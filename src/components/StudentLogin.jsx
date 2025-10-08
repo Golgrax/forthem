@@ -27,14 +27,14 @@ const StudentLogin = () => {
   return (
     <div className="student-login-container">
       <img 
-        src="https://api.builder.io/api/v1/image/assets/TEMP/c4b4e3c4c61e2be26c2691fb84abff2c1606d088?width=2514" 
+        src="https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/backgrounds/school/image.png?width=2514" 
         alt="School Building" 
         className="building-image"
       />
       
       <div className="login-form-content">
         <img 
-          src="https://api.builder.io/api/v1/image/assets/TEMP/f67440401deeb09734fd0bd25c5831aea47eed28?width=300" 
+          src="https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/logo/login-logo/image.png?width=300" 
           alt="School Logo" 
           className="school-logo"
         />
