@@ -1230,12 +1230,18 @@ body {
   position: relative;
 }
 
+.success-icon-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
 .success-icon {
   width: 4.625rem;
   height: 4.625rem;
   fill: var(--success-green);
-  margin-bottom: 1rem;
-  position: relative;
 }
 
 .check-mark {
@@ -1245,7 +1251,6 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  margin-top: -2.5rem;
 }
 
 .confirmation-message {
