@@ -331,7 +331,8 @@ body {
 .nav-menu {
   position: relative;
   z-index: 1;
-  padding: 0 var(--spacing-sm);
+  /* add a small left offset so nav items don't touch the sidebar edge */
+  padding: 0 calc(var(--spacing-sm) + 0.3rem);
 }
 
 .nav-item {
@@ -347,6 +348,7 @@ body {
   color: var(--light-gray);
   text-decoration: none;
   border-radius: 0;
+  position: relative; /* ensure z-index stacking works */
 }
 
 .nav-item.active {
@@ -354,13 +356,32 @@ body {
   border-radius: 3.125rem 0 0 3.125rem;
   box-shadow: 0.3125rem 0.3125rem 0.25rem 0 rgba(0, 0, 0, 0.25);
   color: var(--primary-blue);
-  margin-left: 0;
-  margin-right: -0.25rem;
+  /* expand the active item to cover the nav padding so the white reaches the sidebar edge,
+     but keep a small left gap so it doesn't touch the very left edge */
+  width: calc(100% + 2 * var(--spacing-sm));
+  margin-left: calc(-1 * var(--spacing-sm) + 0.75rem);
+  margin-right: calc(-1 * var(--spacing-sm));
+  z-index: 3; /* keep active on top so other hovers don't create visual artifacts */
 }
 
 .nav-item:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 0 1.5rem 1.5rem 0;
+  /* expand hover to reach the right edge and match active left gap; rounded on left side */
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3.125rem 0 0 3.125rem;
+  z-index: 2;
+  width: calc(100% + 2 * var(--spacing-sm));
+  margin-left: calc(-1 * var(--spacing-sm) + 0.75rem);
+  margin-right: calc(-1 * var(--spacing-sm));
+}
+
+/* On small screens the nav is horizontal; keep original compact hover */
+@media (max-width: 968px) {
+  .nav-item:hover:not(.active) {
+    width: auto;
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: var(--radius-xl);
+  }
 }
 
 .nav-icon {
@@ -618,14 +639,34 @@ body {
 .assignments-list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: 1.5rem;
   position: relative;
+  margin-top: var(--spacing-xs);
+}
+
+/* Connecting line between assignments when there are multiple */
+.assignments-list::before {
+  content: '';
+  position: absolute;
+  left: 1.3125rem;
+  top: 2.6875rem;
+  bottom: 2.6875rem;
+  width: 2px;
+  background: var(--white);
+  display: none;
+}
+
+/* Show line only when there are 2+ assignments */
+.assignments-list:has(.assignment-item:nth-child(2))::before {
+  display: block;
 }
 
 .assignment-item {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  position: relative;
+  z-index: 1;
 }
 
 .assignment-circle {
@@ -634,6 +675,20 @@ body {
   border-radius: var(--radius-full);
   background: var(--white);
   flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Inner circle for single assignments (MAPEH/GMRC style) */
+.subject-reminder:has(.assignments-list .assignment-item:only-child) .assignment-circle::after {
+  content: '';
+  width: 2.1875rem;
+  height: 2.1875rem;
+  border-radius: var(--radius-full);
+  background: #455891;
+  position: absolute;
 }
 
 .assignment-details {
@@ -777,6 +832,11 @@ body {
 
 .progress-line.inactive {
   background: var(--light-gray);
+}
+
+/* Gradient fade for the line right after the active step */
+.progress-line.gradient {
+  background: linear-gradient(to right, var(--secondary-blue), var(--light-gray));
 }
 
 .progress-done-label {
@@ -1329,7 +1389,8 @@ body {
   .nav-menu {
     display: flex;
     overflow-x: auto;
-    padding: 0 var(--spacing-md);
+    /* keep horizontal padding but add a left offset so items aren't flush with the screen */
+    padding: 0 calc(var(--spacing-md) + 0.3rem);
     gap: var(--spacing-xs);
     -webkit-overflow-scrolling: touch;
   }

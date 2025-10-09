@@ -438,10 +438,10 @@ const Enrollment = () => {
                     {step === 3 && "Confirmation"}
                   </div>
                 </div>
-                {step < 3 && <div className={`progress-line ${step < currentStep || (step === 2 && isEnrolled) ? 'active' : 'inactive'}`}></div>}
+                {step < 3 && <div className={`progress-line ${step < currentStep || (step === 2 && isEnrolled) ? 'active' : step === currentStep && !isEnrolled ? 'gradient' : 'inactive'}`}></div>}
               </React.Fragment>
             ))}
-            <div className={`progress-line ${isEnrolled ? 'active' : 'inactive'}`}></div>
+            <div className={`progress-line ${isEnrolled ? 'active' : currentStep === 3 && !isEnrolled ? 'gradient' : 'inactive'}`}></div>
             <div className="progress-step">
               <div className={`step-circle ${isEnrolled ? 'active completed' : 'inactive'}`}>
                 {isEnrolled ? <CheckIcon /> : <CheckIcon />}
