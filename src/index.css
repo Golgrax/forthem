@@ -420,7 +420,7 @@ body {
   box-shadow: 0 0.25rem 0.25rem 0 rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 0 var(--spacing-xl);
   gap: var(--spacing-md);
   flex-shrink: 0;
@@ -1112,6 +1112,80 @@ body {
   flex-wrap: wrap;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex: 1;
+}
+
+.header-subject {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--black);
+}
+
+.header-tabs {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.header-tab {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--black);
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.header-tab:hover {
+  opacity: 0.7;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.assignment-content {
+  width: 100%;
+  max-width: 100%;
+}
+
+.assignment-card-container {
+  width: 100%;
+  max-width: 95.4375rem;
+  min-height: 8.5rem;
+  border-radius: 0.625rem;
+  background: rgba(236, 236, 236, 0.50);
+  box-shadow: 0 0.25rem 0.25rem 0 rgba(0, 0, 0, 0.25);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.assignment-card-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--black);
+  margin: 0;
+}
+
+.assignment-card-meta {
+  display: flex;
+  gap: 0.75rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--black);
+}
+
 /* Schedule Styles */
 .schedule-container {
   width: 100%;
@@ -1441,6 +1515,20 @@ body {
 
   .content-area {
     padding: var(--spacing-md);
+  }
+
+  .header-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .header-tabs {
+    gap: 1rem;
+  }
+
+  .header-tab {
+    font-size: 0.875rem;
   }
 
   .dashboard-content-wrapper {
