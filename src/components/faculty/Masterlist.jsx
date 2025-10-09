@@ -83,7 +83,7 @@ const Masterlist = () => {
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
-      <div className="sidebar">
+      <div className="sidebar faculty">
         <div className="sidebar-header">
           <img 
             src="https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/logo/image.png?width=174" 
@@ -100,7 +100,7 @@ const Masterlist = () => {
           {navItems.map((item) => (
             <div
               key={item.path}
-              className={`nav-item ${isActive(item.path) ? 'active' : ''}`}
+              className={`nav-item ${isActive(item.path) ? 'active faculty' : ''}`}
               onClick={() => navigate(item.path)}
             >
               {getNavIcon(item.icon)}
@@ -114,10 +114,12 @@ const Masterlist = () => {
       <div className="main-content">
         {/* Header */}
         <div className="header">
-          <NotificationIcon />
-          <img 
-            src="https://github.com/Golgrax/forthem-assets/blob/main/students/pfp/me.png?raw=true?width=174" 
-            alt="User Avatar" 
+          <svg className="notification-icon faculty" width="34" height="38" viewBox="0 0 34 38" fill="none">
+            <path d="M13.2222 34.381H20.7778C20.7778 36.3714 19.0778 38 17 38C14.9222 38 13.2222 36.3714 13.2222 34.381ZM34 30.7619V32.5714H0V30.7619L3.77778 27.1429V16.2857C3.77778 10.6762 7.55556 5.79048 13.2222 4.16191V3.61905C13.2222 1.62857 14.9222 0 17 0C19.0778 0 20.7778 1.62857 20.7778 3.61905V4.16191C26.4444 5.79048 30.2222 10.6762 30.2222 16.2857V27.1429L34 30.7619ZM26.4444 16.2857C26.4444 11.219 22.2889 7.2381 17 7.2381C11.7111 7.2381 7.55556 11.219 7.55556 16.2857V28.9524H26.4444V16.2857Z" fill="currentColor"/>
+          </svg>
+          <img
+            src="https://github.com/Golgrax/forthem-assets/blob/main/students/pfp/me.png?raw=true?width=174"
+            alt="User Avatar"
             className="user-avatar"
           />
         </div>
