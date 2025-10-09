@@ -8,6 +8,12 @@ import Schedule from './components/Schedule';
 import Modules from './components/Modules';
 import Grades from './components/Grades';
 import Assignment from './components/Assignment';
+import FacultyLogin from './components/faculty/FacultyLogin';
+import FacultyDashboard from './components/faculty/FacultyDashboard';
+import CreateAnnouncement from './components/faculty/CreateAnnouncement';
+import CreateReminder from './components/faculty/CreateReminder';
+import Masterlist from './components/faculty/Masterlist';
+import FacultySchedule from './components/faculty/FacultySchedule';
 import './index.css';
 
 function App() {
@@ -23,6 +29,12 @@ function App() {
           <Route path="/modules" element={<Modules />} />
           <Route path="/grades" element={<Grades />} />
           <Route path="/assignment" element={<Assignment />} />
+          <Route path="/faculty-login" element={<FacultyLogin />} />
+          <Route path="/faculty/dashboard" element={<FacultyDashboard />} />
+          <Route path="/faculty/create-announcement" element={<CreateAnnouncement />} />
+          <Route path="/faculty/create-reminder" element={<CreateReminder />} />
+          <Route path="/faculty/masterlist" element={<Masterlist />} />
+          <Route path="/faculty/schedule" element={<FacultySchedule />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

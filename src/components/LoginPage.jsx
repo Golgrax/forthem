@@ -9,8 +9,7 @@ const LoginPage = () => {
   };
 
   const handleFacultyLogin = () => {
-    // For demo purposes, faculty login goes to dashboard
-    navigate('/dashboard');
+    navigate('/faculty-login');
   };
 
   return (
