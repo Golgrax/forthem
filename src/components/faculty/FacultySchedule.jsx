@@ -68,7 +68,7 @@ const FacultySchedule = () => {
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
-      <div className="sidebar">
+      <div className="sidebar faculty">
         <div className="sidebar-header">
           <img 
             src="https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/logo/image.png?width=174" 
@@ -85,7 +85,7 @@ const FacultySchedule = () => {
           {navItems.map((item) => (
             <div
               key={item.path}
-              className={`nav-item ${isActive(item.path) ? 'active' : ''}`}
+              className={`nav-item ${isActive(item.path) ? 'active faculty' : ''}`}
               onClick={() => navigate(item.path)}
             >
               {getNavIcon(item.icon)}
