@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../faculty.css';
+import '../../style/faculty.css';
 
 const FacultyLogin = () => {
   const navigate = useNavigate();
@@ -17,10 +17,33 @@ const FacultyLogin = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.facultyNumber && formData.password) {
-      navigate('/faculty/dashboard');
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          username: formData.facultyNumber, 
+          password: formData.password 
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.user && data.user.role === 'faculty') {
+          navigate('/faculty/dashboard');
+        } else {
+          alert('Login successful, but you do not have the correct role to access this page.');
+        }
+      } else {
+        alert('Invalid username or password.');
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+      alert('Login failed. Please try again later.');
     }
   };
 

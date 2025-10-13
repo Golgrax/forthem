@@ -29,16 +29,29 @@
   background: var(--primary-red);
 }
 
+.sidebar.faculty::before {
+  background-image: none;
+}
+
+.sidebar.faculty .close-icon {
+  position: absolute;
+  top: 2rem;
+  left: 1.5rem;
+  cursor: pointer;
+  color: white;
+  z-index: 10;
+}
+
 .nav-item.active.faculty {
   color: var(--primary-red);
 }
 
-.notification-icon.faculty {
-  fill: var(--primary-red);
+.faculty-dashboard .notification-icon {
+  color: var(--primary-red);
 }
 
-.notification-icon.faculty:hover {
-  fill: #7a0e0e;
+.faculty-dashboard .notification-icon:hover {
+  color: #7a0e0e;
 }
 
 /* Faculty Dashboard */
@@ -56,7 +69,6 @@
 .section-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   margin-bottom: 1.5rem;
   gap: 1.5rem;
 }
@@ -164,12 +176,22 @@
   margin-top: 0.5rem;
 }
 
-.reminder-title {
+/* Faculty-specific teacher name - scoped to faculty dashboard */
+.faculty-dashboard-wrapper .teacher-name {
+  font-family: 'SF Compact Rounded', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: clamp(1.25rem, 3vw, 2.25rem);
+  font-weight: 600;
+  color: var(--primary-red);
+}
+
+
+.faculty-dashboard-wrapper .reminder-title {
   font-family: 'SF Compact Rounded', -apple-system, Roboto, Helvetica, sans-serif;
   font-size: 1.375rem;
   font-weight: 600;
   color: #000;
   margin-bottom: 0.25rem;
+  -webkit-text-stroke: 0;
 }
 
 .reminder-text {
@@ -589,3 +611,26 @@
     grid-template-columns: 150px repeat(5, 1fr);
   }
 }
+
+
+@media (max-width: 968px) {
+  .nav-item.active.faculty {
+    border-radius: 3.125rem 0 0 3.125rem;
+  }
+}
+
+
+  .faculty-dashboard .user-avatar {
+    width: 3.625rem;
+    height: 3.625rem;
+    border-radius: var(--radius-full);
+    border: 0.125rem solid var(--primary-red);
+    cursor: pointer;
+    object-fit: cover;
+    transition: border-color 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .faculty-dashboard .user-avatar:hover {
+    border-color: var(--primary-red);
+  }

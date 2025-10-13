@@ -16,11 +16,33 @@ const StudentLogin = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // For demo purposes, any input will navigate to dashboard
-    if (formData.learnerNumber && formData.password) {
-      navigate('/dashboard');
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          username: formData.learnerNumber, 
+          password: formData.password 
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.user && data.user.role === 'student') {
+          navigate('/dashboard');
+        } else {
+          alert('Login successful, but you do not have the correct role to access this page.');
+        }
+      } else {
+        alert('Invalid username or password.');
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+      alert('Login failed. Please try again later.');
     }
   };
 
