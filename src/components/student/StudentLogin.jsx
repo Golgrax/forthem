@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import '../../style/student.css';
 
 const StudentLogin = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     learnerNumber: '',
     password: ''
   });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Load student CSS
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -14,10 +21,18 @@ const StudentLogin = () => {
       ...prev,
       [name]: value
     }));
+    // Clear error when user starts typing
+    if (error) {
+      setError('');
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Clear any previous errors
+    setIsLoading(true);
+    console.log('Attempting login with:', formData.learnerNumber);
+    
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
@@ -30,19 +45,27 @@ const StudentLogin = () => {
         }),
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+
       if (response.ok) {
         const data = await response.json();
         if (data.user && data.user.role === 'student') {
+          login(data.user);
           navigate('/dashboard');
         } else {
           alert('Login successful, but you do not have the correct role to access this page.');
         }
       } else {
-        alert('Invalid username or password.');
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        console.log('Login failed with status:', response.status, 'Error:', errorData);
+        setError(errorData.error || 'Invalid username or password.');
       }
     } catch (error) {
       console.error('Login failed:', error);
-      alert('Login failed. Please try again later.');
+      setError(`Login failed: ${error.message}. Please check your connection and try again.`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -67,6 +90,12 @@ const StudentLogin = () => {
         </div>
         
         <form className="login-form" onSubmit={handleSubmit}>
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
+          
           <input
             type="text"
             name="learnerNumber"
@@ -75,6 +104,7 @@ const StudentLogin = () => {
             value={formData.learnerNumber}
             onChange={handleInputChange}
             required
+            disabled={isLoading}
           />
           
           <input
@@ -85,10 +115,15 @@ const StudentLogin = () => {
             value={formData.password}
             onChange={handleInputChange}
             required
+            disabled={isLoading}
           />
           
-          <button type="submit" className="signin-button">
-            Sign-in
+          <button 
+            type="submit" 
+            className="signin-button"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Signing in...' : 'Sign-in'}
           </button>
           
           <div className="forgot-password">

@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import ReactMarkdown from 'react-markdown';
 import FacultySidebar from './FacultySidebar';
-import Header from '../Header';
+import FacultyHeader from './FacultyHeader';
 import '../../style/faculty.css';
 
 const CreateAnnouncement = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [formData, setFormData] = useState({
     class: 'V - Molave',
     subject: 'GMRC',
     title: '',
     body: ''
   });
+
+  // Load faculty CSS
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -22,19 +29,97 @@ const CreateAnnouncement = () => {
     }));
   };
 
-  const handleSaveDraft = () => {
-    console.log('Draft saved:', formData);
+  const handleToolbarClick = (format) => {
+    const textarea = document.querySelector('textarea[name="body"]');
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = formData.body.substring(start, end);
+    let newText = '';
+
+    switch (format) {
+      case 'bold':
+        newText = `**${selectedText || 'bold text'}**`;
+        break;
+      case 'italic':
+        newText = `*${selectedText || 'italic text'}*`;
+        break;
+      case 'superscript':
+        newText = `${selectedText || 'superscript'}^2^`;
+        break;
+      case 'subscript':
+        newText = `${selectedText || 'subscript'}~2~`;
+        break;
+      case 'image':
+        newText = `![alt text](image-url)`;
+        break;
+      case 'bullet':
+        newText = `- ${selectedText || 'bullet point'}`;
+        break;
+      case 'linebreak':
+        newText = `\n\n`;
+        break;
+      default:
+        return;
+    }
+
+    const newBody = formData.body.substring(0, start) + newText + formData.body.substring(end);
+    setFormData(prev => ({
+      ...prev,
+      body: newBody
+    }));
+
+    // Focus back to textarea
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + newText.length, start + newText.length);
+    }, 0);
   };
 
-  const handlePost = () => {
-    if (formData.title && formData.body) {
-      console.log('Posted:', formData);
-      navigate('/faculty/dashboard');
+  const handleSaveDraft = () => {
+    console.log('Draft saved:', formData);
+    // TODO: Implement draft saving functionality
+  };
+
+  const handlePost = async () => {
+    if (!formData.title || !formData.body) {
+      alert('Please fill in both title and body fields.');
+      return;
+    }
+    if (!user || !user.id) {
+      alert('You must be logged in to post an announcement.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/announcements', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          content: formData.body,
+          title: formData.title,
+          class: formData.class,
+          subject: formData.subject,
+          userId: user.id 
+        }),
+      });
+
+      if (response.ok) {
+        navigate('/faculty/dashboard');
+      } else {
+        alert('Failed to post announcement.');
+      }
+    } catch (error) {
+      console.error('Error posting announcement:', error);
+      alert('An error occurred. Please try again.');
     }
   };
 
   const handleNavigation = (path) => {
-    navigate(path);
+    navigate(path, { state: { user } });
     setIsMenuOpen(false);
   };
 
@@ -49,7 +134,7 @@ const CreateAnnouncement = () => {
   ];
 
   return (
-    <div className="dashboard-container faculty-dashboard">
+    <div className="dashboard-container faculty-dashboard faculty-container">
       <FacultySidebar
         isMenuOpen={isMenuOpen}
         handleNavigation={handleNavigation}
@@ -58,7 +143,7 @@ const CreateAnnouncement = () => {
       />
 
       <div className="main-content">
-        <Header toggleMenu={toggleMenu} />
+        <FacultyHeader toggleMenu={toggleMenu} />
 
         <div className="content-area">
           <div className="create-post-wrapper">
@@ -108,14 +193,59 @@ const CreateAnnouncement = () => {
               </div>
 
               <div className="input-group">
-                <textarea
-                  name="body"
-                  placeholder="Body text"
-                  className="body-textarea"
-                  value={formData.body}
-                  onChange={handleInputChange}
-                  rows={8}
-                />
+                <div className="text-editor-toolbar">
+                  <button className="toolbar-btn" onClick={() => handleToolbarClick('bold')} title="Bold">
+                    <strong>B</strong>
+                  </button>
+                  <button className="toolbar-btn" onClick={() => handleToolbarClick('italic')} title="Italic">
+                    <em>I</em>
+                  </button>
+                  <button className="toolbar-btn" onClick={() => handleToolbarClick('superscript')} title="Superscript">
+                    x²
+                  </button>
+                  <button className="toolbar-btn" onClick={() => handleToolbarClick('subscript')} title="Subscript">
+                    x₂
+                  </button>
+                  <button className="toolbar-btn" onClick={() => handleToolbarClick('image')} title="Insert Image">
+                    🖼
+                  </button>
+                  <button className="toolbar-btn" onClick={() => handleToolbarClick('bullet')} title="Bullet Point">
+                    ●
+                  </button>
+                  <button className="toolbar-btn" onClick={() => handleToolbarClick('linebreak')} title="Line Break">
+                    ↵
+                  </button>
+                  <button 
+                    className={`toolbar-btn ${showPreview ? 'active' : ''}`} 
+                    onClick={() => setShowPreview(!showPreview)}
+                    title="Toggle Preview"
+                  >
+                    👁
+                  </button>
+                </div>
+                {showPreview ? (
+                  <div className="markdown-preview">
+                    <h4>Preview:</h4>
+                    <div className="preview-content">
+                      <ReactMarkdown 
+                        components={{
+                          p: ({ children }) => <p style={{ whiteSpace: 'pre-wrap', marginBottom: '0.5rem' }}>{children}</p>
+                        }}
+                      >
+                        {formData.body || '*No content to preview*'}
+                      </ReactMarkdown>
+                    </div>
+                  </div>
+                ) : (
+                  <textarea
+                    name="body"
+                    placeholder="Body text (supports Markdown formatting)"
+                    className="body-textarea"
+                    value={formData.body}
+                    onChange={handleInputChange}
+                    rows={8}
+                  />
+                )}
               </div>
 
               <div className="action-buttons">

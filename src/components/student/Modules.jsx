@@ -1,11 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../Sidebar';
 import Header from '../Header';
+import '../../style/student.css';
 
 const Modules = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [modules, setModules] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Load student CSS
+
+  useEffect(() => {
+    const fetchModules = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/modules');
+        if (response.ok) {
+          const data = await response.json();
+          setModules(data.modules);
+        } else {
+          setError('Failed to fetch modules');
+        }
+      } catch (error) {
+        setError('Error fetching modules: ' + error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchModules();
+  }, []);
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -24,45 +51,26 @@ const Modules = () => {
     { path: '/grades', icon: 'grades', label: 'Grades' }
   ];
 
-  const modules = [
-    {
-      subject: 'Science',
-      teacher: 'Teacher Santos',
-      className: 'science',
-      backgroundImage: 'https://api.builder.io/api/v1/image/assets/TEMP/51af17d50f9719552ffa770eb3c2f13cbc916d2c?width=730'
-    },
-    {
-      subject: 'Filipino',
-      teacher: 'Teacher Reyes',
-      className: 'filipino'
-    },
-    {
-      subject: 'GMRC',
-      teacher: 'Teacher Cruz',
-      className: 'gmrc'
-    },
-    {
-      subject: 'Mathematics',
-      teacher: 'Teacher Fernandez',
-      className: 'mathematics'
-    },
-    {
-      subject: 'Araling Panlipunan',
-      teacher: 'Teacher Garcia',
-      className: 'araling-panlipunan',
-      backgroundImage: 'https://api.builder.io/api/v1/image/assets/TEMP/470a65a3418a323d9f5063d10a7d68283fa64907?width=730'
-    },
-    {
-      subject: 'MAPEH',
-      teacher: 'Teacher Reyes',
-      className: 'mapeh'
-    },
-    {
-      subject: 'EPP',
-      teacher: 'Teacher Reyes',
-      className: 'epp'
-    }
-  ];
+  const getModuleClassName = (subject) => {
+    const subjectMap = {
+      'Science': 'science',
+      'Filipino': 'filipino',
+      'GMRC': 'gmrc',
+      'Mathematics': 'mathematics',
+      'Araling Panlipunan': 'araling-panlipunan',
+      'MAPEH': 'mapeh',
+      'EPP': 'epp'
+    };
+    return subjectMap[subject] || 'default';
+  };
+
+  const getModuleBackgroundImage = (subject) => {
+    const imageMap = {
+      'Science': 'https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/modules/science.png',
+      'Araling Panlipunan': 'https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/modules/araling-panlipunan.png'
+    };
+    return imageMap[subject];
+  };
 
   const handleModuleClick = (subject) => {
     // Navigate to assignment page with subject context
@@ -83,24 +91,30 @@ const Modules = () => {
 
         <div className="content-area">
           <div className="modules-container">
-            <div className="modules-grid">
-              {modules.map((module, index) => (
-                <div
-                  key={index}
-                  className={`module-card ${module.className}`}
-                  onClick={() => handleModuleClick(module.subject)}
-                  style={module.backgroundImage ? {
-                    backgroundImage: `url(${module.backgroundImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundBlendMode: 'overlay'
-                  } : {}}
-                >
-                  <div className="module-subject">{module.subject}</div>
-                  <div className="module-teacher">{module.teacher}</div>
-                </div>
-              ))}
-            </div>
+            {loading ? (
+              <div>Loading modules...</div>
+            ) : error ? (
+              <div>{error}</div>
+            ) : (
+              <div className="modules-grid">
+                {modules.map((module, index) => (
+                  <div
+                    key={index}
+                    className={`module-card ${getModuleClassName(module.subject)}`}
+                    onClick={() => handleModuleClick(module.subject)}
+                    style={getModuleBackgroundImage(module.subject) ? {
+                      backgroundImage: `url(${getModuleBackgroundImage(module.subject)})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundBlendMode: 'overlay'
+                    } : {}}
+                  >
+                    <div className="module-subject">{module.subject}</div>
+                    <div className="module-teacher">{module.teacher}</div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

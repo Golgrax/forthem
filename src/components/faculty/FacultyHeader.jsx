@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { ReactComponent as ProfileIcon } from './icons/profile.svg';
-import { ReactComponent as SettingsIcon } from './icons/settings.svg';
-import { ReactComponent as LogoutIcon } from './icons/logout.svg';
-import { ReactComponent as NotificationIcon } from './icons/NotificationIcon.svg';
-import { ReactComponent as HamburgerIcon } from './icons/HamburgerIcon.svg';
+import { useAuth } from '../../contexts/AuthContext';
+import { ReactComponent as ProfileIcon } from '../icons/profile.svg';
+import { ReactComponent as SettingsIcon } from '../icons/settings.svg';
+import { ReactComponent as LogoutIcon } from '../icons/logout.svg';
+import { ReactComponent as NotificationIcon } from '../icons/NotificationIcon.svg';
+import { ReactComponent as HamburgerIcon } from '../icons/HamburgerIcon.svg';
 
-const Header = ({ toggleMenu }) => {
+const FacultyHeader = ({ toggleMenu }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -101,4 +101,4 @@ const Header = ({ toggleMenu }) => {
   );
 };
 
-export default Header;
+export default FacultyHeader;

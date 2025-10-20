@@ -1,11 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import Sidebar from '../Sidebar';
 import Header from '../Header';
+import '../../style/student.css';
 
 const Grades = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [grades, setGrades] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Load student CSS
+
+  useEffect(() => {
+    if (user && user.id) {
+      const fetchGrades = async () => {
+        try {
+          setLoading(true);
+          const response = await fetch(`/api/grades/${user.id}`);
+          if (response.ok) {
+            const data = await response.json();
+            setGrades(data.grades);
+          } else {
+            setError('Failed to fetch grades');
+          }
+        } catch (error) {
+          setError('Error fetching grades: ' + error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchGrades();
+    }
+  }, [user]);
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -38,11 +69,38 @@ const Grades = () => {
 
         <div className="content-area">
           <div className="grades-container">
-            <img
-              src="https://api.builder.io/api/v1/image/assets/TEMP/36c267ab4de88be13a9ffed85efd5795bd75f9a4?width=2804"
-              alt="Report Card"
-              className="grades-image"
-            />
+            {loading ? (
+              <div>Loading grades...</div>
+            ) : error ? (
+              <div>{error}</div>
+            ) : grades.length > 0 ? (
+              <div className="grades-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Subject</th>
+                      <th>Grade</th>
+                      <th>Remarks</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {grades.map((grade, index) => (
+                      <tr key={index}>
+                        <td>{grade.subject}</td>
+                        <td>{grade.grade}</td>
+                        <td>{grade.remarks}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <img
+                src="https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/grades/report-card.png"
+                alt="Report Card"
+                className="grades-image"
+              />
+            )}
           </div>
         </div>
       </div>

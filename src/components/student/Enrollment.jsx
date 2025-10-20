@@ -1,16 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import Sidebar from '../Sidebar';
 import Header from '../Header';
 import { ReactComponent as CheckIcon } from '../icons/CheckIcon.svg';
 import { ReactComponent as EditIcon } from '../icons/EditIcon.svg';
+import '../../style/student.css';
 
 const Enrollment = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [showDocument, setShowDocument] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+
+  const [formData, setFormData] = useState({
+        // Learner's Information
+        schoolYear: '',
+        gradeLevel: '',
+        learnerReferenceNo: '',
+        birthday: '',
+        sex: '',
+        age: '',
+        lastName: '',
+        firstName: '',
+        middleName: '',
+        extensionName: '',
+        placeOfBirth: '',
+        // Current Address
+        currentHouseNo: '',
+        currentSitio: '',
+        currentBarangay: '',
+        currentMunicipality: '',
+        currentProvince: '',
+        currentCountry: '',
+        currentZipCode: '',
+        // Permanent Address
+        permanentHouseNo: '',
+        permanentSitio: '',
+        permanentBarangay: '',
+        permanentMunicipality: '',
+        permanentProvince: '',
+        permanentCountry: '',
+        permanentZipCode: '',
+        // Parent/Guardian Information
+        fatherLastName: '',
+        fatherFirstName: '',
+        fatherMiddleName: '',
+        fatherExtensionName: '',
+        fatherContactNumber: '',
+        motherLastName: '',
+        motherFirstName: '',
+        motherMiddleName: '',
+        motherExtensionName: '',
+        motherContactNumber: '',
+        guardianLastName: '',
+        guardianFirstName: '',
+        guardianMiddleName: '',
+        guardianExtensionName: '',
+        guardianContactNumber: ''
+      });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [editingSection, setEditingSection] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -29,11 +84,18 @@ const Enrollment = () => {
     { path: '/grades', icon: 'grades', label: 'Grades' }
   ];
 
-  const handleNext = () => {
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleNext = async () => {
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1);
     } else if (currentStep === 3 && !isEnrolled) {
-      setIsEnrolled(true);
+      await handleSubmitEnrollment();
     }
   };
 
@@ -47,12 +109,131 @@ const Enrollment = () => {
     setShowDocument(true);
   };
 
+  const handleEditClick = (section) => {
+    setEditingSection(section);
+    setShowEditModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowEditModal(false);
+    setEditingSection(null);
+  };
+
+  const handleSaveEdit = () => {
+    setShowEditModal(false);
+    setEditingSection(null);
+  };
+
+      const handleSubmitEnrollment = async () => {
+        if (!user || !user.id) {
+          setError('You must be logged in to enroll.');
+          return;
+        }
+
+        // Validate required fields
+        const requiredFields = [
+          'firstName', 'lastName', 'schoolYear', 'gradeLevel', 
+          'birthday', 'sex', 'age', 'placeOfBirth'
+        ];
+        
+        const missingFields = requiredFields.filter(field => !formData[field] || formData[field].trim() === '');
+        
+        if (missingFields.length > 0) {
+          setError(`Please fill in the following required fields: ${missingFields.join(', ')}`);
+          return;
+        }
+
+        try {
+          setLoading(true);
+          setError(null);
+
+      const enrollmentData = {
+        student_name: `${formData.firstName} ${formData.middleName} ${formData.lastName}`.trim(),
+        student_address: `${formData.currentHouseNo} ${formData.currentSitio}, ${formData.currentBarangay}, ${formData.currentMunicipality}, ${formData.currentProvince} ${formData.currentZipCode}`,
+        parent_name: `${formData.fatherFirstName} ${formData.fatherMiddleName} ${formData.fatherLastName}`.trim(),
+        parent_address: `${formData.permanentHouseNo} ${formData.permanentSitio}, ${formData.permanentBarangay}, ${formData.permanentMunicipality}, ${formData.permanentProvince} ${formData.permanentZipCode}`,
+        userId: user.id,
+        // Additional enrollment details
+        learner_info: {
+          schoolYear: formData.schoolYear,
+          gradeLevel: formData.gradeLevel,
+          learnerReferenceNo: formData.learnerReferenceNo,
+          birthday: formData.birthday,
+          sex: formData.sex,
+          age: formData.age,
+          placeOfBirth: formData.placeOfBirth
+        },
+        current_address: {
+          houseNo: formData.currentHouseNo,
+          sitio: formData.currentSitio,
+          barangay: formData.currentBarangay,
+          municipality: formData.currentMunicipality,
+          province: formData.currentProvince,
+          country: formData.currentCountry,
+          zipCode: formData.currentZipCode
+        },
+        permanent_address: {
+          houseNo: formData.permanentHouseNo,
+          sitio: formData.permanentSitio,
+          barangay: formData.permanentBarangay,
+          municipality: formData.permanentMunicipality,
+          province: formData.permanentProvince,
+          country: formData.permanentCountry,
+          zipCode: formData.permanentZipCode
+        },
+        parent_info: {
+          father: {
+            lastName: formData.fatherLastName,
+            firstName: formData.fatherFirstName,
+            middleName: formData.fatherMiddleName,
+            extensionName: formData.fatherExtensionName,
+            contactNumber: formData.fatherContactNumber
+          },
+          mother: {
+            lastName: formData.motherLastName,
+            firstName: formData.motherFirstName,
+            middleName: formData.motherMiddleName,
+            extensionName: formData.motherExtensionName,
+            contactNumber: formData.motherContactNumber
+          },
+          guardian: {
+            lastName: formData.guardianLastName,
+            firstName: formData.guardianFirstName,
+            middleName: formData.guardianMiddleName,
+            extensionName: formData.guardianExtensionName,
+            contactNumber: formData.guardianContactNumber
+          }
+        }
+      };
+
+      const response = await fetch('/api/enrollment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(enrollmentData),
+      });
+
+      if (response.ok) {
+        setIsEnrolled(true);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || 'Failed to submit enrollment');
+      }
+    } catch (error) {
+      console.error('Error submitting enrollment:', error);
+      setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const renderStepContent = () => {
     if (showDocument) {
       return (
         <div className="enrollment-form-document">
           <img 
-            src="https://api.builder.io/api/v1/image/assets/TEMP/96505abbd937387eec56935ab2863bed112cbf86?width=2786" 
+            src="https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/enrollment/enrollment-form.png" 
             alt="Basic Education Enrollment Form" 
             className="enrollment-document-image"
           />
@@ -90,128 +271,164 @@ const Enrollment = () => {
               <div className="form-title">LEARNER'S INFORMATION</div>
             </div>
             <div className="form-content-scrollable">
-              <div className="form-row basic-info">
-                <div className="form-group">
-                  <div className="form-label">School Year</div>
-                  <div className="form-value">2025 - 2026</div>
+              <div className="form-section">
+                <div className="section-title">Basic Information</div>
+                <div className="section-edit-icon">
+                  <button 
+                    className="edit-icon-btn" 
+                    onClick={() => handleEditClick('basicInfo')}
+                    title="Edit Basic Information"
+                  >
+                    <EditIcon />
+                  </button>
                 </div>
-                <div className="form-group">
-                  <div className="form-label">Grade level to Enroll</div>
-                  <div className="form-value">Grade 5</div>
-                </div>
-                <div className="form-group">
-                  <div className="form-label">Learner Reference No.</div>
-                  <div className="form-value">137591411505</div>
-                </div>
-                <div className="form-group">
-                  <div className="form-label">Birthday (mm/dd/yyyy)</div>
-                  <div className="form-value">01/27/2018</div>
-                </div>
-                <div className="form-group">
-                  <div className="form-label">Sex</div>
-                  <div className="form-value">Male</div>
-                </div>
-                <div className="form-group">
-                  <div className="form-label">Age</div>
-                  <div className="form-value">7</div>
+                <div className="form-row basic-info">
+                      <div className="form-group">
+                        <div className="form-label">School Year</div>
+                        <div className="form-value">{formData.schoolYear || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Grade level to Enroll</div>
+                        <div className="form-value">{formData.gradeLevel || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Learner Reference No.</div>
+                        <div className="form-value">{formData.learnerReferenceNo || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Birthday (mm/dd/yyyy)</div>
+                        <div className="form-value">{formData.birthday || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Sex</div>
+                        <div className="form-value">{formData.sex || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Age</div>
+                        <div className="form-value">{formData.age || 'Not provided'}</div>
+                      </div>
                 </div>
               </div>
 
               <div className="form-section">
                 <div className="section-title">Learner's Name</div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <div className="form-label">Last Name</div>
-                    <div className="form-value">Dela Cruz</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">First Name</div>
-                    <div className="form-value">Jay Andrei</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Middle Name</div>
-                    <div className="form-value">Ramos</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Extension Name e.g. Jr., III (If applicable)</div>
-                    <div className="form-value"></div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Place of Birth (Municipality City)</div>
-                    <div className="form-value">Parañaque City</div>
-                  </div>
+                <div className="section-edit-icon">
+                  <button 
+                    className="edit-icon-btn" 
+                    onClick={() => handleEditClick('learnerName')}
+                    title="Edit Learner's Name"
+                  >
+                    <EditIcon />
+                  </button>
                 </div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <div className="form-label">Last Name</div>
+                        <div className="form-value">{formData.lastName || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">First Name</div>
+                        <div className="form-value">{formData.firstName || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Middle Name</div>
+                        <div className="form-value">{formData.middleName || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Extension Name e.g. Jr., III (If applicable)</div>
+                        <div className="form-value">{formData.extensionName || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Place of Birth (Municipality City)</div>
+                        <div className="form-value">{formData.placeOfBirth || 'Not provided'}</div>
+                      </div>
+                    </div>
               </div>
 
               <div className="form-section">
                 <div className="section-title">Current Address</div>
                 <div className="section-edit-icon">
-                  <EditIcon />
+                  <button 
+                    className="edit-icon-btn" 
+                    onClick={() => handleEditClick('currentAddress')}
+                    title="Edit Current Address"
+                  >
+                    <EditIcon />
+                  </button>
                 </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <div className="form-label">House No.</div>
-                    <div className="form-value">10</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Sitio/Street Name</div>
-                    <div className="form-value">Purok 2</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Barangay</div>
-                    <div className="form-value">Santo Niño</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Municipality/City</div>
-                    <div className="form-value">Parañaque City</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Province</div>
-                    <div className="form-value">Metro Manila</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Country</div>
-                    <div className="form-value">Philippines</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Zip Code</div>
-                    <div className="form-value">1704</div>
-                  </div>
-                </div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <div className="form-label">House No.</div>
+                        <div className="form-value">{formData.currentHouseNo || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Sitio/Street Name</div>
+                        <div className="form-value">{formData.currentSitio || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Barangay</div>
+                        <div className="form-value">{formData.currentBarangay || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Municipality/City</div>
+                        <div className="form-value">{formData.currentMunicipality || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Province</div>
+                        <div className="form-value">{formData.currentProvince || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Country</div>
+                        <div className="form-value">{formData.currentCountry || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Zip Code</div>
+                        <div className="form-value">{formData.currentZipCode || 'Not provided'}</div>
+                      </div>
+                    </div>
               </div>
 
               <div className="form-section">
                 <div className="section-title">Permanent Address</div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <div className="form-label">House No.</div>
-                    <div className="form-value">10</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Sitio/Street Name</div>
-                    <div className="form-value">Purok 2</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Barangay</div>
-                    <div className="form-value">Santo Niño</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Municipality/City</div>
-                    <div className="form-value">Parañaque City</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Province</div>
-                    <div className="form-value">Metro Manila</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Country</div>
-                    <div className="form-value">Philippines</div>
-                  </div>
-                  <div className="form-group">
-                    <div className="form-label">Zip Code</div>
-                    <div className="form-value">1704</div>
-                  </div>
+                <div className="section-edit-icon">
+                  <button 
+                    className="edit-icon-btn" 
+                    onClick={() => handleEditClick('permanentAddress')}
+                    title="Edit Permanent Address"
+                  >
+                    <EditIcon />
+                  </button>
                 </div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <div className="form-label">House No.</div>
+                        <div className="form-value">{formData.permanentHouseNo || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Sitio/Street Name</div>
+                        <div className="form-value">{formData.permanentSitio || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Barangay</div>
+                        <div className="form-value">{formData.permanentBarangay || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Municipality/City</div>
+                        <div className="form-value">{formData.permanentMunicipality || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Province</div>
+                        <div className="form-value">{formData.permanentProvince || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Country</div>
+                        <div className="form-value">{formData.permanentCountry || 'Not provided'}</div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-label">Zip Code</div>
+                        <div className="form-value">{formData.permanentZipCode || 'Not provided'}</div>
+                      </div>
+                    </div>
               </div>
             </div>
           </div>
@@ -227,28 +444,34 @@ const Enrollment = () => {
               <div className="form-section">
                 <div className="section-title">Father's Name</div>
                 <div className="section-edit-icon">
-                  <EditIcon />
+                  <button 
+                    className="edit-icon-btn" 
+                    onClick={() => handleEditClick('fatherInfo')}
+                    title="Edit Father's Information"
+                  >
+                    <EditIcon />
+                  </button>
                 </div>
                 <div className="form-row">
                   <div className="form-group">
                     <div className="form-label">Last Name</div>
-                    <div className="form-value">Dela Cruz</div>
+                    <div className="form-value">{formData.fatherLastName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">First Name</div>
-                    <div className="form-value">Juan Carlos</div>
+                    <div className="form-value">{formData.fatherFirstName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Middle Name</div>
-                    <div className="form-value">Villanueva</div>
+                    <div className="form-value">{formData.fatherMiddleName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Extension Name e.g. Jr., III (If applicable)</div>
-                    <div className="form-value"></div>
+                    <div className="form-value">{formData.fatherExtensionName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Contact Number</div>
-                    <div className="form-value">09298376146</div>
+                    <div className="form-value">{formData.fatherContactNumber || 'Not provided'}</div>
                   </div>
                 </div>
               </div>
@@ -256,28 +479,34 @@ const Enrollment = () => {
               <div className="form-section">
                 <div className="section-title">Mother's Name</div>
                 <div className="section-edit-icon">
-                  <EditIcon />
+                  <button 
+                    className="edit-icon-btn" 
+                    onClick={() => handleEditClick('motherInfo')}
+                    title="Edit Mother's Information"
+                  >
+                    <EditIcon />
+                  </button>
                 </div>
                 <div className="form-row">
                   <div className="form-group">
                     <div className="form-label">Last Name</div>
-                    <div className="form-value">Dela Cruz</div>
+                    <div className="form-value">{formData.motherLastName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">First Name</div>
-                    <div className="form-value">Elena</div>
+                    <div className="form-value">{formData.motherFirstName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Middle Name</div>
-                    <div className="form-value">Ramos</div>
+                    <div className="form-value">{formData.motherMiddleName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Extension Name e.g. Jr., III (If applicable)</div>
-                    <div className="form-value"></div>
+                    <div className="form-value">{formData.motherExtensionName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Contact Number</div>
-                    <div className="form-value">09298376146</div>
+                    <div className="form-value">{formData.motherContactNumber || 'Not provided'}</div>
                   </div>
                 </div>
               </div>
@@ -285,28 +514,34 @@ const Enrollment = () => {
               <div className="form-section">
                 <div className="section-title">Guardian's Name</div>
                 <div className="section-edit-icon">
-                  <EditIcon />
+                  <button 
+                    className="edit-icon-btn" 
+                    onClick={() => handleEditClick('guardianInfo')}
+                    title="Edit Guardian's Information"
+                  >
+                    <EditIcon />
+                  </button>
                 </div>
                 <div className="form-row">
                   <div className="form-group">
                     <div className="form-label">Last Name</div>
-                    <div className="form-value">Dela Cruz</div>
+                    <div className="form-value">{formData.guardianLastName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">First Name</div>
-                    <div className="form-value">Elena</div>
+                    <div className="form-value">{formData.guardianFirstName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Middle Name</div>
-                    <div className="form-value">Ramos</div>
+                    <div className="form-value">{formData.guardianMiddleName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Extension Name e.g. Jr., III (If applicable)</div>
-                    <div className="form-value"></div>
+                    <div className="form-value">{formData.guardianExtensionName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Contact Number</div>
-                    <div className="form-value">09298376146</div>
+                    <div className="form-value">{formData.guardianContactNumber || 'Not provided'}</div>
                   </div>
                 </div>
               </div>
@@ -318,7 +553,7 @@ const Enrollment = () => {
         return (
           <div className="enrollment-form-document">
             <img
-              src="https://api.builder.io/api/v1/image/assets/TEMP/96505abbd937387eec56935ab2863bed112cbf86?width=2786"
+              src="https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/enrollment/enrollment-form.png"
               alt="Certificate of Registration Preview"
               className="enrollment-document-image"
             />
@@ -371,23 +606,410 @@ const Enrollment = () => {
           </div>
 
           <div className={`enrollment-step-content ${currentStep === 3 || isEnrolled || showDocument ? 'full-height-step' : 'scrollable-step'}`}> 
+            {error && (
+              <div className="error-message" style={{ color: 'red', marginBottom: '1rem', padding: '0.5rem', backgroundColor: '#ffe6e6', border: '1px solid #ff9999', borderRadius: '4px' }}>
+                {error}
+              </div>
+            )}
             {renderStepContent()}
           </div>
 
           {!isEnrolled && !showDocument && (
             <div className="form-actions">
               {currentStep > 1 && (
-                <button className="btn btn-secondary" onClick={handleBack}>
+                <button className="btn btn-secondary" onClick={handleBack} disabled={loading}>
                   Back
                 </button>
               )}
-              <button className="btn btn-primary" onClick={handleNext}>
-                Next
+              <button className="btn btn-primary" onClick={handleNext} disabled={loading}>
+                {loading ? 'Submitting...' : currentStep === 3 ? 'Submit Enrollment' : 'Next'}
               </button>
             </div>
           )}
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {showEditModal && (
+        <div className="edit-modal-overlay">
+          <div className="edit-modal">
+                <div className="edit-modal-header">
+                  <h3>Edit {editingSection === 'basicInfo' ? 'Basic Information' : 
+                            editingSection === 'learnerName' ? "Learner's Name" : 
+                            editingSection === 'currentAddress' ? 'Current Address' : 
+                            editingSection === 'permanentAddress' ? 'Permanent Address' : 
+                            editingSection === 'fatherInfo' ? "Father's Information" :
+                            editingSection === 'motherInfo' ? "Mother's Information" :
+                            editingSection === 'guardianInfo' ? "Guardian's Information" :
+                            editingSection === 'parentInfo' ? 'Parent/Guardian Information' : 'Information'}</h3>
+                  <button className="close-btn" onClick={handleCloseModal}>×</button>
+                </div>
+            <div className="edit-modal-content">
+              {editingSection === 'basicInfo' && (
+                <div className="edit-form">
+                  <div className="form-group">
+                    <label>School Year</label>
+                    <input 
+                      type="text" 
+                      value={formData.schoolYear}
+                      onChange={(e) => handleInputChange('schoolYear', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Grade Level</label>
+                    <input 
+                      type="text" 
+                      value={formData.gradeLevel}
+                      onChange={(e) => handleInputChange('gradeLevel', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Learner Reference No.</label>
+                    <input 
+                      type="text" 
+                      value={formData.learnerReferenceNo}
+                      onChange={(e) => handleInputChange('learnerReferenceNo', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Birthday</label>
+                    <input 
+                      type="text" 
+                      value={formData.birthday}
+                      onChange={(e) => handleInputChange('birthday', e.target.value)}
+                    />
+                  </div>
+                      <div className="form-group">
+                        <label>Sex</label>
+                        <select 
+                          value={formData.sex}
+                          onChange={(e) => handleInputChange('sex', e.target.value)}
+                        >
+                          <option value="">Select Sex</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                        </select>
+                      </div>
+                  <div className="form-group">
+                    <label>Age</label>
+                    <input 
+                      type="number" 
+                      value={formData.age}
+                      onChange={(e) => handleInputChange('age', e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {editingSection === 'learnerName' && (
+                <div className="edit-form">
+                  <div className="form-group">
+                    <label>Last Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.lastName}
+                      onChange={(e) => handleInputChange('lastName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>First Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.firstName}
+                      onChange={(e) => handleInputChange('firstName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Middle Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.middleName}
+                      onChange={(e) => handleInputChange('middleName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Extension Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.extensionName}
+                      onChange={(e) => handleInputChange('extensionName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Place of Birth</label>
+                    <input 
+                      type="text" 
+                      value={formData.placeOfBirth}
+                      onChange={(e) => handleInputChange('placeOfBirth', e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {editingSection === 'currentAddress' && (
+                <div className="edit-form">
+                  <div className="form-group">
+                    <label>House No.</label>
+                    <input 
+                      type="text" 
+                      value={formData.currentHouseNo}
+                      onChange={(e) => handleInputChange('currentHouseNo', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Sitio/Street Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.currentSitio}
+                      onChange={(e) => handleInputChange('currentSitio', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Barangay</label>
+                    <input 
+                      type="text" 
+                      value={formData.currentBarangay}
+                      onChange={(e) => handleInputChange('currentBarangay', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Municipality/City</label>
+                    <input 
+                      type="text" 
+                      value={formData.currentMunicipality}
+                      onChange={(e) => handleInputChange('currentMunicipality', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Province</label>
+                    <input 
+                      type="text" 
+                      value={formData.currentProvince}
+                      onChange={(e) => handleInputChange('currentProvince', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Country</label>
+                    <input 
+                      type="text" 
+                      value={formData.currentCountry}
+                      onChange={(e) => handleInputChange('currentCountry', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Zip Code</label>
+                    <input 
+                      type="text" 
+                      value={formData.currentZipCode}
+                      onChange={(e) => handleInputChange('currentZipCode', e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {editingSection === 'permanentAddress' && (
+                <div className="edit-form">
+                  <div className="form-group">
+                    <label>House No.</label>
+                    <input 
+                      type="text" 
+                      value={formData.permanentHouseNo}
+                      onChange={(e) => handleInputChange('permanentHouseNo', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Sitio/Street Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.permanentSitio}
+                      onChange={(e) => handleInputChange('permanentSitio', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Barangay</label>
+                    <input 
+                      type="text" 
+                      value={formData.permanentBarangay}
+                      onChange={(e) => handleInputChange('permanentBarangay', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Municipality/City</label>
+                    <input 
+                      type="text" 
+                      value={formData.permanentMunicipality}
+                      onChange={(e) => handleInputChange('permanentMunicipality', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Province</label>
+                    <input 
+                      type="text" 
+                      value={formData.permanentProvince}
+                      onChange={(e) => handleInputChange('permanentProvince', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Country</label>
+                    <input 
+                      type="text" 
+                      value={formData.permanentCountry}
+                      onChange={(e) => handleInputChange('permanentCountry', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Zip Code</label>
+                    <input 
+                      type="text" 
+                      value={formData.permanentZipCode}
+                      onChange={(e) => handleInputChange('permanentZipCode', e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {editingSection === 'fatherInfo' && (
+                <div className="edit-form">
+                  <div className="form-group">
+                    <label>Last Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.fatherLastName}
+                      onChange={(e) => handleInputChange('fatherLastName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>First Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.fatherFirstName}
+                      onChange={(e) => handleInputChange('fatherFirstName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Middle Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.fatherMiddleName}
+                      onChange={(e) => handleInputChange('fatherMiddleName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Extension Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.fatherExtensionName}
+                      onChange={(e) => handleInputChange('fatherExtensionName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Contact Number</label>
+                    <input 
+                      type="text" 
+                      value={formData.fatherContactNumber}
+                      onChange={(e) => handleInputChange('fatherContactNumber', e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {editingSection === 'motherInfo' && (
+                <div className="edit-form">
+                  <div className="form-group">
+                    <label>Last Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.motherLastName}
+                      onChange={(e) => handleInputChange('motherLastName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>First Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.motherFirstName}
+                      onChange={(e) => handleInputChange('motherFirstName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Middle Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.motherMiddleName}
+                      onChange={(e) => handleInputChange('motherMiddleName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Extension Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.motherExtensionName}
+                      onChange={(e) => handleInputChange('motherExtensionName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Contact Number</label>
+                    <input 
+                      type="text" 
+                      value={formData.motherContactNumber}
+                      onChange={(e) => handleInputChange('motherContactNumber', e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {editingSection === 'guardianInfo' && (
+                <div className="edit-form">
+                  <div className="form-group">
+                    <label>Last Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.guardianLastName}
+                      onChange={(e) => handleInputChange('guardianLastName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>First Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.guardianFirstName}
+                      onChange={(e) => handleInputChange('guardianFirstName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Middle Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.guardianMiddleName}
+                      onChange={(e) => handleInputChange('guardianMiddleName', e.target.value)}
+                    />
+              </div>
+                  <div className="form-group">
+                    <label>Extension Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.guardianExtensionName}
+                      onChange={(e) => handleInputChange('guardianExtensionName', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Contact Number</label>
+                    <input 
+                      type="text" 
+                      value={formData.guardianContactNumber}
+                      onChange={(e) => handleInputChange('guardianContactNumber', e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="edit-modal-footer">
+              <button className="btn btn-secondary" onClick={handleCloseModal}>Cancel</button>
+              <button className="btn btn-primary" onClick={handleSaveEdit}>Save Changes</button>
+              </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

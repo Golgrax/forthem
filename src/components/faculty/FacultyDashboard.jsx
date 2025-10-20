@@ -1,12 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import ReactMarkdown from 'react-markdown';
 import FacultySidebar from './FacultySidebar';
-import Header from '../Header';
+import FacultyHeader from './FacultyHeader';
 import '../../style/faculty.css';
 
 const FacultyDashboard = () => {
+  console.log('Rendering FacultyDashboard');
   const navigate = useNavigate();
+  const { user } = useAuth();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [announcements, setAnnouncements] = useState([]);
+  const [reminders, setReminders] = useState([]);
+
+  // Load faculty CSS
+
+  useEffect(() => {
+    if (user && user.id) {
+      const fetchAnnouncements = async () => {
+        try {
+          const response = await fetch('/api/announcements');
+          if (response.ok) {
+            const data = await response.json();
+            setAnnouncements(data.announcements);
+          } else {
+            console.error('Failed to fetch announcements');
+          }
+        } catch (error) {
+          console.error('Error fetching announcements:', error);
+        }
+      };
+
+      const fetchReminders = async () => {
+        try {
+          const response = await fetch('/api/reminders');
+          if (response.ok) {
+            const data = await response.json();
+            setReminders(data.reminders);
+          } else {
+            console.error('Failed to fetch reminders');
+          }
+        } catch (error) {
+          console.error('Error fetching reminders:', error);
+        }
+      };
+
+      fetchAnnouncements();
+      fetchReminders();
+    }
+  }, [user]);
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -24,7 +68,7 @@ const FacultyDashboard = () => {
   ];
 
   return (
-    <div className="dashboard-container faculty-dashboard">
+    <div className="dashboard-container faculty-dashboard faculty-container">
       <FacultySidebar
         isMenuOpen={isMenuOpen}
         handleNavigation={handleNavigation}
@@ -33,7 +77,7 @@ const FacultyDashboard = () => {
       />
 
       <div className="main-content">
-        <Header toggleMenu={toggleMenu} />
+        <FacultyHeader toggleMenu={toggleMenu} />
 
         <div className="content-area">
           <div className="faculty-dashboard-wrapper">
@@ -43,55 +87,63 @@ const FacultyDashboard = () => {
                 <button className="add-button" onClick={() => navigate('/faculty/create-announcement')}>+</button>
               </div>
 
-              <div className="announcement-card faculty-card">
-                <div className="announcement-header">
-                  <div className="announcement-teacher-info">
-                    <img
-                      src="https://github.com/Golgrax/forthem-assets/blob/main/students/pfp/me.png?raw=true?width=174"
-                      alt="Faculty Avatar"
-                      className="teacher-avatar"
-                    />
-                    <div className="teacher-name">You</div>
+              {announcements.map(announcement => (
+                <div key={announcement.id} className="announcement-card faculty-card">
+                  <div className="announcement-header">
+                                      <div className="announcement-teacher-info">
+                                        <img
+                                          src={announcement.profile_picture}
+                                          alt="Faculty Avatar"
+                                          className="teacher-avatar"
+                                        />
+                                        <div className="teacher-name">{announcement.username}</div>
+                                      </div>                    <div className="announcement-date">{new Date(announcement.created_at).toLocaleDateString()}</div>
                   </div>
-                  <div className="announcement-date">Feb 11 2025</div>
+                  <div className="announcement-text">
+                    <ReactMarkdown 
+                      components={{
+                        p: ({ children }) => <p style={{ whiteSpace: 'pre-wrap', marginBottom: '0.5rem' }}>{children}</p>
+                      }}
+                    >
+                      {announcement.content}
+                    </ReactMarkdown>
+                  </div>
                 </div>
-                <div className="announcement-text">
-                  Hello, V-Molave!
-                  Please do your Module 5 for this week's activity.
-
-                  Thank you!
-                </div>
-              </div>
+              ))}
             </div>
-
             <div className="posted-section">
               <div className="section-header">
                 <div className="section-title">POSTED UPCOMING REMINDERS</div>
-                <button className="add-button" onClick={() => navigate('/faculty/create-reminder')}>+</button>
+                <button className="add-button" onClick={() => navigate('/faculty/create-reminder', { state: { user } })}>+</button>
               </div>
 
-              <div className="reminder-card faculty-card">
-                <div className="reminder-header">
-                  <div className="reminder-teacher-info">
-                    <img
-                      src="https://github.com/Golgrax/forthem-assets/blob/main/students/pfp/me.png?raw=true?width=174"
-                      alt="Faculty Avatar"
-                      className="teacher-avatar"
-                    />
-                    <div className="teacher-name">You</div>
-                    <div className="subject-tags">
-                      <span className="subject-tag gmrc">GMRC</span>
-                      <span className="subject-tag molave">V - Molave</span>
-                      <button className="tag-add-btn">+</button>
+              {reminders.map(reminder => (
+                <div key={reminder.id} className="reminder-card faculty-card">
+                  <div className="reminder-header">
+                    <div className="reminder-teacher-info">
+                      <img
+                        src={reminder.profile_picture}
+                        alt="Faculty Avatar"
+                        className="teacher-avatar"
+                      />
+                      <div className="teacher-name">{reminder.username}</div>
+                    </div>
+                    <div className="reminder-date">DUE ON {new Date(reminder.due_date).toLocaleDateString()}</div>
+                  </div>
+                  <div className="reminder-content">
+                    <div className="reminder-title">{reminder.title}</div>
+                    <div className="reminder-text">
+                      <ReactMarkdown 
+                        components={{
+                          p: ({ children }) => <p style={{ whiteSpace: 'pre-wrap', marginBottom: '0.5rem' }}>{children}</p>
+                        }}
+                      >
+                        {reminder.text}
+                      </ReactMarkdown>
                     </div>
                   </div>
-                  <div className="reminder-date">DUE ON Sept 24 2025</div>
                 </div>
-                <div className="reminder-content">
-                  <div className="reminder-title">Assignment #1</div>
-                  <div className="reminder-text">Be creative and make a family tree in your household.</div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

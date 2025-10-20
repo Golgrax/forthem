@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TransfereeSidebar from './TransfereeSidebar';
 import Header from '../Header';
-import '../../style/transferee.css';
+
 
 const NewEnrollee = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   const handleNavigation = (path) => {
     navigate(path);
     setIsMenuOpen(false);
-  };
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
   };
 
   const navItems = [

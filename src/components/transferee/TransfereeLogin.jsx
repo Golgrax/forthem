@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import '../../style/faculty.css';
+import '../../style/transferee.css';
 
-const FacultyLogin = () => {
+
+const TransfereeLogin = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [formData, setFormData] = useState({
-    facultyNumber: '',
+    learnerNumber: '',
     password: ''
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Load faculty CSS
+  // Load transferee CSS
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +32,7 @@ const FacultyLogin = () => {
     e.preventDefault();
     setError(''); // Clear any previous errors
     setIsLoading(true);
-    console.log('Attempting faculty login with:', formData.facultyNumber);
+    console.log('Attempting transferee login with:', formData.transfereeNumber);
     
     try {
       const response = await fetch('/api/login', {
@@ -40,7 +41,7 @@ const FacultyLogin = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-          username: formData.facultyNumber, 
+          username: formData.transfereeNumber, 
           password: formData.password 
         }),
       });
@@ -50,11 +51,16 @@ const FacultyLogin = () => {
 
       if (response.ok) {
         const data = await response.json();
-        if (data.user && data.user.role === 'faculty') {
-          login(data.user);
-          navigate('/faculty/dashboard');
+        console.log('Login response data:', data);
+        
+        if (data.user && data.user.role === 'transferee') {
+          console.log('Login successful, storing user data...');
+          login(data.user); // Store user data in context
+          console.log('Redirecting to transferee dashboard...');
+          navigate('/transferee/new-enrollee');
         } else {
-          alert('Login successful, but you do not have the correct role to access this page.');
+          console.log('Wrong role:', data.user?.role);
+          setError('Login successful, but you do not have the correct role to access this page.');
         }
       } else {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
@@ -70,7 +76,7 @@ const FacultyLogin = () => {
   };
 
   return (
-    <div className="student-login-container faculty">
+    <div className="transferee-login-container">
       <img
         src="https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/backgrounds/school/image.png?width=2514" 
         alt="School Building" 
@@ -86,7 +92,7 @@ const FacultyLogin = () => {
 
         <div>
           <div className="school-title">STO. NIÑO ELEMENTARY SCHOOL</div>
-          <div className="school-subtitle">Student Access System</div>
+          <div className="school-subtitle">Transferee Login</div>
         </div>
         
         <form className="login-form" onSubmit={handleSubmit}>
@@ -98,10 +104,10 @@ const FacultyLogin = () => {
           
           <input
             type="text"
-            name="facultyNumber"
-            placeholder="Faculty Number"
+            name="transfereeNumber"
+            placeholder="Transferee ID"
             className="input-field"
-            value={formData.facultyNumber}
+            value={formData.transfereeNumber}
             onChange={handleInputChange}
             required
             disabled={isLoading}
@@ -135,4 +141,4 @@ const FacultyLogin = () => {
   );
 };
 
-export default FacultyLogin;
+export default TransfereeLogin;

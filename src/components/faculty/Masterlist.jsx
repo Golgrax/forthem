@@ -1,12 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FacultySidebar from './FacultySidebar';
-import Header from '../Header';
-import '../../style/faculty.css';
+import FacultyHeader from './FacultyHeader';
+
 
 const Masterlist = () => {
   const navigate = useNavigate();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Load faculty CSS
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const response = await fetch('/api/students');
+        if (response.ok) {
+          const data = await response.json();
+          setStudents(data.students);
+        } else {
+          console.error('Failed to fetch students');
+        }
+      } catch (error) {
+        console.error('Error fetching students:', error);
+      }
+    };
+
+    fetchStudents();
+  }, []);
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -23,24 +47,8 @@ const Masterlist = () => {
     { path: '/faculty/schedule', icon: 'schedule', label: 'Schedule' },
   ];
 
-  const maleStudents = [
-    'Cruz, Rafael Javier Luis I.',
-    'Dela Cruz, Andrei Jhay R.',
-    'Mendoza, Samuel Eduardo C.',
-    'Reyes, Carlos Antonio',
-    'Santos, Miguel Alejandro T.'
-  ];
-
-  const femaleStudents = [
-    'Alvarez, Sofia Renee M.',
-    'Flores, Isabella J.',
-    'Ladisla, Maria Christina I.',
-    'Santos, Ana Gabrielle E.',
-    'Torres, Carla Beatriz T.'
-  ];
-
   return (
-    <div className="dashboard-container faculty-dashboard">
+    <div className="dashboard-container faculty-dashboard faculty-container">
       <FacultySidebar
         isMenuOpen={isMenuOpen}
         handleNavigation={handleNavigation}
@@ -49,36 +57,35 @@ const Masterlist = () => {
       />
 
       <div className="main-content">
-        <Header toggleMenu={toggleMenu} />
+        <FacultyHeader toggleMenu={toggleMenu} />
 
         <div className="content-area">
           <div className="masterlist-wrapper">
             <div className="masterlist-header-section">
               <div className="masterlist-header-text">
                 <div className="header-line">Republic of the Philippines</div>
-                <div className="header-deped">Department of Education</div>
-                <div className="header-line">National Capital Region</div>
-                <div className="header-line">Schools Division of Parañaque City</div>
-                <div className="masterlist-title">MASTERLIST</div>
-                <div className="masterlist-sy">S.Y. 2025-2026</div>
+                <div className="header-line">Department of Education</div>
+                <div className="header-deped">Region V - Bicol</div>
+                <div className="header-line">Division of Camarines Sur</div>
               </div>
+              <div className="masterlist-title">MASTERLIST</div>
+              <div className="masterlist-sy">S.Y. 2025 - 2026</div>
             </div>
 
             <div className="masterlist-content">
               <div className="gender-section">
                 <div className="gender-header male-header">MALE</div>
                 <div className="students-list">
-                  {maleStudents.map((student, index) => (
-                    <div key={index} className="student-name">{student}</div>
+                  {students.filter((_, i) => i % 2 === 0).map(student => (
+                    <div key={student.id} className="student-name">{student.username}</div>
                   ))}
                 </div>
               </div>
-
               <div className="gender-section">
                 <div className="gender-header female-header">FEMALE</div>
                 <div className="students-list">
-                  {femaleStudents.map((student, index) => (
-                    <div key={index} className="student-name">{student}</div>
+                  {students.filter((_, i) => i % 2 !== 0).map(student => (
+                    <div key={student.id} className="student-name">{student.username}</div>
                   ))}
                 </div>
               </div>

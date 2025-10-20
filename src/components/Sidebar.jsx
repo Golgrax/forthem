@@ -39,14 +39,12 @@ const Sidebar = ({ isMenuOpen, handleNavigation, navItems, toggleMenu }) => {
         </div>
         <div className="sidebar-header">
           <img
-            src="https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/logo/image.png?width=174"
-            alt="School Logo"
+            src="https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/logo/login-logo/image.png?width=300" 
+            alt="School Logo" 
             className="sidebar-logo"
           />
-          <div className="sidebar-text">
-            <div className="sidebar-school-name">STO. NIÑO ELEMENTARY SCHOOL</div>
-            <div className="sidebar-system-name">Student Access System</div>
-          </div>
+          <div className="sidebar-school-name">STO. NIÑO ELEMENTARY SCHOOL</div>
+          <div className="sidebar-system-name">Student Access System</div>
         </div>
 
         <nav className="nav-menu">

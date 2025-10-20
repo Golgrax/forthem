@@ -29,3 +29,4 @@ Pass: `password`.
   - Username: `faculty`
 - **Transferee Manager:**
   - Username: `transferee`
+  - Login Page: `/transferee-login`

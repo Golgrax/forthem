@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../style/student.css';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+
+  // Load student CSS for login page
 
   const handleStudentLogin = () => {
     navigate('/student-login');

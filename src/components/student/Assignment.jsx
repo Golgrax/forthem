@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../Sidebar';
 import Header from '../Header';
+import '../../style/student.css';
 
 const Assignment = () => {
   const navigate = useNavigate();
@@ -9,6 +10,32 @@ const Assignment = () => {
   const subject = location.state?.subject || 'SCIENCE';
   const [activeTab, setActiveTab] = useState('assignment');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [assignments, setAssignments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Load student CSS
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/assignments?subject=${subject}`);
+        if (response.ok) {
+          const data = await response.json();
+          setAssignments(data.assignments);
+        } else {
+          setError('Failed to fetch assignments');
+        }
+      } catch (error) {
+        setError('Error fetching assignments: ' + error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAssignments();
+  }, [subject]);
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -60,15 +87,34 @@ const Assignment = () => {
                 </div>
               </div>
             </div>
-            <div className="assignment-content">
-              <div className="assignment-card-container">
-                <h2 className="assignment-card-title">Assignment 1 - Property of Matters</h2>
-                <div className="assignment-card-meta">
-                  <span>Due August 26,2025</span>
-                  <span>11:59 PM</span>
+                <div className="assignment-content">
+                  {loading ? (
+                    <div>Loading assignments...</div>
+                  ) : error ? (
+                    <div>{error}</div>
+                  ) : assignments.length > 0 ? (
+                    assignments.map((assignment, index) => (
+                      <div key={index} className="assignment-card-container">
+                        <h2 className="assignment-card-title">{assignment.title}</h2>
+                        <div className="assignment-card-meta">
+                          <span>Due {new Date(assignment.due_date).toLocaleDateString()}</span>
+                          <span>{new Date(assignment.due_date).toLocaleTimeString()}</span>
+                        </div>
+                        <div className="assignment-description">
+                          {assignment.description}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="assignment-card-container">
+                      <h2 className="assignment-card-title">Assignment 1 - Property of Matters</h2>
+                      <div className="assignment-card-meta">
+                        <span>Due August 26,2025</span>
+                        <span>11:59 PM</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

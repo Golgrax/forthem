@@ -1,11 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../Sidebar';
 import Header from '../Header';
+import '../../style/student.css';
 
 const Schedule = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scheduleData, setScheduleData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Load student CSS
+
+  useEffect(() => {
+    const fetchSchedule = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/schedule');
+        if (response.ok) {
+          const data = await response.json();
+          setScheduleData(data.schedule);
+        } else {
+          setError('Failed to fetch schedule');
+        }
+      } catch (error) {
+        setError('Error fetching schedule: ' + error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSchedule();
+  }, []);
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -22,15 +49,6 @@ const Schedule = () => {
     { path: '/schedule', icon: 'schedule', label: 'Schedule' },
     { path: '/modules', icon: 'modules', label: 'Modules' },
     { path: '/grades', icon: 'grades', label: 'Grades' }
-  ];
-
-  const scheduleData = [
-    { time: '12:20 - 1:00', minutes: '40', subject: 'Science', teacher: 'Juan Miguel Santos' },
-    { time: '1:00 - 1:40', minutes: '40', subject: 'Filipino', teacher: 'Maria Teresa Reyes' },
-    { time: '1:40 - 2:20', minutes: '40', subject: 'GMRC', teacher: 'Carlos Antonio Cruz' },
-    { time: '2:20 - 2:35', minutes: '15', subject: 'Recess', teacher: 'John Miguel Santos' },
-    { time: '2:35 - 3:15', minutes: '40', subject: 'Mathematics', teacher: 'Liza Marie Fernandez' },
-    { time: '3:15 - 3:55', minutes: '40', subject: 'Araling Panlipunan', teacher: 'Jose Luis Garcia' }
   ];
 
   return (
@@ -53,28 +71,34 @@ const Schedule = () => {
               <div className="schedule-year">S.Y. 2025-2026</div>
             </div>
 
-            <div className="schedule-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>TIME</th>
-                    <th>MINUTES</th>
-                    <th>SUBJECT</th>
-                    <th>TEACHER</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {scheduleData.map((row, index) => (
-                    <tr key={index}>
-                      <td>{row.time}</td>
-                      <td>{row.minutes}</td>
-                      <td>{row.subject}</td>
-                      <td>{row.teacher}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+              <div className="schedule-table">
+                {loading ? (
+                  <div>Loading schedule...</div>
+                ) : error ? (
+                  <div>{error}</div>
+                ) : (
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>TIME</th>
+                        <th>MINUTES</th>
+                        <th>SUBJECT</th>
+                        <th>TEACHER</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {scheduleData.map((row, index) => (
+                        <tr key={index}>
+                          <td>{row.time}</td>
+                          <td>{row.minutes}</td>
+                          <td>{row.subject}</td>
+                          <td>{row.teacher}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
           </div>
         </div>
       </div>

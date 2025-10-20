@@ -1,12 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import FacultySidebar from './FacultySidebar';
-import Header from '../Header';
-import '../../style/faculty.css';
+import FacultyHeader from './FacultyHeader';
+
 
 const FacultySchedule = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [schedule, setSchedule] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Load faculty CSS
+
+  useEffect(() => {
+    if (user && user.id) {
+      const fetchSchedule = async () => {
+        try {
+          const response = await fetch(`/api/schedules/${user.id}`);
+          if (response.ok) {
+            const data = await response.json();
+            setSchedule(data.schedules);
+          } else {
+            console.error('Failed to fetch schedule');
+          }
+        } catch (error) {
+          console.error('Error fetching schedule:', error);
+        }
+      };
+
+      fetchSchedule();
+    }
+  }, [user]);
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -23,8 +51,16 @@ const FacultySchedule = () => {
     { path: '/faculty/schedule', icon: 'schedule', label: 'Schedule' },
   ];
 
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  const times = schedule.reduce((acc, curr) => {
+    if (!acc.includes(curr.time_start)) {
+      acc.push(curr.time_start);
+    }
+    return acc;
+  }, []).sort();
+
   return (
-    <div className="dashboard-container faculty-dashboard">
+    <div className="dashboard-container faculty-dashboard faculty-container">
       <FacultySidebar
         isMenuOpen={isMenuOpen}
         handleNavigation={handleNavigation}
@@ -33,57 +69,25 @@ const FacultySchedule = () => {
       />
 
       <div className="main-content">
-        <Header toggleMenu={toggleMenu} />
+        <FacultyHeader toggleMenu={toggleMenu} />
 
         <div className="content-area">
           <div className="schedule-wrapper">
             <div className="schedule-table">
               <div className="schedule-header">
-                <div className="time-header">TIME<br/>ALLOTMENT</div>
-                <div className="day-header">MONDAY</div>
-                <div className="day-header">TUESDAY</div>
-                <div className="day-header">WEDNESDAY</div>
-                <div className="day-header">THURSDAY</div>
-                <div className="day-header">FRIDAY</div>
+                <div className="time-header">TIME</div>
+                {days.map(day => <div key={day} className="day-header">{day.toUpperCase()}</div>)}
               </div>
-
               <div className="schedule-body">
-                <div className="schedule-row">
-                  <div className="time-cell">8:00 - 9:00</div>
-                  <div className="subject-cell">MATH</div>
-                  <div className="subject-cell">SCIENCE</div>
-                  <div className="subject-cell">FILIPINO</div>
-                  <div className="subject-cell">ENGLISH</div>
-                  <div className="subject-cell">MAPEH</div>
-                </div>
-                <div className="schedule-row">
-                  <div className="time-cell">9:00 - 10:00</div>
-                  <div className="subject-cell">SCIENCE</div>
-                  <div className="subject-cell">MATH</div>
-                  <div className="subject-cell">ENGLISH</div>
-                  <div className="subject-cell">FILIPINO</div>
-                  <div className="subject-cell">AP</div>
-                </div>
-                <div className="schedule-row break-row">
-                  <div className="time-cell">10:00 - 10:15</div>
-                  <div className="subject-cell break-cell" colSpan={5}>BREAK</div>
-                </div>
-                <div className="schedule-row">
-                  <div className="time-cell">10:15 - 11:15</div>
-                  <div className="subject-cell">ENGLISH</div>
-                  <div className="subject-cell">FILIPINO</div>
-                  <div className="subject-cell">MATH</div>
-                  <div className="subject-cell">SCIENCE</div>
-                  <div className="subject-cell">GMRC</div>
-                </div>
-                <div className="schedule-row">
-                  <div className="time-cell">11:15 - 12:00</div>
-                  <div className="subject-cell">FILIPINO</div>
-                  <div className="subject-cell">ENGLISH</div>
-                  <div className="subject-cell">AP</div>
-                  <div className="subject-cell">GMRC</div>
-                  <div className="subject-cell">EPP</div>
-                </div>
+                {times.map(time => (
+                  <div key={time} className="schedule-row">
+                    <div className="time-cell">{time}</div>
+                    {days.map(day => {
+                      const entry = schedule.find(s => s.day === day && s.time_start === time);
+                      return <div key={day} className="subject-cell">{entry ? entry.subject : ''}</div>;
+                    })}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
