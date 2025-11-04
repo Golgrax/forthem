@@ -1,0 +1,68 @@
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import { ReactComponent as DashboardIcon } from './icons/DashboardIcon.svg';
+import { ReactComponent as EnrollmentIcon } from './icons/EnrollmentIcon.svg';
+import { ReactComponent as ScheduleIcon } from './icons/ScheduleIcon.svg';
+import { ReactComponent as ModulesIcon } from './icons/ModulesIcon.svg';
+import { ReactComponent as GradesIcon } from './icons/GradesIcon.svg';
+import { ReactComponent as CloseIcon } from './icons/CloseIcon.svg';
+
+const Sidebar = ({ isMenuOpen, handleNavigation, navItems, toggleMenu }) => {
+  const location = useLocation();
+
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
+
+  const getNavIcon = (iconType) => {
+    switch (iconType) {
+      case 'dashboard':
+        return <DashboardIcon className="nav-icon" />;
+      case 'enrollment':
+        return <EnrollmentIcon className="nav-icon" />;
+      case 'schedule':
+        return <ScheduleIcon className="nav-icon" />;
+      case 'modules':
+        return <ModulesIcon className="nav-icon modules-icon" />;
+      case 'grades':
+        return <GradesIcon className="nav-icon" />;
+      default:
+        return <DashboardIcon className="nav-icon" />;
+    }
+  };
+
+  return (
+    <>
+      <div className={`sidebar ${isMenuOpen ? 'open' : ''}`}>
+        <div className="close-icon" onClick={toggleMenu}>
+          <CloseIcon />
+        </div>
+        <div className="sidebar-header">
+          <img
+            src="https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/logo/login-logo/image.png?width=300" 
+            alt="School Logo" 
+            className="sidebar-logo"
+          />
+          <div className="sidebar-school-name">STO. NIÑO ELEMENTARY SCHOOL</div>
+          <div className="sidebar-system-name">Student Access System</div>
+        </div>
+
+        <nav className="nav-menu">
+          {navItems.map((item) => (
+            <div
+              key={item.path}
+              className={`nav-item ${isActive(item.path) ? 'active' : ''}`}
+              onClick={() => handleNavigation(item.path)}
+            >
+              {getNavIcon(item.icon)}
+              <span className="nav-text">{item.label}</span>
+            </div>
+          ))}
+        </nav>
+      </div>
+      {isMenuOpen && <div className="sidebar-overlay" onClick={toggleMenu}></div>}
+    </>
+  );
+};
+
+export default Sidebar;

@@ -328,37 +328,6 @@ app.put("/api/enrollment/:id", (req, res) => {
     });
 });
 
-app.put("/api/users/:id", (req, res) => {
-    const { profile_picture } = req.body;
-    const sql = 'UPDATE users SET profile_picture = ?, welcome_image = ? WHERE id = ?';
-    db.run(sql, [profile_picture, profile_picture, req.params.id], function(err) {
-        if (err) {
-            res.status(500).json({ "error": err.message });
-            return;
-        }
-        const sql = "SELECT * FROM users WHERE id = ?";
-        db.get(sql, [req.params.id], (err, row) => {
-            if (err) {
-                res.status(500).json({ "error": err.message });
-                return;
-            }
-            if (row) {
-                res.json({
-                    "message": "success",
-                    "user": {
-                        "id": row.id,
-                        "username": row.username,
-                        "role": row.role,
-                        "profile_picture": row.profile_picture,
-                        "welcome_image": row.welcome_image
-                    }
-                });
-            } else {
-                res.status(404).json({ "error": "User not found" });
-            }
-        });
-    });
-});
 
 app.get("/api/schedule", (req, res) => {
     const sql = "SELECT * FROM schedules ORDER BY time_start";
