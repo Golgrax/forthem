@@ -23,7 +23,7 @@ export const createMockUser = (username, role) => ({
   id: randomId(),
   username: username || randomName().toLowerCase(),
   role: role || 'student',
-  profile_picture: 'https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/pfp/me.png',
+  profile_picture: '/assets/pfp/me.png',
   email: `${username || 'demo'}@example.com`,
   firstName: randomName().split(' ')[0],
   lastName: randomName().split(' ')[1],
@@ -50,14 +50,14 @@ const initializeMockData = () => {
     {
       id: randomId(),
       username: 'Teacher Ann',
-      profile_picture: 'https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/pfp/teacher.png',
+      profile_picture: '/assets/pfp/teacher.png',
       content: 'Hello, V-Molave!\n\nPlease do your Module 5 for this week\'s activity.\n\nThank you!',
       created_at: new Date().toISOString()
     },
     {
       id: randomId(),
       username: 'Teacher Smith',
-      profile_picture: 'https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/pfp/teacher.png',
+      profile_picture: '/assets/pfp/teacher.png',
       content: 'Reminder: Assignment #1 is due on September 23, 2025.\n\nPlease submit on time!',
       created_at: new Date(Date.now() - 86400000).toISOString()
     }
@@ -68,7 +68,7 @@ const initializeMockData = () => {
     {
       id: randomId(),
       username: 'Teacher Ann',
-      profile_picture: 'https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/pfp/teacher.png',
+      profile_picture: '/assets/pfp/teacher.png',
       title: 'Assignment #1',
       text: 'Complete Module 5 exercises',
       due_date: new Date(Date.now() + 86400000 * 2).toISOString()
@@ -254,7 +254,7 @@ export const mockCreateAnnouncement = (content, user) => {
   const announcement = {
     id: randomId(),
     username: user.username,
-    profile_picture: user.profile_picture || 'https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/pfp/teacher.png',
+    profile_picture: user.profile_picture || '/assets/pfp/teacher.png',
     content: content,
     created_at: new Date().toISOString()
   };
@@ -268,7 +268,7 @@ export const mockCreateReminder = (title, text, dueDate, user) => {
   const reminder = {
     id: randomId(),
     username: user.username,
-    profile_picture: user.profile_picture || 'https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/pfp/teacher.png',
+    profile_picture: user.profile_picture || '/assets/pfp/teacher.png',
     title: title,
     text: text,
     due_date: dueDate
@@ -281,4 +281,3 @@ export const mockCreateReminder = (title, text, dueDate, user) => {
 
 // Initialize mock data
 initializeMockData();
-

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Sidebar from './Sidebar';
@@ -12,43 +12,8 @@ import '../style/transferee.css';
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { user, login } = useAuth();
-  const [profilePicture, setProfilePicture] = useState(user?.profile_picture || '');
-  const [bio, setBio] = useState(user?.bio || '');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const { user } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-
-  const handleSave = async () => {
-    setError('');
-    setSuccess('');
-
-    try {
-      const response = await fetch(`/api/users/${user.id}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            profile_picture: profilePicture,
-            bio: bio,
-          }),
-        });
-
-      if (response.ok) {
-        const updatedUser = await response.json();
-        login(updatedUser.user);
-        setSuccess('Profile updated successfully!');
-      } else {
-        const errorData = await response.json();
-        setError(errorData.error || 'Failed to update profile.');
-      }
-    } catch (error) {
-      setError('Failed to update profile. Please try again later.');
-    }
-  };
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -87,6 +52,9 @@ const Profile = () => {
                           user?.role === 'transferee' ? TransfereeSidebar : Sidebar;
   const HeaderComponent = user?.role === 'faculty' ? FacultyHeader : Header;
 
+  const fullName = user?.role === 'faculty' ? 'Jane Cruz' : 'John Doe';
+  const lrn = '136754200001';
+
   return (
     <div className={`dashboard-container ${user?.role === 'faculty' ? 'faculty-container' : user?.role === 'transferee' ? 'transferee-container' : 'student-container'}`}>
       <SidebarComponent
@@ -105,66 +73,40 @@ const Profile = () => {
               <h1>Profile</h1>
             </div>
             
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {success && <p style={{ color: 'green' }}>{success}</p>}
-            
             {user && (
               <div className="profile-content">
                 <div className="profile-picture-section">
                   <img 
-                    src={profilePicture || user.profile_picture || 'https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/pfp/me.png'} 
+                    src={'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'} 
                     alt="Profile" 
                     className="profile-preview"
                   />
                   <div className="picture-info">
-                    <h3>Profile Picture</h3>
-                    <p>Update your profile picture by entering a valid image URL</p>
+                    <h3>{fullName}</h3>
+                    <p>{lrn}</p>
                   </div>
-                </div>
-
-                <div className="profile-form">
-                  <div className="form-group">
-                    <label htmlFor="profilePicture">Profile Picture URL:</label>
-                    <input
-                      type="url"
-                      id="profilePicture"
-                      value={profilePicture}
-                      onChange={(e) => setProfilePicture(e.target.value)}
-                      className="input-field"
-                      placeholder="Enter profile picture URL"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="bio">Bio:</label>
-                    <textarea
-                      id="bio"
-                      value={bio}
-                      onChange={(e) => setBio(e.target.value)}
-                      className="input-field textarea-field"
-                      placeholder="Tell us about yourself..."
-                      rows="4"
-                    />
-                  </div>
-
-                  <button onClick={handleSave} className="btn-primary">
-                    Save Changes
-                  </button>
                 </div>
 
                 <div className="profile-info">
                   <div className="info-item">
-                    <strong>Username:</strong> {user.username}
+                    <strong>Sex at Birth:</strong> {'Male'}
                   </div>
                   <div className="info-item">
-                    <strong>Role:</strong> {user.role}
+                    <strong>Date of Birth:</strong> {'January 1, 2000'}
                   </div>
-                  {bio && (
-                    <div className="info-item">
-                      <strong>Bio:</strong> 
-                      <div className="bio-content">{bio}</div>
-                    </div>
-                  )}
+                  <div className="info-item">
+                    <strong>Place of Birth:</strong> {'Manila'}
+                  </div>
+                </div>
+
+                <div className="profile-info">
+                  <h4>Parent/Guardian's Information</h4>
+                  <div className="info-item">
+                    <strong>Full Name:</strong> {'Juan Dela Cruz'}
+                  </div>
+                  <div className="info-item">
+                    <strong>Contact Number:</strong> {'09123456789'}
+                  </div>
                 </div>
               </div>
             )}

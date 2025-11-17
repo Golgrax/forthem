@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import '../../style/faculty.css';
+import schoolBuilding from '../../assets/backgrounds/school/image.png';
+import schoolLogo from '../../assets/logo/login-logo/image.png';
 
 const FacultyLogin = () => {
   const navigate = useNavigate();
@@ -51,20 +53,20 @@ const FacultyLogin = () => {
   return (
     <div className="student-login-container faculty">
       <img
-        src="https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/backgrounds/school/image.png?width=2514" 
+        src={schoolBuilding} 
         alt="School Building" 
         className="building-image"
       />
       
       <div className="login-form-content">
         <img
-          src="https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/logo/login-logo/image.png?width=300" 
+          src={schoolLogo} 
           alt="School Logo" 
           className="school-logo"
         />
 
         <div>
-          <div className="school-title">STO. NIÑO ELEMENTARY SCHOOL</div>
+          <div className="school-title">La Huerta Elementary School</div>
           <div className="school-subtitle">Student Access System</div>
         </div>
         

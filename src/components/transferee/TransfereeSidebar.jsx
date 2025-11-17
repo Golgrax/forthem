@@ -4,6 +4,7 @@ import { ReactComponent as DashboardIcon } from '../icons/DashboardIcon.svg';
 import { ReactComponent as MasterlistIcon } from '../icons/MasterlistIcon.svg';
 import { ReactComponent as ScheduleIcon } from '../icons/ScheduleIcon.svg';
 import { ReactComponent as CloseIcon } from '../icons/CloseIcon.svg';
+import schoolLogo from '../../assets/logo/image.png';
 
 const TransfereeSidebar = ({ isMenuOpen, handleNavigation, navItems, toggleMenu }) => {
   const location = useLocation();
@@ -33,12 +34,12 @@ const TransfereeSidebar = ({ isMenuOpen, handleNavigation, navItems, toggleMenu 
         </div>
         <div className="sidebar-header">
           <img
-            src="https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/logo/image.png?width=174"
+            src={schoolLogo}
             alt="School Logo"
             className="sidebar-logo"
           />
           <div className="sidebar-text">
-            <div className="sidebar-school-name">STO. NIÑO ELEMENTARY SCHOOL</div>
+            <div className="sidebar-school-name">La Huerta Elementary School</div>
             <div className="sidebar-system-name">Student Access System</div>
           </div>
         </div>

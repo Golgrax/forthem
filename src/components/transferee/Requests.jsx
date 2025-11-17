@@ -11,8 +11,6 @@ const Requests = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [requests, setRequests] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   // Load transferee CSS
 

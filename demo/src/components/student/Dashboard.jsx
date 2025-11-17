@@ -6,6 +6,8 @@ import Sidebar from '../Sidebar';
 import Header from '../Header';
 import { mockGetAnnouncements } from '../../services/mockData';
 import '../../style/student.css';
+import mePfp from '../../assets/pfp/me.png';
+import teacherPfp from '../../assets/pfp/teacher.png';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -66,7 +68,7 @@ const Dashboard = () => {
             <div className="welcome-section">
               <div className="welcome-text">Welcome, {user ? user.username : 'Student'}!</div>
               <img
-                src={user ? user.profile_picture : 'https://github.com/Golgrax/forthem-assets/blob/main/students/pfp/me.png?raw=true?width=602'}
+                src={user ? user.profile_picture : mePfp}
                 alt="Welcome Illustration"
                 className="welcome-image"
               />
@@ -83,7 +85,7 @@ const Dashboard = () => {
                   <div className="announcement-header">
                     <div className="announcement-teacher-info">
                       <img
-                        src="https://github.com/Golgrax/forthem-assets/blob/main/students/pfp/teacher.png?raw=true?width=174"
+                        src={teacherPfp}
                         alt="Teacher Avatar"
                         className="teacher-avatar"
                       />
@@ -107,7 +109,7 @@ const Dashboard = () => {
                     <div className="announcement-header">
                       <div className="announcement-teacher-info">
                         <img
-                          src={announcement.profile_picture || "https://github.com/Golgrax/forthem-assets/blob/main/students/pfp/teacher.png?raw=true?width=174"}
+                          src={announcement.profile_picture || teacherPfp}
                           alt="Teacher Avatar"
                           className="teacher-avatar"
                         />

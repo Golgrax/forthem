@@ -12,8 +12,6 @@ const TransfereeSchedule = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [schedule, setSchedule] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   // Load transferee CSS
 

@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import '../../style/transferee.css';
+import schoolBuilding from '../../assets/backgrounds/login-background.png';
+import schoolLogo from '../../assets/logo/login-logo/image.png';
 
 
 const TransfereeLogin = () => {
@@ -62,7 +64,8 @@ const TransfereeLogin = () => {
           console.log('Wrong role:', data.user?.role);
           setError('Login successful, but you do not have the correct role to access this page.');
         }
-      } else {
+      }
+      else {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
         console.log('Login failed with status:', response.status, 'Error:', errorData);
         setError(errorData.error || 'Invalid username or password.');
@@ -78,20 +81,20 @@ const TransfereeLogin = () => {
   return (
     <div className="transferee-login-container">
       <img
-        src="https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/backgrounds/school/image.png?width=2514" 
+        src={schoolBuilding} 
         alt="School Building" 
         className="building-image"
       />
       
       <div className="login-form-content">
         <img
-          src="https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/logo/login-logo/image.png?width=300" 
+          src={schoolLogo} 
           alt="School Logo" 
           className="school-logo"
         />
 
         <div>
-          <div className="school-title">STO. NIÑO ELEMENTARY SCHOOL</div>
+          <div className="school-title">La Huerta Elementary School</div>
           <div className="school-subtitle">Transferee Login</div>
         </div>
         
@@ -102,27 +105,35 @@ const TransfereeLogin = () => {
             </div>
           )}
           
-          <input
-            type="text"
-            name="transfereeNumber"
-            placeholder="Transferee ID"
-            className="input-field"
-            value={formData.transfereeNumber}
-            onChange={handleInputChange}
-            required
-            disabled={isLoading}
-          />
+          <div className="form-group">
+            <input
+              type="text"
+              id="transfereeNumber"
+              name="transfereeNumber"
+              placeholder=" "
+              className="input-field"
+              value={formData.transfereeNumber}
+              onChange={handleInputChange}
+              required
+              disabled={isLoading}
+            />
+            <label htmlFor="transfereeNumber" className="form-label">Transferee ID</label>
+          </div>
           
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="input-field"
-            value={formData.password}
-            onChange={handleInputChange}
-            required
-            disabled={isLoading}
-          />
+          <div className="form-group">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder=" "
+              className="input-field"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+              disabled={isLoading}
+            />
+            <label htmlFor="password" className="form-label">Password</label>
+          </div>
           
           <button 
             type="submit" 

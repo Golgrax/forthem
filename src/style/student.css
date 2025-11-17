@@ -133,6 +133,7 @@ body {
   opacity: 0.5;
   box-shadow: 0 0.25rem 0.25rem 0 rgba(0, 0, 0, 0.25);
   object-fit: cover;
+  object-position: center;
   flex-shrink: 0;
 }
 
@@ -237,6 +238,7 @@ body {
   padding: var(--spacing-xl);
   gap: var(--spacing-lg);
   min-width: 0;
+  text-align: center;
 }
 
 .login-form {
@@ -334,7 +336,7 @@ body {
   left: 0;
   width: 100%;
   height: 27rem;
-  background-image: url('https://raw.githubusercontent.com/Golgrax/forthem-assets/refs/heads/main/students/backgrounds/student-nav/background.png?width=576');
+  background-image: url('../assets/backgrounds/student-nav/background.png');
   background-size: cover;
   background-position: center;
   opacity: 0.3;
@@ -1427,7 +1429,6 @@ body {
 .form-label {
   font-family: 'Inter', sans-serif;
   font-size: 0.9375rem;
-  font-style: italic;
   font-weight: 200;
   color: var(--black);
 }
@@ -3902,3 +3903,28 @@ body {
     padding: 15px;
   }
 }
+
+.form-group {
+  position: relative;
+  width: 100%;
+}
+
+.form-label {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  transition: all 0.2s ease-in-out;
+  color: #999;
+  pointer-events: none;
+  background-color: white;
+  padding: 0 0.5rem;
+}
+
+.student-login-container .input-field:focus + .form-label,
+.student-login-container .input-field:not(:placeholder-shown) + .form-label {
+  top: 0;
+  font-size: 0.8rem;
+  color: var(--primary-blue);
+}
+

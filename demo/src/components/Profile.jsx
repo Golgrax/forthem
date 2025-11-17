@@ -9,6 +9,7 @@ import TransfereeSidebar from './transferee/TransfereeSidebar';
 import '../style/student.css';
 import '../style/faculty.css';
 import '../style/transferee.css';
+import mePfp from '../assets/pfp/me.png';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -99,7 +100,7 @@ const Profile = () => {
               <div className="profile-content">
                 <div className="profile-picture-section">
                   <img 
-                    src={profilePicture || user.profile_picture || 'https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/pfp/me.png'} 
+                    src={profilePicture || user.profile_picture || mePfp} 
                     alt="Profile" 
                     className="profile-preview"
                   />

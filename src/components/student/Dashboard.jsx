@@ -74,7 +74,7 @@ const Dashboard = () => {
             <div className="welcome-section">
               <div className="welcome-text">Welcome, {user ? user.username : 'Student'}!</div>
               <img
-                src={user ? user.profile_picture : 'https://github.com/Golgrax/forthem-assets/blob/main/students/pfp/me.png?raw=true?width=602'}
+                src={user ? user.profile_picture : '/assets/pfp/me.png'}
                 alt="Welcome Illustration"
                 className="welcome-image"
               />
@@ -91,7 +91,7 @@ const Dashboard = () => {
                   <div className="announcement-header">
                     <div className="announcement-teacher-info">
                       <img
-                        src="https://github.com/Golgrax/forthem-assets/blob/main/students/pfp/teacher.png?raw=true?width=174"
+                        src="/assets/pfp/teacher.png"
                         alt="Teacher Avatar"
                         className="teacher-avatar"
                       />
@@ -115,7 +115,7 @@ const Dashboard = () => {
                     <div className="announcement-header">
                       <div className="announcement-teacher-info">
                         <img
-                          src={announcement.profile_picture || "https://github.com/Golgrax/forthem-assets/blob/main/students/pfp/teacher.png?raw=true?width=174"}
+                          src={announcement.profile_picture || '/assets/pfp/teacher.png'}
                           alt="Teacher Avatar"
                           className="teacher-avatar"
                         />

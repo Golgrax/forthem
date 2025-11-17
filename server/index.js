@@ -504,8 +504,8 @@ db.serialize(() => {
     db.run("DELETE FROM schedules");
 
     const insert = 'INSERT INTO users (username, password, role, profile_picture, welcome_image) VALUES (?,?,?,?,?)';
-    db.run(insert, ["student", "password", "student", "https://github.com/Golgrax/forthem-assets/raw/refs/heads/main/students/pfp/me.png", "https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/backgrounds/school/image.png"]);
-    db.run(insert, ["faculty", "password", "faculty", "https://raw.githubusercontent.com/Golgrax/forthem-assets/main/pfp/teacher.png", null]);
+    db.run(insert, ["student", "password", "student", "/assets/pfp/me.png", "/assets/backgrounds/login-background.png"]);
+    db.run(insert, ["faculty", "password", "faculty", "/assets/pfp/teacher.png", null]);
     db.run(insert, ["transferee", "password", "transferee", null, null]);
 
     db.get("SELECT id FROM users WHERE role = 'faculty'", (err, row) => {

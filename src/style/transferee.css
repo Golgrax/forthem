@@ -1100,3 +1100,28 @@
     padding: 15px;
   }
 }
+
+.form-group {
+  position: relative;
+  width: 100%;
+}
+
+.form-label {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  transition: all 0.2s ease-in-out;
+  color: #999;
+  pointer-events: none;
+  background-color: white;
+  padding: 0 0.5rem;
+}
+
+.input-field:focus + .form-label,
+.input-field:not(:placeholder-shown) + .form-label {
+  top: 0;
+  font-size: 0.8rem;
+  color: var(--transferee-red);
+}
+
