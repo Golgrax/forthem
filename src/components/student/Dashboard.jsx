@@ -12,17 +12,26 @@ const Dashboard = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [announcements, setAnnouncements] = useState([]);
+  const [reminders, setReminders] = useState([]);
+  const [doneList, setDoneList] = useState({});
   const [loading, setLoading] = useState(true);
+  const [reminderLoading, setReminderLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Load student CSS
+  // Load student "marked as done" list from localStorage
+  useEffect(() => {
+    const savedDone = JSON.parse(localStorage.getItem("doneList")) || {};
+    setDoneList(savedDone);
+  }, []);
 
+  // Fetch announcements
   useEffect(() => {
     if (user && user.id) {
       const fetchAnnouncements = async () => {
         try {
           setLoading(true);
           const response = await fetch('/api/announcements');
+
           if (response.ok) {
             const data = await response.json();
             setAnnouncements(data.announcements);
@@ -40,14 +49,49 @@ const Dashboard = () => {
     }
   }, [user]);
 
+  // Fetch reminders created by teachers
+  useEffect(() => {
+    if (user && user.id) {
+      const fetchReminders = async () => {
+        try {
+          setReminderLoading(true);
+          const response = await fetch('/api/reminders');
+
+          if (response.ok) {
+            const data = await response.json();
+            setReminders(data.reminders); // expects: [{ id, subject, title, date }]
+          }
+        } catch (error) {
+          console.error("Error loading reminders:", error);
+        } finally {
+          setReminderLoading(false);
+        }
+      };
+
+      fetchReminders();
+    }
+  }, [user]);
+
+  // Toggle assignment done/undone
+  const toggleDone = (id) => {
+    const updated = { ...doneList, [id]: !doneList[id] };
+    setDoneList(updated);
+    localStorage.setItem("doneList", JSON.stringify(updated));
+  };
+
   const handleNavigation = (path) => {
     navigate(path);
     setIsMenuOpen(false);
   };
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  // Group reminders by subject
+  const subjectGroups = reminders.reduce((acc, r) => {
+    if (!acc[r.subject]) acc[r.subject] = [];
+    acc[r.subject].push(r);
+    return acc;
+  }, {});
 
   const navItems = [
     { path: '/dashboard', icon: 'dashboard', label: 'Dashboard' },
@@ -71,27 +115,32 @@ const Dashboard = () => {
 
         <div className="content-area">
           <div className="dashboard-content-wrapper">
+
+            {/* WELCOME SECTION */}
             <div className="welcome-section">
               <div className="welcome-text">Welcome, {user ? user.username : 'Student'}!</div>
               <img
-                src={user ? user.profile_picture : '/assets/pfp/me.png'}
+                src={user ? user.profile_picture : 'https://github.com/Golgrax/forthem-assets/blob/main/students/pfp/me.png?raw=true'}
                 alt="Welcome Illustration"
                 className="welcome-image"
               />
             </div>
 
+            {/* ANNOUNCEMENTS */}
             <div className="announcements-section">
               <div className="announcements-title">CLASS ANNOUNCEMENTS</div>
+
               {loading ? (
                 <div>Loading...</div>
               ) : error ? (
                 <div>{error}</div>
               ) : announcements.length === 0 ? (
+                // Default announcement example
                 <div className="announcement-card">
                   <div className="announcement-header">
                     <div className="announcement-teacher-info">
                       <img
-                        src="/assets/pfp/teacher.png"
+                        src="https://github.com/Golgrax/forthem-assets/blob/main/students/pfp/teacher.png?raw=true"
                         alt="Teacher Avatar"
                         className="teacher-avatar"
                       />
@@ -100,12 +149,12 @@ const Dashboard = () => {
                     <div className="announcement-date">Feb 11 2025</div>
                   </div>
                   <div className="announcement-text">
-                    <ReactMarkdown 
-                      components={{
-                        p: ({ children }) => <p style={{ whiteSpace: 'pre-wrap', marginBottom: '0.5rem' }}>{children}</p>
-                      }}
-                    >
-                      Hello, V-Molave!{'\n\n'}Please do your Module 5 for this week's activity.{'\n\n'}Thank you!
+                    <ReactMarkdown>
+                      Hello, V-Molave!
+
+                      Please do your Module 5 for this week's activity.
+
+                      Thank you!
                     </ReactMarkdown>
                   </div>
                 </div>
@@ -115,20 +164,19 @@ const Dashboard = () => {
                     <div className="announcement-header">
                       <div className="announcement-teacher-info">
                         <img
-                          src={announcement.profile_picture || '/assets/pfp/teacher.png'}
+                          src={announcement.profile_picture ||
+                            "https://github.com/Golgrax/forthem-assets/blob/main/students/pfp/teacher.png?raw=true"}
                           alt="Teacher Avatar"
                           className="teacher-avatar"
                         />
                         <div className="teacher-name">{announcement.username}</div>
                       </div>
-                      <div className="announcement-date">{new Date(announcement.created_at).toLocaleDateString()}</div>
+                      <div className="announcement-date">
+                        {new Date(announcement.created_at).toLocaleDateString()}
+                      </div>
                     </div>
                     <div className="announcement-text">
-                      <ReactMarkdown 
-                        components={{
-                          p: ({ children }) => <p style={{ whiteSpace: 'pre-wrap', marginBottom: '0.5rem' }}>{children}</p>
-                        }}
-                      >
+                      <ReactMarkdown>
                         {announcement.content}
                       </ReactMarkdown>
                     </div>
@@ -137,55 +185,39 @@ const Dashboard = () => {
               )}
             </div>
 
+            {/* REMINDER SECTION (dynamic per subject) */}
             <div className="reminder-section">
               <div className="reminder-title">REMINDER</div>
 
-              <div className="subject-reminder">
-                <div className="subject-name">SCIENCE</div>
-                <div className="assignments-list">
-                  <div className="assignment-item">
-                    <div className="assignment-circle"></div>
-                    <div className="assignment-details">
-                      <div className="assignment-name">Assignment #1</div>
-                      <div className="assignment-date">Sept 23 2025</div>
-                    </div>
-                  </div>
-                  <div className="assignment-item">
-                    <div className="assignment-circle"></div>
-                    <div className="assignment-details">
-                      <div className="assignment-name">Assignment #2</div>
-                      <div className="assignment-date">Sept 24 2025</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {reminderLoading ? (
+                <div>Loading reminders...</div>
+              ) : reminders.length === 0 ? (
+                <div className="no-reminders">No reminders yet.</div>
+              ) : (
+                Object.keys(subjectGroups).map(subject => (
+                  <div key={subject} className="subject-reminder">
+                    <div className="subject-name">{subject}</div>
 
-              <div className="subject-reminder">
-                <div className="subject-name">MAPEH</div>
-                <div className="assignments-list">
-                  <div className="assignment-item">
-                    <div className="assignment-circle"></div>
-                    <div className="assignment-details">
-                      <div className="assignment-name">Assignment #1</div>
-                      <div className="assignment-date">Sept 24 2025</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                    <div className="assignments-list">
+                      {subjectGroups[subject].map(r => (
+                        <div key={r.id} className="assignment-item">
+                          <div
+                            className={`assignment-circle ${doneList[r.id] ? 'done' : ''}`}
+                            onClick={() => toggleDone(r.id)}
+                          ></div>
 
-              <div className="subject-reminder">
-                <div className="subject-name">GMRC</div>
-                <div className="assignments-list">
-                  <div className="assignment-item">
-                    <div className="assignment-circle"></div>
-                    <div className="assignment-details">
-                      <div className="assignment-name">Assignment #1</div>
-                      <div className="assignment-date">Sept 24 2025</div>
+                          <div className="assignment-details">
+                            <div className="assignment-name">{r.title}</div>
+                            <div className="assignment-date">{r.date}</div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </div>
-              </div>
+                ))
+              )}
             </div>
+
           </div>
         </div>
       </div>

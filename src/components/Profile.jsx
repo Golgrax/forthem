@@ -89,23 +89,23 @@ const Profile = () => {
 
                 <div className="profile-info">
                   <div className="info-item">
-                    <strong>Sex at Birth:</strong> {'Male'}
+                    <strong>Sex at Birth:</strong> <span className="info-value">{'Male'}</span>
                   </div>
                   <div className="info-item">
-                    <strong>Date of Birth:</strong> {'January 1, 2000'}
+                    <strong>Date of Birth:</strong> <span className="info-value">{'January 1, 2000'}</span>
                   </div>
                   <div className="info-item">
-                    <strong>Place of Birth:</strong> {'Manila'}
+                    <strong>Place of Birth:</strong> <span className="info-value">{'Manila'}</span>
                   </div>
                 </div>
 
                 <div className="profile-info">
                   <h4>Parent/Guardian's Information</h4>
                   <div className="info-item">
-                    <strong>Full Name:</strong> {'Juan Dela Cruz'}
+                    <strong>Full Name:</strong> <span className="info-value">{'Juan Dela Cruz'}</span>
                   </div>
                   <div className="info-item">
-                    <strong>Contact Number:</strong> {'09123456789'}
+                    <strong>Contact Number:</strong> <span className="info-value">{'09123456789'}</span>
                   </div>
                 </div>
               </div>

@@ -158,8 +158,22 @@ module.exports = async (req, res) => {
     }
 
     if (req.method === 'GET') {
-        // Check if requesting pending enrollments
-        if (req.url.includes('/pending')) {
+        const url = new URL(req.url, `http://${req.headers.host}`);
+        const userId = url.searchParams.get('userId');
+
+        if (userId) {
+            // Get enrollment by user_id
+            const sql = "SELECT * FROM enrollment WHERE user_id = ?";
+            db.get(sql, [userId], (err, row) => {
+                if (err) {
+                    console.error('Database error:', err);
+                    res.status(500).json({ "error": err.message });
+                    return;
+                }
+                res.json({ enrollment: row });
+            });
+        } else if (req.url.includes('/pending')) {
+            // Check if requesting pending enrollments
             const sql = "SELECT * FROM enrollment WHERE status = 'pending'";
             db.all(sql, [], (err, rows) => {
                 if (err) {
