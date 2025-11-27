@@ -1,0 +1,107 @@
+/* Enrollment New Styles */
+.enrollment-form-new {
+  width: 100%;
+  max-width: 97.5rem;
+  border-radius: 1.25rem;
+  border: 0.3125rem solid var(--secondary-blue);
+  background: var(--white);
+  margin: 0 auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.enrollment-form-new.with-scroll {
+  max-height: 100%;
+}
+
+.form-header-new {
+  width: 100%;
+  min-height: 4.75rem;
+  border-radius: 1.25rem 1.25rem 0 0;
+  background: var(--secondary-blue);
+  display: flex;
+  align-items: center;
+  padding: 1.25rem 2.125rem;
+}
+
+.form-title-new {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: var(--white);
+}
+
+.form-content-scrollable-new {
+  padding: 1.5rem 2.125rem 2.125rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  max-height: 100%;
+}
+
+.form-section-new {
+  margin-bottom: 2rem;
+  position: relative;
+  background: rgba(236, 236, 236, 0.5); /* This is the background for the section, matching the image */
+  border-radius: 0.625rem;
+  padding: 1rem;
+}
+
+.section-title-new {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5625rem;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 1rem;
+}
+
+.section-edit-icon-new {
+  position: absolute;
+  right: 1rem;
+  top: 0.5rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.section-edit-icon-new:hover {
+  opacity: 1;
+}
+
+.form-row-new {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  gap: 1.5rem 1rem;
+  /* No background here, it's on the section */
+}
+
+.form-row-new.basic-info-new {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: 1rem;
+}
+
+.form-group-new {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.form-label-new {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 200;
+  color: var(--black);
+  margin-bottom: 0.5rem;
+}
+
+.form-value-new {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--black);
+  min-height: 1.5rem; /* Re-added min-height for consistency */
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}

@@ -5,7 +5,7 @@ import Sidebar from '../Sidebar';
 import Header from '../Header';
 import { ReactComponent as CheckIcon } from '../icons/CheckIcon.svg';
 import { ReactComponent as EditIcon } from '../icons/EditIcon.svg';
-import '../../style/student.css';
+import '../../style/enrollmentForm.css';
 
 const Enrollment = () => {
   const navigate = useNavigate();
@@ -266,167 +266,167 @@ const Enrollment = () => {
     switch(currentStep) {
       case 1:
         return (
-          <div className="enrollment-form with-scroll">
-            <div className="form-header">
-              <div className="form-title">LEARNER'S INFORMATION</div>
+          <div className="enrollment-form-new with-scroll">
+            <div className="form-header-new">
+              <div className="form-title-new">LEARNER'S INFORMATION</div>
             </div>
-            <div className="form-content-scrollable">
-              <div className="form-section">
-                <div className="section-title">Basic Information</div>
-                <div className="section-edit-icon">
+            <div className="form-content-scrollable-new">
+              <div className="form-section-new">
+                <div className="section-title-new">Basic Information</div>
+                <div className="section-edit-icon-new">
                   <button 
-                    className="edit-icon-btn" 
+                    className="edit-icon-btn-new" 
                     onClick={() => handleEditClick('basicInfo')}
                     title="Edit Basic Information"
                   >
                     <EditIcon />
                   </button>
                 </div>
-                <div className="form-row basic-info">
-                      <div className="form-group">
-                        <div className="form-label">School Year</div>
-                        <div className="form-value">{formData.schoolYear || 'Not provided'}</div>
+                <div className="form-row-new basic-info-new">
+                      <div className="form-group-new">
+                        <div className="form-label-new">School Year</div>
+                        <div className="form-value-new">{formData.schoolYear || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Grade level to Enroll</div>
-                        <div className="form-value">{formData.gradeLevel || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Grade level to Enroll</div>
+                        <div className="form-value-new">{formData.gradeLevel || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Learner Reference No.</div>
-                        <div className="form-value">{formData.learnerReferenceNo || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Learner Reference No.</div>
+                        <div className="form-value-new">{formData.learnerReferenceNo || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Birthday (mm/dd/yyyy)</div>
-                        <div className="form-value">{formData.birthday || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Birthday (mm/dd/yyyy)</div>
+                        <div className="form-value-new">{formData.birthday || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Sex</div>
-                        <div className="form-value">{formData.sex || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Sex</div>
+                        <div className="form-value-new">{formData.sex || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Age</div>
-                        <div className="form-value">{formData.age || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Age</div>
+                        <div className="form-value-new">{formData.age || 'Not provided'}</div>
                       </div>
                 </div>
               </div>
 
-              <div className="form-section">
-                <div className="section-title">Learner's Name</div>
-                <div className="section-edit-icon">
+              <div className="form-section-new">
+                <div className="section-title-new">Learner's Name</div>
+                <div className="section-edit-icon-new">
                   <button 
-                    className="edit-icon-btn" 
+                    className="edit-icon-btn-new" 
                     onClick={() => handleEditClick('learnerName')}
                     title="Edit Learner's Name"
                   >
                     <EditIcon />
                   </button>
                 </div>
-                    <div className="form-row">
-                      <div className="form-group">
-                        <div className="form-label">Last Name</div>
-                        <div className="form-value">{formData.lastName || 'Not provided'}</div>
+                    <div className="form-row-new">
+                      <div className="form-group-new">
+                        <div className="form-label-new">Last Name</div>
+                        <div className="form-value-new">{formData.lastName || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">First Name</div>
-                        <div className="form-value">{formData.firstName || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">First Name</div>
+                        <div className="form-value-new">{formData.firstName || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Middle Name</div>
-                        <div className="form-value">{formData.middleName || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Middle Name</div>
+                        <div className="form-value-new">{formData.middleName || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Extension Name e.g. Jr., III (If applicable)</div>
-                        <div className="form-value">{formData.extensionName || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Extension Name e.g. Jr., III (If applicable)</div>
+                        <div className="form-value-new">{formData.extensionName || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Place of Birth (Municipality City)</div>
-                        <div className="form-value">{formData.placeOfBirth || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Place of Birth (Municipality City)</div>
+                        <div className="form-value-new">{formData.placeOfBirth || 'Not provided'}</div>
                       </div>
                     </div>
               </div>
 
-              <div className="form-section">
-                <div className="section-title">Current Address</div>
-                <div className="section-edit-icon">
+              <div className="form-section-new">
+                <div className="section-title-new">Current Address</div>
+                <div className="section-edit-icon-new">
                   <button 
-                    className="edit-icon-btn" 
+                    className="edit-icon-btn-new" 
                     onClick={() => handleEditClick('currentAddress')}
                     title="Edit Current Address"
                   >
                     <EditIcon />
                   </button>
                 </div>
-                    <div className="form-row">
-                      <div className="form-group">
-                        <div className="form-label">House No.</div>
-                        <div className="form-value">{formData.currentHouseNo || 'Not provided'}</div>
+                    <div className="form-row-new">
+                      <div className="form-group-new">
+                        <div className="form-label-new">House No.</div>
+                        <div className="form-value-new">{formData.currentHouseNo || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Sitio/Street Name</div>
-                        <div className="form-value">{formData.currentSitio || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Sitio/Street Name</div>
+                        <div className="form-value-new">{formData.currentSitio || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Barangay</div>
-                        <div className="form-value">{formData.currentBarangay || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Barangay</div>
+                        <div className="form-value-new">{formData.currentBarangay || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Municipality/City</div>
-                        <div className="form-value">{formData.currentMunicipality || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Municipality/City</div>
+                        <div className="form-value-new">{formData.currentMunicipality || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Province</div>
-                        <div className="form-value">{formData.currentProvince || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Province</div>
+                        <div className="form-value-new">{formData.currentProvince || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Country</div>
-                        <div className="form-value">{formData.currentCountry || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Country</div>
+                        <div className="form-value-new">{formData.currentCountry || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Zip Code</div>
-                        <div className="form-value">{formData.currentZipCode || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Zip Code</div>
+                        <div className="form-value-new">{formData.currentZipCode || 'Not provided'}</div>
                       </div>
                     </div>
               </div>
 
-              <div className="form-section">
-                <div className="section-title">Permanent Address</div>
-                <div className="section-edit-icon">
+              <div className="form-section-new">
+                <div className="section-title-new">Permanent Address</div>
+                <div className="section-edit-icon-new">
                   <button 
-                    className="edit-icon-btn" 
+                    className="edit-icon-btn-new" 
                     onClick={() => handleEditClick('permanentAddress')}
                     title="Edit Permanent Address"
                   >
                     <EditIcon />
                   </button>
                 </div>
-                    <div className="form-row">
-                      <div className="form-group">
-                        <div className="form-label">House No.</div>
-                        <div className="form-value">{formData.permanentHouseNo || 'Not provided'}</div>
+                    <div className="form-row-new">
+                      <div className="form-group-new">
+                        <div className="form-label-new">House No.</div>
+                        <div className="form-value-new">{formData.permanentHouseNo || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Sitio/Street Name</div>
-                        <div className="form-value">{formData.permanentSitio || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Sitio/Street Name</div>
+                        <div className="form-value-new">{formData.permanentSitio || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Barangay</div>
-                        <div className="form-value">{formData.permanentBarangay || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Barangay</div>
+                        <div className="form-value-new">{formData.permanentBarangay || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Municipality/City</div>
-                        <div className="form-value">{formData.permanentMunicipality || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Municipality/City</div>
+                        <div className="form-value-new">{formData.permanentMunicipality || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Province</div>
-                        <div className="form-value">{formData.permanentProvince || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Province</div>
+                        <div className="form-value-new">{formData.permanentProvince || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Country</div>
-                        <div className="form-value">{formData.permanentCountry || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Country</div>
+                        <div className="form-value-new">{formData.permanentCountry || 'Not provided'}</div>
                       </div>
-                      <div className="form-group">
-                        <div className="form-label">Zip Code</div>
-                        <div className="form-value">{formData.permanentZipCode || 'Not provided'}</div>
+                      <div className="form-group-new">
+                        <div className="form-label-new">Zip Code</div>
+                        <div className="form-value-new">{formData.permanentZipCode || 'Not provided'}</div>
                       </div>
                     </div>
               </div>

@@ -861,11 +861,6 @@ body {
   margin-bottom: 20px;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
 
 .form-group label {
   font-weight: 600;
@@ -1144,10 +1139,6 @@ body {
   gap: 15px;
 }
 
-.edit-form .form-group {
-  display: flex;
-  flex-direction: column;
-}
 
 .edit-form label {
   font-weight: 600;
@@ -1418,11 +1409,6 @@ body {
   gap: 1rem;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
 
 .form-label {
   font-family: 'Inter', sans-serif;
@@ -2910,9 +2896,6 @@ body {
   margin-bottom: 1rem;
 }
 
-.form-group {
-  margin-bottom: 1.5rem;
-}
 
 .form-group label {
   display: block;
@@ -3780,9 +3763,6 @@ body {
   border: 1px solid #e9ecef;
 }
 
-.form-group {
-  margin-bottom: 20px;
-}
 
 .form-group label {
   display: block;
@@ -3902,3 +3882,23 @@ body {
     padding: 15px;
   }
 }
+
+
+.form-label {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  transition: all 0.2s ease-in-out;
+  color: #999;
+  pointer-events: none;
+}
+
+.form-value:focus + .form-label,
+.form-value:not(:placeholder-shown) + .form-label {
+  top: 0;
+  transform: translateY(-100%);
+  font-size: 0.75rem;
+  color: #0B1983;
+}
+
