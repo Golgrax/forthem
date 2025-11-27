@@ -283,29 +283,29 @@ const Enrollment = () => {
                   </button>
                 </div>
                 <div className="form-row basic-info">
-                      <div className={`form-group ${formData.schoolYear ? 'has-value' : ''}`}>
+                      <div className="form-group">
                         <div className="form-label">School Year</div>
-                        <div className="form-value">{formData.schoolYear || ' '}</div>
+                        <div className="form-value">{formData.schoolYear || 'Not provided'}</div>
                       </div>
-                      <div className={`form-group ${formData.gradeLevel ? 'has-value' : ''}`}>
+                      <div className="form-group">
                         <div className="form-label">Grade level to Enroll</div>
-                        <div className="form-value">{formData.gradeLevel || ' '}</div>
+                        <div className="form-value">{formData.gradeLevel || 'Not provided'}</div>
                       </div>
-                      <div className={`form-group ${formData.learnerReferenceNo ? 'has-value' : ''}`}>
+                      <div className="form-group">
                         <div className="form-label">Learner Reference No.</div>
-                        <div className="form-value">{formData.learnerReferenceNo || ' '}</div>
+                        <div className="form-value">{formData.learnerReferenceNo || 'Not provided'}</div>
                       </div>
-                      <div className={`form-group ${formData.birthday ? 'has-value' : ''}`}>
+                      <div className="form-group">
                         <div className="form-label">Birthday (mm/dd/yyyy)</div>
-                        <div className="form-value">{formData.birthday || ' '}</div>
+                        <div className="form-value">{formData.birthday || 'Not provided'}</div>
                       </div>
-                      <div className={`form-group ${formData.sex ? 'has-value' : ''}`}>
+                      <div className="form-group">
                         <div className="form-label">Sex</div>
-                        <div className="form-value">{formData.sex || ' '}</div>
+                        <div className="form-value">{formData.sex || 'Not provided'}</div>
                       </div>
-                      <div className={`form-group ${formData.age ? 'has-value' : ''}`}>
+                      <div className="form-group">
                         <div className="form-label">Age</div>
-                        <div className="form-value">{formData.age || ' '}</div>
+                        <div className="form-value">{formData.age || 'Not provided'}</div>
                       </div>
                 </div>
               </div>
@@ -322,25 +322,25 @@ const Enrollment = () => {
                   </button>
                 </div>
                     <div className="form-row">
-                      <div className={`form-group ${formData.lastName ? 'has-value' : ''}`}>
+                      <div className="form-group">
                         <div className="form-label">Last Name</div>
-                        <div className="form-value">{formData.lastName || ' '}</div>
+                        <div className="form-value">{formData.lastName || 'Not provided'}</div>
                       </div>
-                      <div className={`form-group ${formData.firstName ? 'has-value' : ''}`}>
+                      <div className="form-group">
                         <div className="form-label">First Name</div>
-                        <div className="form-value">{formData.firstName || ' '}</div>
+                        <div className="form-value">{formData.firstName || 'Not provided'}</div>
                       </div>
-                      <div className={`form-group ${formData.middleName ? 'has-value' : ''}`}>
+                      <div className="form-group">
                         <div className="form-label">Middle Name</div>
-                        <div className="form-value">{formData.middleName || ' '}</div>
+                        <div className="form-value">{formData.middleName || 'Not provided'}</div>
                       </div>
-                      <div className={`form-group ${formData.extensionName ? 'has-value' : ''}`}>
+                      <div className="form-group">
                         <div className="form-label">Extension Name e.g. Jr., III (If applicable)</div>
-                        <div className="form-value">{formData.extensionName || ' '}</div>
+                        <div className="form-value">{formData.extensionName || 'Not provided'}</div>
                       </div>
-                      <div className={`form-group ${formData.placeOfBirth ? 'has-value' : ''}`}>
+                      <div className="form-group">
                         <div className="form-label">Place of Birth (Municipality City)</div>
-                        <div className="form-value">{formData.placeOfBirth || ' '}</div>
+                        <div className="form-value">{formData.placeOfBirth || 'Not provided'}</div>
                       </div>
                     </div>
               </div>
@@ -357,33 +357,33 @@ const Enrollment = () => {
                   </button>
                 </div>
                     <div className="form-row">
-                      <div className={`form-group ${formData.currentHouseNo ? 'has-value' : ''}`}>
+                      <div className="form-group">
                         <div className="form-label">House No.</div>
-                        <div className="form-value">{formData.currentHouseNo || ' '}</div>
+                        <div className="form-value">{formData.currentHouseNo || 'Not provided'}</div>
                       </div>
                       <div className="form-group">
                         <div className="form-label">Sitio/Street Name</div>
-                        <div className="form-value">{formData.currentSitio || ' '}</div>
+                        <div className="form-value">{formData.currentSitio || 'Not provided'}</div>
                       </div>
                       <div className="form-group">
                         <div className="form-label">Barangay</div>
-                        <div className="form-value">{formData.currentBarangay || ' '}</div>
+                        <div className="form-value">{formData.currentBarangay || 'Not provided'}</div>
                       </div>
                       <div className="form-group">
                         <div className="form-label">Municipality/City</div>
-                        <div className="form-value">{formData.currentMunicipality || ' '}</div>
+                        <div className="form-value">{formData.currentMunicipality || 'Not provided'}</div>
                       </div>
                       <div className="form-group">
                         <div className="form-label">Province</div>
-                        <div className="form-value">{formData.currentProvince || ' '}</div>
+                        <div className="form-value">{formData.currentProvince || 'Not provided'}</div>
                       </div>
                       <div className="form-group">
                         <div className="form-label">Country</div>
-                        <div className="form-value">{formData.currentCountry || ' '}</div>
+                        <div className="form-value">{formData.currentCountry || 'Not provided'}</div>
                       </div>
                       <div className="form-group">
                         <div className="form-label">Zip Code</div>
-                        <div className="form-value">{formData.currentZipCode || ' '}</div>
+                        <div className="form-value">{formData.currentZipCode || 'Not provided'}</div>
                       </div>
                     </div>
               </div>
@@ -402,31 +402,31 @@ const Enrollment = () => {
                     <div className="form-row">
                       <div className="form-group">
                         <div className="form-label">House No.</div>
-                        <div className="form-value">{formData.permanentHouseNo || ' '}</div>
+                        <div className="form-value">{formData.permanentHouseNo || 'Not provided'}</div>
                       </div>
                       <div className="form-group">
                         <div className="form-label">Sitio/Street Name</div>
-                        <div className="form-value">{formData.permanentSitio || ' '}</div>
+                        <div className="form-value">{formData.permanentSitio || 'Not provided'}</div>
                       </div>
                       <div className="form-group">
                         <div className="form-label">Barangay</div>
-                        <div className="form-value">{formData.permanentBarangay || ' '}</div>
+                        <div className="form-value">{formData.permanentBarangay || 'Not provided'}</div>
                       </div>
                       <div className="form-group">
                         <div className="form-label">Municipality/City</div>
-                        <div className="form-value">{formData.permanentMunicipality || ' '}</div>
+                        <div className="form-value">{formData.permanentMunicipality || 'Not provided'}</div>
                       </div>
                       <div className="form-group">
                         <div className="form-label">Province</div>
-                        <div className="form-value">{formData.permanentProvince || ' '}</div>
+                        <div className="form-value">{formData.permanentProvince || 'Not provided'}</div>
                       </div>
                       <div className="form-group">
                         <div className="form-label">Country</div>
-                        <div className="form-value">{formData.permanentCountry || ' '}</div>
+                        <div className="form-value">{formData.permanentCountry || 'Not provided'}</div>
                       </div>
                       <div className="form-group">
                         <div className="form-label">Zip Code</div>
-                        <div className="form-value">{formData.permanentZipCode || ' '}</div>
+                        <div className="form-value">{formData.permanentZipCode || 'Not provided'}</div>
                       </div>
                     </div>
               </div>
@@ -455,23 +455,23 @@ const Enrollment = () => {
                 <div className="form-row">
                   <div className="form-group">
                     <div className="form-label">Last Name</div>
-                    <div className="form-value">{formData.fatherLastName || ' '}</div>
+                    <div className="form-value">{formData.fatherLastName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">First Name</div>
-                    <div className="form-value">{formData.fatherFirstName || ' '}</div>
+                    <div className="form-value">{formData.fatherFirstName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Middle Name</div>
-                    <div className="form-value">{formData.fatherMiddleName || ' '}</div>
+                    <div className="form-value">{formData.fatherMiddleName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Extension Name e.g. Jr., III (If applicable)</div>
-                    <div className="form-value">{formData.fatherExtensionName || ' '}</div>
+                    <div className="form-value">{formData.fatherExtensionName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Contact Number</div>
-                    <div className="form-value">{formData.fatherContactNumber || ' '}</div>
+                    <div className="form-value">{formData.fatherContactNumber || 'Not provided'}</div>
                   </div>
                 </div>
               </div>
@@ -490,23 +490,23 @@ const Enrollment = () => {
                 <div className="form-row">
                   <div className="form-group">
                     <div className="form-label">Last Name</div>
-                    <div className="form-value">{formData.motherLastName || ' '}</div>
+                    <div className="form-value">{formData.motherLastName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">First Name</div>
-                    <div className="form-value">{formData.motherFirstName || ' '}</div>
+                    <div className="form-value">{formData.motherFirstName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Middle Name</div>
-                    <div className="form-value">{formData.motherMiddleName || ' '}</div>
+                    <div className="form-value">{formData.motherMiddleName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Extension Name e.g. Jr., III (If applicable)</div>
-                    <div className="form-value">{formData.motherExtensionName || ' '}</div>
+                    <div className="form-value">{formData.motherExtensionName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Contact Number</div>
-                    <div className="form-value">{formData.motherContactNumber || ' '}</div>
+                    <div className="form-value">{formData.motherContactNumber || 'Not provided'}</div>
                   </div>
                 </div>
               </div>
@@ -525,23 +525,23 @@ const Enrollment = () => {
                 <div className="form-row">
                   <div className="form-group">
                     <div className="form-label">Last Name</div>
-                    <div className="form-value">{formData.guardianLastName || ' '}</div>
+                    <div className="form-value">{formData.guardianLastName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">First Name</div>
-                    <div className="form-value">{formData.guardianFirstName || ' '}</div>
+                    <div className="form-value">{formData.guardianFirstName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Middle Name</div>
-                    <div className="form-value">{formData.guardianMiddleName || ' '}</div>
+                    <div className="form-value">{formData.guardianMiddleName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Extension Name e.g. Jr., III (If applicable)</div>
-                    <div className="form-value">{formData.guardianExtensionName || ' '}</div>
+                    <div className="form-value">{formData.guardianExtensionName || 'Not provided'}</div>
                   </div>
                   <div className="form-group">
                     <div className="form-label">Contact Number</div>
-                    <div className="form-value">{formData.guardianContactNumber || ' '}</div>
+                    <div className="form-value">{formData.guardianContactNumber || 'Not provided'}</div>
                   </div>
                 </div>
               </div>
