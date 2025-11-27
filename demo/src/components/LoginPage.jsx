@@ -31,7 +31,7 @@ const LoginPage = () => {
         />
         
         <div>
-          <div className="school-title">La Huerta Elementary School</div>
+          <div className="school-title">Sto. Niño Elementary School</div>
           <div className="school-subtitle">Student Access System</div>
         </div>
         

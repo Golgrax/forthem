@@ -39,7 +39,7 @@ const TransfereeSidebar = ({ isMenuOpen, handleNavigation, navItems, toggleMenu 
             className="sidebar-logo"
           />
           <div className="sidebar-text">
-            <div className="sidebar-school-name">La Huerta Elementary School</div>
+            <div className="sidebar-school-name">Sto. Niño Elementary School</div>
             <div className="sidebar-system-name">Student Access System</div>
           </div>
         </div>

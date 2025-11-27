@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { ReactComponent as DashboardIcon } from '../icons/DashboardIcon.svg';
 import { ReactComponent as MasterlistIcon } from '../icons/MasterlistIcon.svg';
 import { ReactComponent as ScheduleIcon } from '../icons/ScheduleIcon.svg';
+import { ReactComponent as GradesIcon } from '../icons/GradesIcon.svg';
 import { ReactComponent as CloseIcon } from '../icons/CloseIcon.svg';
 import schoolLogo from '../../assets/logo/image.png';
 
@@ -21,6 +22,8 @@ const FacultySidebar = ({ isMenuOpen, handleNavigation, navItems, toggleMenu }) 
         return <MasterlistIcon className="nav-icon" />;
       case 'schedule':
         return <ScheduleIcon className="nav-icon" />;
+      case 'grades':
+        return <GradesIcon className="nav-icon" />;
       default:
         return <DashboardIcon className="nav-icon" />;
     }
@@ -39,7 +42,7 @@ const FacultySidebar = ({ isMenuOpen, handleNavigation, navItems, toggleMenu }) 
             className="sidebar-logo"
           />
           <div className="sidebar-text">
-            <div className="sidebar-school-name">La Huerta Elementary School</div>
+            <div className="sidebar-school-name">Sto. Niño Elementary School</div>
             <div className="sidebar-system-name">Student Access System</div>
           </div>
         </div>

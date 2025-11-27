@@ -41,8 +41,9 @@ const Masterlist = () => {
 
   const navItems = [
     { path: '/faculty/dashboard', icon: 'dashboard', label: 'Dashboard' },
-    { path: '/faculty/masterlist', icon: 'masterlist', label: 'Masterlist' },
+    { path: ' /faculty/masterlist', icon: 'masterlist', label: 'Masterlist' },
     { path: '/faculty/schedule', icon: 'schedule', label: 'Schedule' },
+    { path: '/faculty/grades', icon: 'grades', label: 'Grades' },
   ];
 
   return (

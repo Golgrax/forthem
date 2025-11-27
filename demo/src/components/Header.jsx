@@ -23,7 +23,7 @@ const Header = ({ toggleMenu }) => {
     setShowUserMenu(!showUserMenu);
   };
 
-  // Close user menu when clicking outside
+  // Isara ang user menu kapag nag-click sa labas
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {

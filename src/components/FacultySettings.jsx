@@ -15,9 +15,9 @@ const FacultySettings = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Settings state - faculty-specific defaults
+  // Estado ng mga setting - mga default na partikular sa faculty
   const [settings, setSettings] = useState({
-    // Accessibility Settings
+    // Mga Setting ng Accessibility
     highContrast: false,
     largeText: false,
     reducedMotion: false,
@@ -25,13 +25,13 @@ const FacultySettings = () => {
     keyboardNavigation: true,
     focusIndicators: true,
     
-    // Display Settings
+    // Mga Setting ng Display
     theme: 'light',
     fontSize: 'medium',
     language: 'en',
     timezone: 'Asia/Manila',
     
-    // Notification Settings
+    // Mga Setting ng Notification
     emailNotifications: true,
     pushNotifications: true,
     smsNotifications: false,
@@ -39,13 +39,13 @@ const FacultySettings = () => {
     studentSubmissionAlerts: true,
     scheduleReminders: true,
     
-    // Privacy Settings
+    // Mga Setting ng Privacy
     profileVisibility: 'public',
     showOnlineStatus: true,
     allowMessages: true,
     dataSharing: false,
     
-    // Advanced Settings
+    // Mga Advanced na Setting
     autoSave: true,
     autoLogout: 30,
     sessionTimeout: 120,
@@ -54,7 +54,7 @@ const FacultySettings = () => {
   });
 
   useEffect(() => {
-    // Load saved settings from localStorage
+    // I-load ang mga naka-save na setting mula sa localStorage
     const savedSettings = localStorage.getItem('facultySettings');
     if (savedSettings) {
       setSettings(JSON.parse(savedSettings));
@@ -79,18 +79,18 @@ const FacultySettings = () => {
     setSuccess('');
 
     try {
-      // Save settings to localStorage
+      // I-save ang mga setting sa localStorage
       localStorage.setItem('facultySettings', JSON.stringify(settings));
       
-      // Simulate API call
+      // I-simulate ang API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       setSuccess('Settings saved successfully!');
       
-      // Apply accessibility settings immediately
+      // Ilapat kaagad ang mga setting ng accessibility
       applyAccessibilitySettings();
       
-      // Clear success message after 3 seconds
+      // I-clear ang success message pagkatapos ng 3 segundo
       setTimeout(() => {
         setSuccess('');
       }, 3000);
@@ -105,21 +105,21 @@ const FacultySettings = () => {
   const applyAccessibilitySettings = () => {
     const root = document.documentElement;
     
-    // Apply high contrast
+    // Ilapat ang mataas na contrast
     if (settings.highContrast) {
       root.classList.add('high-contrast');
     } else {
       root.classList.remove('high-contrast');
     }
     
-    // Apply large text
+    // Ilapat ang malaking text
     if (settings.largeText) {
       root.classList.add('large-text');
     } else {
       root.classList.remove('large-text');
     }
     
-    // Apply reduced motion
+    // Ilapat ang reduced motion
     if (settings.reducedMotion) {
       root.classList.add('reduced-motion');
     } else {
@@ -173,7 +173,8 @@ const FacultySettings = () => {
   const getNavItems = () => [
     { path: '/faculty/dashboard', icon: 'dashboard', label: 'Dashboard' },
     { path: '/faculty/masterlist', icon: 'masterlist', label: 'Masterlist' },
-    { path: '/faculty/schedule', icon: 'schedule', label: 'Schedule' }
+    { path: '/faculty/schedule', icon: 'schedule', label: 'Schedule' },
+    { path: '/faculty/grades', icon: 'grades', label: 'Grades' },
   ];
 
   if (!user || user.role !== 'faculty') {
@@ -213,7 +214,7 @@ const FacultySettings = () => {
                 </div>
               )}
 
-              {/* Accessibility Settings */}
+              {/* Mga Setting ng Accessibility */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">♿</span>
@@ -312,7 +313,7 @@ const FacultySettings = () => {
                 </div>
               </div>
 
-              {/* Display Settings */}
+              {/* Mga Setting ng Display */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">🎨</span>
@@ -375,7 +376,7 @@ const FacultySettings = () => {
                 </div>
               </div>
 
-              {/* Notification Settings */}
+              {/* Mga Setting ng Notification */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">🔔</span>
@@ -459,7 +460,7 @@ const FacultySettings = () => {
                 </div>
               </div>
 
-              {/* Privacy Settings */}
+              {/* Mga Setting ng Privacy */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">🔒</span>
@@ -527,7 +528,7 @@ const FacultySettings = () => {
                 </div>
               </div>
 
-              {/* Advanced Settings */}
+              {/* Mga Advanced na Setting */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">⚙️</span>
@@ -597,7 +598,7 @@ const FacultySettings = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
+              {/* Mga Pindutan ng Aksyon */}
               <div className="settings-actions">
                 <button
                   type="button"

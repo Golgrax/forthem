@@ -41,7 +41,7 @@ const NewEnrollee = () => {
               <h1 className="welcome-title">Welcome to New Enrollee Section</h1>
               <p className="welcome-description">
                 This section is dedicated to managing new transferee students. Here you can view enrollment requests,
-                process documentation, and manage the onboarding of new students to La Huerta Elementary School.
+                process documentation, and manage the onboarding of new students to Sto. Niño Elementary School.
               </p>
               <p className="welcome-description">
                 Use the navigation menu to access different sections: view and approve requests, manage schedules,

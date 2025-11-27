@@ -44,7 +44,7 @@ const Sidebar = ({ isMenuOpen, handleNavigation, navItems, toggleMenu }) => {
             alt="School Logo" 
             className="sidebar-logo"
           />
-          <div className="sidebar-school-name">La Huerta Elementary School</div>
+          <div className="sidebar-school-name">Sto. Niño Elementary School</div>
           <div className="sidebar-system-name">Student Access System</div>
         </div>
 

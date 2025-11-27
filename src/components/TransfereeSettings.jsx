@@ -14,9 +14,9 @@ const TransfereeSettings = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Settings state - transferee-specific defaults
+  // Estado ng mga setting - mga default na partikular sa transferee
   const [settings, setSettings] = useState({
-    // Accessibility Settings
+    // Mga Setting ng Accessibility
     highContrast: false,
     largeText: false,
     reducedMotion: false,
@@ -24,13 +24,13 @@ const TransfereeSettings = () => {
     keyboardNavigation: true,
     focusIndicators: true,
     
-    // Display Settings
+    // Mga Setting ng Display
     theme: 'light',
     fontSize: 'medium',
     language: 'en',
     timezone: 'Asia/Manila',
     
-    // Notification Settings
+    // Mga Setting ng Notification
     emailNotifications: true,
     pushNotifications: true,
     smsNotifications: false,
@@ -38,13 +38,13 @@ const TransfereeSettings = () => {
     enrollmentRequests: true,
     scheduleReminders: true,
     
-    // Privacy Settings
+    // Mga Setting ng Privacy
     profileVisibility: 'public',
     showOnlineStatus: true,
     allowMessages: true,
     dataSharing: false,
     
-    // Advanced Settings
+    // Mga Advanced na Setting
     autoSave: true,
     autoLogout: 30,
     sessionTimeout: 120,
@@ -53,7 +53,7 @@ const TransfereeSettings = () => {
   });
 
   useEffect(() => {
-    // Load saved settings from localStorage
+    // I-load ang mga naka-save na setting mula sa localStorage
     const savedSettings = localStorage.getItem('transfereeSettings');
     if (savedSettings) {
       setSettings(JSON.parse(savedSettings));
@@ -78,18 +78,18 @@ const TransfereeSettings = () => {
     setSuccess('');
 
     try {
-      // Save settings to localStorage
+      // I-save ang mga setting sa localStorage
       localStorage.setItem('transfereeSettings', JSON.stringify(settings));
       
-      // Simulate API call
+      // I-simulate ang API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       setSuccess('Settings saved successfully!');
       
-      // Apply accessibility settings immediately
+      // Ilapat kaagad ang mga setting ng accessibility
       applyAccessibilitySettings();
       
-      // Clear success message after 3 seconds
+      // I-clear ang success message pagkatapos ng 3 segundo
       setTimeout(() => {
         setSuccess('');
       }, 3000);
@@ -104,21 +104,21 @@ const TransfereeSettings = () => {
   const applyAccessibilitySettings = () => {
     const root = document.documentElement;
     
-    // Apply high contrast
+    // Ilapat ang mataas na contrast
     if (settings.highContrast) {
       root.classList.add('high-contrast');
     } else {
       root.classList.remove('high-contrast');
     }
     
-    // Apply large text
+    // Ilapat ang malaking text
     if (settings.largeText) {
       root.classList.add('large-text');
     } else {
       root.classList.remove('large-text');
     }
     
-    // Apply reduced motion
+    // Ilapat ang reduced motion
     if (settings.reducedMotion) {
       root.classList.add('reduced-motion');
     } else {
@@ -212,7 +212,7 @@ const TransfereeSettings = () => {
                 </div>
               )}
 
-              {/* Accessibility Settings */}
+              {/* Mga Setting ng Accessibility */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">♿</span>
@@ -311,7 +311,7 @@ const TransfereeSettings = () => {
                 </div>
               </div>
 
-              {/* Display Settings */}
+              {/* Mga Setting ng Display */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">🎨</span>
@@ -374,7 +374,7 @@ const TransfereeSettings = () => {
                 </div>
               </div>
 
-              {/* Notification Settings */}
+              {/* Mga Setting ng Notification */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">🔔</span>
@@ -458,7 +458,7 @@ const TransfereeSettings = () => {
                 </div>
               </div>
 
-              {/* Privacy Settings */}
+              {/* Mga Setting ng Privacy */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">🔒</span>
@@ -526,7 +526,7 @@ const TransfereeSettings = () => {
                 </div>
               </div>
 
-              {/* Advanced Settings */}
+              {/* Mga Advanced na Setting */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">⚙️</span>
@@ -596,7 +596,7 @@ const TransfereeSettings = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
+              {/* Mga Pindutan ng Aksyon */}
               <div className="settings-actions">
                 <button
                   type="button"

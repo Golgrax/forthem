@@ -51,7 +51,7 @@ const EditProfile = () => {
       ...prev,
       [name]: value
     }));
-    // Clear errors when user starts typing
+    // Burahin ang mga error kapag nagsimulang mag-type ang user
     if (error) setError('');
   };
 
@@ -62,10 +62,10 @@ const EditProfile = () => {
     setSuccess('');
 
     try {
-      // Simulate API call - in real app, this would update the backend
+      // I-simulate ang API call - sa totoong app, ia-update nito ang backend
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Update user context with new data
+      // I-update ang konteksto ng user gamit ang bagong data
       const updatedUser = {
         ...user,
         ...formData
@@ -74,7 +74,7 @@ const EditProfile = () => {
       login(updatedUser);
       setSuccess('Profile updated successfully!');
       
-      // Clear success message after 3 seconds
+      // I-clear ang success message pagkatapos ng 3 segundo
       setTimeout(() => {
         setSuccess('');
       }, 3000);

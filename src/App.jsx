@@ -15,6 +15,7 @@ import CreateAnnouncement from './components/faculty/CreateAnnouncement';
 import CreateReminder from './components/faculty/CreateReminder';
 import Masterlist from './components/faculty/Masterlist';
 import FacultySchedule from './components/faculty/FacultySchedule';
+import FacultyGrades from './components/faculty/FacultyGrades';
 import TransfereeLogin from './components/transferee/TransfereeLogin';
 import NewEnrollee from './components/transferee/NewEnrollee';
 import Requests from './components/transferee/Requests';
@@ -41,6 +42,7 @@ function App() {
             <Route path="/faculty/create-reminder" element={<CreateReminder />} />
             <Route path="/faculty/masterlist" element={<Masterlist />} />
             <Route path="/faculty/schedule" element={<FacultySchedule />} />
+            <Route path="/faculty/grades" element={<FacultyGrades />} />
             <Route path="/transferee/new-enrollee" element={<NewEnrollee />} />
             <Route path="/transferee/requests" element={<Requests />} />
             <Route path="/transferee/schedule" element={<ScheduleT />} />

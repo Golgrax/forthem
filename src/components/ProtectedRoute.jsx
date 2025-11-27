@@ -11,7 +11,7 @@ const ProtectedRoute = ({
 }) => {
   const { user, loading } = useAuth();
 
-  // Show loading state while checking authentication
+  // Ipakita ang estado ng pag-load habang tinitingnan ang pagpapatunay
   if (loading) {
     return (
       <div style={{ 
@@ -26,12 +26,12 @@ const ProtectedRoute = ({
     );
   }
 
-  // If no user is logged in, redirect to login
+  // Kung walang user na naka-log in, i-redirect sa login
   if (!user) {
     return <Navigate to={redirectTo} replace />;
   }
 
-  // Check role-based access
+  // Suriin ang access na batay sa papel
   if (requiredRole && user.role !== requiredRole) {
     return fallback || (
       <div style={{ 
@@ -63,7 +63,7 @@ const ProtectedRoute = ({
     );
   }
 
-  // Check if user has any of the allowed roles
+  // Suriin kung ang user ay may alinman sa mga pinapayagang papel
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     return fallback || (
       <div style={{ 
@@ -95,7 +95,7 @@ const ProtectedRoute = ({
     );
   }
 
-  // User is authenticated and has the required role
+  // Ang user ay napatotohanan at may kinakailangang papel
   return children;
 };
 

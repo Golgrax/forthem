@@ -7,7 +7,7 @@ import schoolLogo from '../assets/logo/login-logo/image.png';
 const LoginPage = () => {
   const navigate = useNavigate();
 
-  // Load student CSS for login page
+  // I-load ang student CSS para sa login page
 
   const handleStudentLogin = () => {
     navigate('/student-login');
@@ -33,7 +33,7 @@ const LoginPage = () => {
         />
         
         <div>
-          <div className="school-title">La Huerta Elementary School</div>
+          <div className="school-title">Sto. Niño Elementary School</div>
           <div className="school-subtitle">Student Access System</div>
         </div>
         

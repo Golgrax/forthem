@@ -15,9 +15,9 @@ const Settings = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Settings state - role-specific defaults
+  // Estado ng mga setting - mga default na partikular sa papel
   const [settings, setSettings] = useState({
-    // Accessibility Settings
+    // Mga Setting ng Accessibility
     highContrast: false,
     largeText: false,
     reducedMotion: false,
@@ -25,13 +25,13 @@ const Settings = () => {
     keyboardNavigation: true,
     focusIndicators: true,
     
-    // Display Settings
+    // Mga Setting ng Display
     theme: 'light', // light, dark, auto
     fontSize: 'medium', // small, medium, large, extra-large
     language: 'en',
     timezone: 'UTC',
     
-    // Notification Settings
+    // Mga Setting ng Notification
     emailNotifications: true,
     pushNotifications: true,
     smsNotifications: false,
@@ -39,13 +39,13 @@ const Settings = () => {
     gradeAlerts: user?.role === 'student' ? true : false,
     scheduleReminders: true,
     
-    // Privacy Settings
+    // Mga Setting ng Privacy
     profileVisibility: 'public', // public, friends, private
     showOnlineStatus: true,
     allowMessages: true,
     dataSharing: false,
     
-    // Advanced Settings
+    // Mga Advanced na Setting
     autoSave: true,
     autoLogout: 30, // minutes
     sessionTimeout: 120, // minutes
@@ -54,7 +54,7 @@ const Settings = () => {
   });
 
   useEffect(() => {
-    // Load saved settings from localStorage
+    // I-load ang mga naka-save na setting mula sa localStorage
     const savedSettings = localStorage.getItem('userSettings');
     if (savedSettings) {
       setSettings(JSON.parse(savedSettings));
@@ -70,7 +70,7 @@ const Settings = () => {
       [name]: newValue
     }));
     
-    // Clear errors when user makes changes
+    // I-clear ang mga error kapag gumawa ng mga pagbabago ang user
     if (error) setError('');
   };
 
@@ -80,18 +80,18 @@ const Settings = () => {
     setSuccess('');
 
     try {
-      // Save settings to localStorage
+      // I-save ang mga setting sa localStorage
       localStorage.setItem('userSettings', JSON.stringify(settings));
       
-      // Simulate API call
+      // I-simulate ang API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       setSuccess('Settings saved successfully!');
       
-      // Apply accessibility settings immediately
+      // Ilapat kaagad ang mga setting ng accessibility
       applyAccessibilitySettings();
       
-      // Clear success message after 3 seconds
+      // I-clear ang success message pagkatapos ng 3 segundo
       setTimeout(() => {
         setSuccess('');
       }, 3000);
@@ -106,21 +106,21 @@ const Settings = () => {
   const applyAccessibilitySettings = () => {
     const root = document.documentElement;
     
-    // Apply high contrast
+    // Ilapat ang mataas na contrast
     if (settings.highContrast) {
       root.classList.add('high-contrast');
     } else {
       root.classList.remove('high-contrast');
     }
     
-    // Apply large text
+    // Ilapat ang malaking text
     if (settings.largeText) {
       root.classList.add('large-text');
     } else {
       root.classList.remove('large-text');
     }
     
-    // Apply reduced motion
+    // Ilapat ang reduced motion
     if (settings.reducedMotion) {
       root.classList.add('reduced-motion');
     } else {
@@ -276,7 +276,7 @@ const Settings = () => {
                 </div>
               )}
 
-              {/* Accessibility Settings */}
+              {/* Mga Setting ng Accessibility */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">♿</span>
@@ -375,7 +375,7 @@ const Settings = () => {
                 </div>
               </div>
 
-              {/* Display Settings */}
+              {/* Mga Setting ng Display */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">🎨</span>
@@ -444,7 +444,7 @@ const Settings = () => {
                 </div>
               </div>
 
-              {/* Notification Settings */}
+              {/* Mga Setting ng Notification */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">🔔</span>
@@ -564,7 +564,7 @@ const Settings = () => {
                 </div>
               </div>
 
-              {/* Privacy Settings */}
+              {/* Mga Setting ng Privacy */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">🔒</span>
@@ -633,7 +633,7 @@ const Settings = () => {
               </div>
 
 
-              {/* Advanced Settings */}
+              {/* Mga Advanced na Setting */}
               <div className="settings-section">
                 <h2 className="section-title">
                   <span className="section-icon">⚙️</span>
@@ -703,7 +703,7 @@ const Settings = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
+              {/* Mga Pindutan ng Aksyon */}
               <div className="settings-actions">
                 <button
                   type="button"
