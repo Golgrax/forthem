@@ -144,6 +144,15 @@ const Enrollment = () => {
     }
   };
 
+  const handleDownloadCertificate = () => {
+    const link = document.createElement('a');
+    link.href = '/static/media/educationform.png'; // Path to the image
+    link.download = 'Enrollment_Certificate.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleCertificateClick = () => {
     setShowDocument(true);
   };
@@ -291,11 +300,11 @@ const Enrollment = () => {
               </svg>
             </div>
             <div className="confirmation-message">You are officially enrolled.</div>
-            <button className="certificate-button" onClick={handleCertificateClick}>
+          <button className="certificate-button" onClick={handleDownloadCertificate}>
               <svg className="certificate-icon" width="22" height="27" viewBox="0 0 22 27" fill="none">
                 <path d="M19.25 27C19.9793 27 20.6788 26.7155 21.1945 26.2092C21.7103 25.7028 22 25.0161 22 24.3V8.3098C22 8.1756 21.9461 8.04704 21.8503 7.95302L13.8959 0.143218C13.8024 0.0514271 13.6766 0 13.5456 0H2.75C2.02065 0 1.32118 0.284463 0.805456 0.790812C0.289731 1.29716 0 1.98392 0 2.7V24.3C0 25.0161 0.289731 25.7028 0.805456 26.2092C1.32118 26.7155 2.02065 27 2.75 27H19.25ZM12.375 3.89162C12.375 3.44837 12.909 3.2243 13.2253 3.53483L18.3774 8.59322C18.6968 8.90685 18.4747 9.45 18.0271 9.45H12.875C12.5989 9.45 12.375 9.22614 12.375 8.95V3.89162ZM4.125 8.6C4.125 8.32386 4.34886 8.1 4.625 8.1H7.75C8.02614 8.1 8.25 8.32386 8.25 8.6V10.3C8.25 10.5761 8.02614 10.8 7.75 10.8H4.625C4.34886 10.8 4.125 10.5761 4.125 10.3V8.6ZM4.125 14C4.125 13.7239 4.34886 13.5 4.625 13.5H17.375C17.6511 13.5 17.875 13.7239 17.875 14V15.7C17.875 15.9761 17.6511 16.2 17.375 16.2H4.625C4.34886 16.2 4.125 15.9761 4.125 15.7V14ZM4.125 19.4C4.125 19.1239 4.34886 18.9 4.625 18.9H17.375C17.6511 18.9 17.875 19.1239 17.875 19.4V21.1C17.875 21.3761 17.6511 21.6 17.375 21.6H4.625C4.34886 21.6 4.125 21.3761 4.125 21.1V19.4Z" fill="white"/>
               </svg>
-              Certificate of Registration
+              Download Certificate
             </button>
           </div>
         </div>
