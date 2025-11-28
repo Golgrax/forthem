@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 const db = require('./database.js');
@@ -8,6 +7,229 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = 8080;
+
+db.serialize(() => {
+    db.run(`CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE, 
+        password TEXT, 
+        role TEXT,
+        profile_picture TEXT,
+        welcome_image TEXT,
+        email TEXT,
+        firstName TEXT,
+        lastName TEXT,
+        middleName TEXT,
+        phone TEXT,
+        studentId TEXT,
+        employeeId TEXT,
+        gradeLevel TEXT,
+        section TEXT,
+        birthDate TEXT,
+        address TEXT,
+        parentName TEXT,
+        parentPhone TEXT,
+        parentEmail TEXT,
+        emergencyContact TEXT,
+        emergencyPhone TEXT,
+        department TEXT,
+        position TEXT,
+        subject TEXT,
+        bio TEXT,
+        qualifications TEXT,
+        experience TEXT,
+        previousSchool TEXT,
+        previousGrade TEXT,
+        reasonForTransfer TEXT,
+        transferDate TEXT,
+        academicRecords TEXT,
+        recommendationLetter TEXT,
+        CONSTRAINT username_unique UNIQUE (username)
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS announcements (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        content TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        user_id INTEGER,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS reminders (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT,
+        text TEXT,
+        due_date TEXT,
+        user_id INTEGER,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS modules (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        subject TEXT,
+        teacher_name TEXT
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS grades (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        subject TEXT,
+        grade TEXT,
+        user_id INTEGER,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS assignments (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT,
+        description TEXT,
+        due_date TEXT,
+        subject TEXT,
+        user_id INTEGER,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS enrollment (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_name TEXT,
+        student_address TEXT,
+        parent_name TEXT,
+        parent_address TEXT,
+        status TEXT DEFAULT 'pending',
+        enrollment_data TEXT,
+        user_id INTEGER,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS schedules (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        day TEXT,
+        time_start TEXT,
+        time_end TEXT,
+        subject TEXT,
+        teacher_name TEXT,
+        user_id INTEGER,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    )`);
+
+    console.log("Seeding database...");
+    db.serialize(() => {
+        db.run("DELETE FROM users", () => {
+            const insert = 'INSERT INTO users (username, password, role, profile_picture, welcome_image) VALUES (?,?,?,?,?)';
+            db.run(insert, ["student", "password", "student", "/assets/pfp/me.png", "/assets/backgrounds/login-background.png"]);
+            db.run(insert, ["faculty", "password", "faculty", "/assets/pfp/teacher.png", null]);
+            db.run(insert, ["transferee", "password", "transferee", null, null]);
+        });
+    
+        db.run("DELETE FROM announcements", () => {
+            db.get("SELECT id FROM users WHERE role = 'faculty'", (err, row) => {
+                if (err) {
+                    console.error("Error getting faculty user", err);
+                    return;
+                }
+                if (row) {
+                    const insertAnnouncements = 'INSERT INTO announcements (content, user_id) VALUES (?, ?)';
+                    db.run(insertAnnouncements, ["Hello, V-Molave! Please do your Module 5 for this week's activity. Thank you!", row.id]);
+                }
+            });
+        });
+    
+        db.run("DELETE FROM schedules", () => {
+            const insertSchedules = 'INSERT INTO schedules (day, time_start, time_end, subject, teacher_name, user_id) VALUES (?, ?, ?, ?, ?, ?)';
+            db.run(insertSchedules, ["Monday", "12:20", "1:00", "Science", "Juan Miguel Santos", 1]);
+            db.run(insertSchedules, ["Monday", "1:00", "1:40", "Filipino", "Maria Teresa Reyes", 1]);
+            db.run(insertSchedules, ["Monday", "1:40", "2:20", "GMRC", "Carlos Antonio Cruz", 1]);
+            db.run(insertSchedules, ["Monday", "2:20", "2:35", "Recess", "John Miguel Santos", 1]);
+            db.run(insertSchedules, ["Monday", "2:35", "3:15", "Mathematics", "Liza Marie Fernandez", 1]);
+            db.run(insertSchedules, ["Monday", "3:15", "3:55", "Araling Panlipunan", "Jose Luis Garcia", 1]);
+        });
+        
+        db.run("DELETE FROM modules", () => {
+            const insertModules = 'INSERT INTO modules (subject, teacher_name) VALUES (?, ?)';
+            db.run(insertModules, ["Science", "Ms. Cha"]);
+            db.run(insertModules, ["Filipino", "Ms. Cha"]);
+            db.run(insertModules, ["GMRC", "Ms. Cha"]);
+            db.run(insertModules, ["Mathematics", "Ms. Cha"]);
+            db.run(insertModules, ["Araling Panlipunan", "Ms. Cha"]);
+            db.run(insertModules, ["MAPEH", "Ms. Cha"]);
+            db.run(insertModules, ["EPP", "Ms. Cha"]);
+        });
+    
+        db.run("DELETE FROM grades", () => {
+            const insertGrades = 'INSERT INTO grades (subject, grade, user_id) VALUES (?, ?, ?)';
+            db.run(insertGrades, ["Science", "A", 1]);
+            db.run(insertGrades, ["Filipino", "A", 1]);
+            db.run(insertGrades, ["GMRC", "A", 1]);
+        });
+    
+        db.run("DELETE FROM assignments", () => {
+            const insertAssignments = 'INSERT INTO assignments (title, description, due_date, subject, user_id) VALUES (?, ?, ?, ?, ?)';
+            db.run(insertAssignments, ["Assignment #1 - Property of Matters", "Complete the worksheet on properties of matter", "2025-08-26", "Science", 1]);
+            db.run(insertAssignments, ["Assignment #2 - Family Tree", "Be creative and make a family tree in your household.", "2025-09-24", "Filipino", 1]);
+        });
+    
+        db.run("DELETE FROM enrollment", () => {
+            const insertEnrollment = 'INSERT INTO enrollment (student_name, student_address, parent_name, parent_address, user_id, enrollment_data, status) VALUES (?, ?, ?, ?, ?, ?, ?)';
+            const enrollmentData = JSON.stringify({
+                learner_info: {
+                  schoolYear: '2025 - 2026',
+                  gradeLevel: 'Grade 5',
+                  learnerReferenceNo: '137591411505',
+                  birthday: '01/27/2018',
+                  sex: 'Male',
+                  age: '7',
+                  lastName: 'Dela Cruz',
+                  firstName: 'Jay Andrei',
+                  middleName: 'Ramos',
+                  extensionName: '',
+                  placeOfBirth: 'Parañaque City',
+                },
+                current_address: {
+                  currentHouseNo: '123',
+                  currentSitio: 'Sitio Matatag',
+                  currentBarangay: 'Barangay 176',
+                  currentMunicipality: 'Caloocan',
+                  currentProvince: 'Metro Manila',
+                  currentCountry: 'Philippines',
+                  currentZipCode: '1422',
+                },
+                permanent_address: {
+                    permanentHouseNo: '123',
+                    permanentSitio: 'Sitio Matatag',
+                    permanentBarangay: 'Barangay 176',
+                    permanentMunicipality: 'Caloocan',
+                    permanentProvince: 'Metro Manila',
+                    permanentCountry: 'Philippines',
+                    permanentZipCode: '1422',
+                },
+                parent_info: {
+                  father: {
+                    fatherLastName: 'Dela Cruz',
+                    fatherFirstName: 'John',
+                    fatherMiddleName: 'R.',
+                    fatherExtensionName: '',
+                    fatherContactNumber: '09123456789',
+                  },
+                  mother: {
+                    motherLastName: 'Dela Cruz',
+                    motherFirstName: 'Jane',
+                    motherMiddleName: 'R.',
+                    motherExtensionName: '',
+                    motherContactNumber: '09123456789',
+                  },
+                  guardian: {
+                    guardianLastName: '',
+                    guardianFirstName: '',
+                    guardianMiddleName: '',
+                    guardianExtensionName: '',
+                    guardianContactNumber: '',
+                  }
+                }
+              });
+            db.run(insertEnrollment, ["Jay Andrei Ramos Dela Cruz", "Caloocan, Metro Manila", "John Dela Cruz", "Caloocan, Metro Manila", 1, enrollmentData, 'enrolled']);
+        
+        });
+    });
+});
 
 app.post("/api/login", (req, res) => {
     const { username, password } = req.body;
@@ -358,194 +580,6 @@ app.get("/api/schedules/:userId", (req, res) => {
     });
 });
 
-db.serialize(() => {
-    db.run(`CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE, 
-        password TEXT, 
-        role TEXT,
-        profile_picture TEXT,
-        welcome_image TEXT,
-        email TEXT,
-        firstName TEXT,
-        lastName TEXT,
-        middleName TEXT,
-        phone TEXT,
-        studentId TEXT,
-        employeeId TEXT,
-        gradeLevel TEXT,
-        section TEXT,
-        birthDate TEXT,
-        address TEXT,
-        parentName TEXT,
-        parentPhone TEXT,
-        parentEmail TEXT,
-        emergencyContact TEXT,
-        emergencyPhone TEXT,
-        department TEXT,
-        position TEXT,
-        subject TEXT,
-        bio TEXT,
-        qualifications TEXT,
-        experience TEXT,
-        previousSchool TEXT,
-        previousGrade TEXT,
-        reasonForTransfer TEXT,
-        transferDate TEXT,
-        academicRecords TEXT,
-        recommendationLetter TEXT,
-        CONSTRAINT username_unique UNIQUE (username)
-    )`, (err) => {
-        if (err) {
-            console.error("Error creating users table", err);
-        }
-    });
-
-    db.run(`CREATE TABLE IF NOT EXISTS announcements (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        content TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        user_id INTEGER,
-        FOREIGN KEY (user_id) REFERENCES users (id)
-    )`, (err) => {
-        if (err) {
-            console.error("Error creating announcements table", err);
-        }
-    });
-
-    db.run(`CREATE TABLE IF NOT EXISTS reminders (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        text TEXT,
-        due_date TEXT,
-        user_id INTEGER,
-        FOREIGN KEY (user_id) REFERENCES users (id)
-    )`, (err) => {
-        if (err) {
-            console.error("Error creating reminders table", err);
-        }
-    });
-
-    db.run(`CREATE TABLE IF NOT EXISTS modules (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        subject TEXT,
-        teacher_name TEXT
-    )`, (err) => {
-        if (err) {
-            console.error("Error creating modules table", err);
-        }
-    });
-
-    db.run(`CREATE TABLE IF NOT EXISTS grades (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        subject TEXT,
-        grade TEXT,
-        user_id INTEGER,
-        FOREIGN KEY (user_id) REFERENCES users (id)
-    )`, (err) => {
-        if (err) {
-            console.error("Error creating grades table", err);
-        }
-    });
-
-    db.run(`CREATE TABLE IF NOT EXISTS assignments (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        description TEXT,
-        due_date TEXT,
-        subject TEXT,
-        user_id INTEGER,
-        FOREIGN KEY (user_id) REFERENCES users (id)
-    )`, (err) => {
-        if (err) {
-            console.error("Error creating assignments table", err);
-        }
-    });
-
-    db.run(`CREATE TABLE IF NOT EXISTS enrollment (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        student_name TEXT,
-        student_address TEXT,
-        parent_name TEXT,
-        parent_address TEXT,
-        status TEXT DEFAULT 'pending',
-        enrollment_data TEXT,
-        user_id INTEGER,
-        FOREIGN KEY (user_id) REFERENCES users (id)
-    )`, (err) => {
-        if (err) {
-            console.error("Error creating enrollment table", err);
-        }
-    });
-
-    db.run(`CREATE TABLE IF NOT EXISTS schedules (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        day TEXT,
-        time_start TEXT,
-        time_end TEXT,
-        subject TEXT,
-        teacher_name TEXT,
-        user_id INTEGER,
-        FOREIGN KEY (user_id) REFERENCES users (id)
-    )`, (err) => {
-        if (err) {
-            console.error("Error creating schedules table", err);
-        }
-    });
-
-    console.log("Seeding database...");
-    db.run("DELETE FROM users");
-    db.run("DELETE FROM announcements");
-    db.run("DELETE FROM reminders");
-    db.run("DELETE FROM modules");
-    db.run("DELETE FROM grades");
-    db.run("DELETE FROM assignments");
-    db.run("DELETE FROM enrollment");
-    db.run("DELETE FROM schedules");
-
-    const insert = 'INSERT INTO users (username, password, role, profile_picture, welcome_image) VALUES (?,?,?,?,?)';
-    db.run(insert, ["student", "password", "student", "/assets/pfp/me.png", "/assets/backgrounds/login-background.png"]);
-    db.run(insert, ["faculty", "password", "faculty", "/assets/pfp/teacher.png", null]);
-    db.run(insert, ["transferee", "password", "transferee", null, null]);
-
-    db.get("SELECT id FROM users WHERE role = 'faculty'", (err, row) => {
-        if (err) {
-            console.error("Error getting faculty user", err);
-            return;
-        }
-        if (row) {
-            const insertAnnouncements = 'INSERT INTO announcements (content, user_id) VALUES (?, ?)';
-            db.run(insertAnnouncements, ["Hello, V-Molave! Please do your Module 5 for this week's activity. Thank you!", row.id]);
-        }
-    });
-
-    const insertSchedules = 'INSERT INTO schedules (day, time_start, time_end, subject, teacher_name, user_id) VALUES (?, ?, ?, ?, ?, ?)';
-    db.run(insertSchedules, ["Monday", "12:20", "1:00", "Science", "Juan Miguel Santos", 1]);
-    db.run(insertSchedules, ["Monday", "1:00", "1:40", "Filipino", "Maria Teresa Reyes", 1]);
-    db.run(insertSchedules, ["Monday", "1:40", "2:20", "GMRC", "Carlos Antonio Cruz", 1]);
-    db.run(insertSchedules, ["Monday", "2:20", "2:35", "Recess", "John Miguel Santos", 1]);
-    db.run(insertSchedules, ["Monday", "2:35", "3:15", "Mathematics", "Liza Marie Fernandez", 1]);
-    db.run(insertSchedules, ["Monday", "3:15", "3:55", "Araling Panlipunan", "Jose Luis Garcia", 1]);
-
-    const insertModules = 'INSERT INTO modules (subject, teacher_name) VALUES (?, ?)';
-    db.run(insertModules, ["Science", "Ms. Cha"]);
-    db.run(insertModules, ["Filipino", "Ms. Cha"]);
-    db.run(insertModules, ["GMRC", "Ms. Cha"]);
-    db.run(insertModules, ["Mathematics", "Ms. Cha"]);
-    db.run(insertModules, ["Araling Panlipunan", "Ms. Cha"]);
-    db.run(insertModules, ["MAPEH", "Ms. Cha"]);
-    db.run(insertModules, ["EPP", "Ms. Cha"]);
-
-    const insertGrades = 'INSERT INTO grades (subject, grade, user_id) VALUES (?, ?, ?)';
-    db.run(insertGrades, ["Science", "A", 1]);
-    db.run(insertGrades, ["Filipino", "A", 1]);
-    db.run(insertGrades, ["GMRC", "A", 1]);
-
-    const insertAssignments = 'INSERT INTO assignments (title, description, due_date, subject, user_id) VALUES (?, ?, ?, ?, ?)';
-    db.run(insertAssignments, ["Assignment #1 - Property of Matters", "Complete the worksheet on properties of matter", "2025-08-26", "Science", 1]);
-    db.run(insertAssignments, ["Assignment #2 - Family Tree", "Be creative and make a family tree in your household.", "2025-09-24", "Filipino", 1]);
-
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });

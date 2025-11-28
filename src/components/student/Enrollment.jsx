@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import Sidebar from '../Sidebar';
@@ -66,6 +66,32 @@ const Enrollment = () => {
   const [error, setError] = useState(null);
   const [editingSection, setEditingSection] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+
+  useEffect(() => {
+    const fetchEnrollmentData = async () => {
+      if (user && user.id) {
+        try {
+          const response = await fetch(`/api/enrollment?userId=${user.id}`);
+          const data = await response.json();
+          if (data.enrollment) {
+            const enrollmentData = JSON.parse(data.enrollment.enrollment_data);
+            setFormData(prev => ({
+                ...prev,
+                ...enrollmentData.learner_info,
+                ...enrollmentData.current_address,
+                ...enrollmentData.permanent_address,
+                ...enrollmentData.parent_info.father,
+                ...enrollmentData.parent_info.mother,
+                ...enrollmentData.parent_info.guardian,
+            }));
+          }
+        } catch (error) {
+          console.error('Error fetching enrollment data:', error);
+        }
+      }
+    };
+    fetchEnrollmentData();
+  }, [user]);
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -436,112 +462,112 @@ const Enrollment = () => {
 
       case 2:
         return (
-          <div className="enrollment-form with-scroll">
-            <div className="form-header">
-              <div className="form-title">PARENT/GUARDIAN'S INFORMATION</div>
+          <div className="enrollment-form-new with-scroll">
+            <div className="form-header-new">
+              <div className="form-title-new">PARENT/GUARDIAN'S INFORMATION</div>
             </div>
-            <div className="form-content-scrollable">
-              <div className="form-section">
-                <div className="section-title">Father's Name</div>
-                <div className="section-edit-icon">
+            <div className="form-content-scrollable-new">
+              <div className="form-section-new">
+                <div className="section-title-new">Father's Name</div>
+                <div className="section-edit-icon-new">
                   <button 
-                    className="edit-icon-btn" 
+                    className="edit-icon-btn-new" 
                     onClick={() => handleEditClick('fatherInfo')}
                     title="Edit Father's Information"
                   >
                     <EditIcon />
                   </button>
                 </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <div className="form-label">Last Name</div>
-                    <div className="form-value">{formData.fatherLastName || 'Not provided'}</div>
+                <div className="form-row-new">
+                  <div className="form-group-new">
+                    <div className="form-label-new">Last Name</div>
+                    <div className="form-value-new">{formData.fatherLastName || 'Not provided'}</div>
                   </div>
-                  <div className="form-group">
-                    <div className="form-label">First Name</div>
-                    <div className="form-value">{formData.fatherFirstName || 'Not provided'}</div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">First Name</div>
+                    <div className="form-value-new">{formData.fatherFirstName || 'Not provided'}</div>
                   </div>
-                  <div className="form-group">
-                    <div className="form-label">Middle Name</div>
-                    <div className="form-value">{formData.fatherMiddleName || 'Not provided'}</div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">Middle Name</div>
+                    <div className="form-value-new">{formData.fatherMiddleName || 'Not provided'}</div>
                   </div>
-                  <div className="form-group">
-                    <div className="form-label">Extension Name e.g. Jr., III (If applicable)</div>
-                    <div className="form-value">{formData.fatherExtensionName || 'Not provided'}</div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">Extension Name e.g. Jr., III (If applicable)</div>
+                    <div className="form-value-new">{formData.fatherExtensionName || 'Not provided'}</div>
                   </div>
-                  <div className="form-group">
-                    <div className="form-label">Contact Number</div>
-                    <div className="form-value">{formData.fatherContactNumber || 'Not provided'}</div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">Contact Number</div>
+                    <div className="form-value-new">{formData.fatherContactNumber || 'Not provided'}</div>
                   </div>
                 </div>
               </div>
 
-              <div className="form-section">
-                <div className="section-title">Mother's Name</div>
-                <div className="section-edit-icon">
+              <div className="form-section-new">
+                <div className="section-title-new">Mother's Name</div>
+                <div className="section-edit-icon-new">
                   <button 
-                    className="edit-icon-btn" 
+                    className="edit-icon-btn-new" 
                     onClick={() => handleEditClick('motherInfo')}
                     title="Edit Mother's Information"
                   >
                     <EditIcon />
                   </button>
                 </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <div className="form-label">Last Name</div>
-                    <div className="form-value">{formData.motherLastName || 'Not provided'}</div>
+                <div className="form-row-new">
+                  <div className="form-group-new">
+                    <div className="form-label-new">Last Name</div>
+                    <div className="form-value-new">{formData.motherLastName || 'Not provided'}</div>
                   </div>
-                  <div className="form-group">
-                    <div className="form-label">First Name</div>
-                    <div className="form-value">{formData.motherFirstName || 'Not provided'}</div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">First Name</div>
+                    <div className="form-value-new">{formData.motherFirstName || 'Not provided'}</div>
                   </div>
-                  <div className="form-group">
-                    <div className="form-label">Middle Name</div>
-                    <div className="form-value">{formData.motherMiddleName || 'Not provided'}</div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">Middle Name</div>
+                    <div className="form-value-new">{formData.motherMiddleName || 'Not provided'}</div>
                   </div>
-                  <div className="form-group">
-                    <div className="form-label">Extension Name e.g. Jr., III (If applicable)</div>
-                    <div className="form-value">{formData.motherExtensionName || 'Not provided'}</div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">Extension Name e.g. Jr., III (If applicable)</div>
+                    <div className="form-value-new">{formData.motherExtensionName || 'Not provided'}</div>
                   </div>
-                  <div className="form-group">
-                    <div className="form-label">Contact Number</div>
-                    <div className="form-value">{formData.motherContactNumber || 'Not provided'}</div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">Contact Number</div>
+                    <div className="form-value-new">{formData.motherContactNumber || 'Not provided'}</div>
                   </div>
                 </div>
               </div>
 
-              <div className="form-section">
-                <div className="section-title">Guardian's Name</div>
-                <div className="section-edit-icon">
+              <div className="form-section-new">
+                <div className="section-title-new">Guardian's Name</div>
+                <div className="section-edit-icon-new">
                   <button 
-                    className="edit-icon-btn" 
+                    className="edit-icon-btn-new" 
                     onClick={() => handleEditClick('guardianInfo')}
                     title="Edit Guardian's Information"
                   >
                     <EditIcon />
                   </button>
                 </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <div className="form-label">Last Name</div>
-                    <div className="form-value">{formData.guardianLastName || 'Not provided'}</div>
+                <div className="form-row-new">
+                  <div className="form-group-new">
+                    <div className="form-label-new">Last Name</div>
+                    <div className="form-value-new">{formData.guardianLastName || 'Not provided'}</div>
                   </div>
-                  <div className="form-group">
-                    <div className="form-label">First Name</div>
-                    <div className="form-value">{formData.guardianFirstName || 'Not provided'}</div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">First Name</div>
+                    <div className="form-value-new">{formData.guardianFirstName || 'Not provided'}</div>
                   </div>
-                  <div className="form-group">
-                    <div className="form-label">Middle Name</div>
-                    <div className="form-value">{formData.guardianMiddleName || 'Not provided'}</div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">Middle Name</div>
+                    <div className="form-value-new">{formData.guardianMiddleName || 'Not provided'}</div>
                   </div>
-                  <div className="form-group">
-                    <div className="form-label">Extension Name e.g. Jr., III (If applicable)</div>
-                    <div className="form-value">{formData.guardianExtensionName || 'Not provided'}</div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">Extension Name e.g. Jr., III (If applicable)</div>
+                    <div className="form-value-new">{formData.guardianExtensionName || 'Not provided'}</div>
                   </div>
-                  <div className="form-group">
-                    <div className="form-label">Contact Number</div>
-                    <div className="form-value">{formData.guardianContactNumber || 'Not provided'}</div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">Contact Number</div>
+                    <div className="form-value-new">{formData.guardianContactNumber || 'Not provided'}</div>
                   </div>
                 </div>
               </div>
