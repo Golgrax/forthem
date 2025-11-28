@@ -6,6 +6,7 @@ import Header from '../Header';
 import { ReactComponent as CheckIcon } from '../icons/CheckIcon.svg';
 import { ReactComponent as EditIcon } from '../icons/EditIcon.svg';
 import '../../style/enrollmentForm.css';
+import EnrollmentPreview from './EnrollmentPreview';
 
 const Enrollment = () => {
   const navigate = useNavigate();
@@ -80,9 +81,21 @@ const Enrollment = () => {
                 ...enrollmentData.learner_info,
                 ...enrollmentData.current_address,
                 ...enrollmentData.permanent_address,
-                ...enrollmentData.parent_info.father,
-                ...enrollmentData.parent_info.mother,
-                ...enrollmentData.parent_info.guardian,
+                fatherLastName: enrollmentData.parent_info.father.lastName,
+                fatherFirstName: enrollmentData.parent_info.father.firstName,
+                fatherMiddleName: enrollmentData.parent_info.father.middleName,
+                fatherExtensionName: enrollmentData.parent_info.father.extensionName,
+                fatherContactNumber: enrollmentData.parent_info.father.contactNumber,
+                motherLastName: enrollmentData.parent_info.mother.lastName,
+                motherFirstName: enrollmentData.parent_info.mother.firstName,
+                motherMiddleName: enrollmentData.parent_info.mother.middleName,
+                motherExtensionName: enrollmentData.parent_info.mother.extensionName,
+                motherContactNumber: enrollmentData.parent_info.mother.contactNumber,
+                guardianLastName: enrollmentData.parent_info.guardian.lastName,
+                guardianFirstName: enrollmentData.parent_info.guardian.firstName,
+                guardianMiddleName: enrollmentData.parent_info.guardian.middleName,
+                guardianExtensionName: enrollmentData.parent_info.guardian.extensionName,
+                guardianContactNumber: enrollmentData.parent_info.guardian.contactNumber,
             }));
           }
         } catch (error) {
@@ -204,8 +217,8 @@ const Enrollment = () => {
           barangay: formData.permanentBarangay,
           municipality: formData.permanentMunicipality,
           province: formData.permanentProvince,
-          country: formData.permanentCountry,
-          zipCode: formData.permanentZipCode
+          country: formData.currentCountry,
+          zipCode: formData.currentZipCode
         },
         parent_info: {
           father: {
@@ -576,15 +589,7 @@ const Enrollment = () => {
         );
 
       case 3:
-        return (
-          <div className="enrollment-form-document">
-            <img
-              src="https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/enrollment/enrollment-form.png"
-              alt="Certificate of Registration Preview"
-              className="enrollment-document-image"
-            />
-          </div>
-        );
+        return <EnrollmentPreview formData={formData} />;
 
       default:
         return null;
