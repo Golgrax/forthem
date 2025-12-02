@@ -7,6 +7,12 @@ import { ReactComponent as CheckIcon } from '../icons/CheckIcon.svg';
 import { ReactComponent as EditIcon } from '../icons/EditIcon.svg';
 import '../../style/enrollmentForm.css';
 import EnrollmentPreview from './EnrollmentPreview';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { enrollmentHtml } from './enrollmentHtml.js';
+import formDefinition from './enrollment-form-data.json';
+
+import Cookies from 'js-cookie';
 
 const Enrollment = () => {
   const navigate = useNavigate();
@@ -17,10 +23,16 @@ const Enrollment = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [sameAsCurrent, setSameAsCurrent] = useState(false);
 
-
-
-  const [formData, setFormData] = useState({
-        // Learner's Information
+  const [formData, setFormData] = useState(() => {
+    const savedData = Cookies.get('enrollmentFormData');
+    try {
+      if (savedData) {
+        return JSON.parse(savedData);
+      }
+    } catch (e) {
+      console.error("Could not parse cookie data", e);
+    }
+    return {
         schoolYear: '',
         gradeLevel: '',
         learnerReferenceNo: '',
@@ -37,12 +49,10 @@ const Enrollment = () => {
         ifIndigenous: '',
         is4psBeneficiary: false,
         householdIdNo: '',
-        // For returning learners
         lastGradeLevelCompleted: '',
         lastSchoolYearCompleted: '',
         lastSchoolAttended: '',
         lastSchoolId: '',
-        // Current Address
         currentHouseNo: '',
         currentSitio: '',
         currentBarangay: '',
@@ -50,7 +60,6 @@ const Enrollment = () => {
         currentProvince: '',
         currentCountry: '',
         currentZipCode: '',
-        // Permanent Address
         permanentHouseNo: '',
         permanentSitio: '',
         permanentBarangay: '',
@@ -58,7 +67,6 @@ const Enrollment = () => {
         permanentProvince: '',
         permanentCountry: '',
         permanentZipCode: '',
-        // Parent/Guardian Information
         fatherLastName: '',
         fatherFirstName: '',
         fatherMiddleName: '',
@@ -74,11 +82,18 @@ const Enrollment = () => {
         guardianMiddleName: '',
         guardianExtensionName: '',
         guardianContactNumber: ''
-      });
+      };
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [editingSection, setEditingSection] = useState(null);
   const [formErrors, setFormErrors] = useState({});
+
+  useEffect(() => {
+    if (Object.values(formData).some(val => val !== '' && val !== false)) {
+      Cookies.set('enrollmentFormData', JSON.stringify(formData), { expires: 300 });
+    }
+  }, [formData]);
 
   useEffect(() => {
     if (formData.birthday) {
@@ -90,7 +105,6 @@ const Enrollment = () => {
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
           age--;
         }
-        // Use a direct state update to avoid re-triggering validation logic in handleInputChange
         setFormData(prev => ({ ...prev, age: age.toString() }));
       }
     }
@@ -209,13 +223,127 @@ const Enrollment = () => {
     }
   };
 
-  const handleDownloadCertificate = () => {
-    const link = document.createElement('a');
-    link.href = '/static/media/educationform.png'; // Path to the image
-    link.download = 'Enrollment_Certificate.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+// ... (inside the component)
+
+  const handleDownloadCertificate = async () => {
+    const CHECK_SVG = `<svg viewBox="0 0 16 16" fill="black" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;"><path d="M13.78 3.22a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06 0l-3.5-3.5a.75.75 0 1 1 1.06-1.06L5.5 9.94l7.22-7.22a.75.75 0 0 1 1.06 0z"/></svg>`;
+    
+    const doc = new DOMParser().parseFromString(enrollmentHtml, "text/html");
+
+    const overlayWrapper = doc.createElement('div');
+    overlayWrapper.id = 'overlay-layer';
+    overlayWrapper.style.position = 'absolute';
+    overlayWrapper.style.top = '0';
+    overlayWrapper.style.left = '0';
+    overlayWrapper.style.width = '100%';
+    overlayWrapper.style.height = '100%';
+    overlayWrapper.style.pointerEvents = 'none';
+    overlayWrapper.style.zIndex = '10000';
+
+    let overlayBoxesHtml = '';
+    formDefinition.groups.forEach(group => {
+      group.boxes.forEach(box => {
+        let valueToSet = '';
+        let isChecked = false;
+        const key = box.name.toLowerCase().replace(/\s/g, '');
+        
+        if (group.name === '3' || group.name === '4') { // Address
+            const isCurrent = group.name === '3';
+            const addrMapping = { 'housenumber': 'HouseNo', 'street': 'Sitio', 'barangay': 'Barangay', 'city': 'Municipality', 'province': 'Province', 'country': 'Country', 'zipcode': 'ZipCode' };
+            const formDataKey = addrMapping[key];
+            if(formDataKey) valueToSet = formData[ (isCurrent ? 'current' : 'permanent') + formDataKey ] || '';
+        } else if (box.name.startsWith('bd')) {
+            if (formData.birthday) {
+                const parts = formData.birthday.split('-');
+                if (parts.length === 3) {
+                    if (box.name === 'bdMM') valueToSet = parts[1];
+                    if (box.name === 'bdDD') valueToSet = parts[2];
+                    if (box.name === 'bdYYYY') valueToSet = parts[0];
+                }
+            }
+        } else if (box.name === 'from' || box.name === 'to') {
+             if (formData.schoolYear) {
+                const years = formData.schoolYear.split('-');
+                if (box.name === 'from') valueToSet = years[0] || '';
+                if (box.name === 'to' && years.length > 1) valueToSet = years[1] || '';
+            }
+        } else {
+             const genericMapping = {
+                'gradelevel': 'gradeLevel', 'lastname': 'lastName', 'firstname': 'firstName', 'middlename': 'middleName',
+                'extensionname': 'extensionName', 'age': 'age', 'lrn': 'learnerReferenceNo', 'placeofbirth': 'placeOfBirth',
+                'mothertonge': 'motherTongue', '4ps': 'householdIdNo', 'ifyesindigenous': 'ifIndigenous', 'fathersurname': 'fatherLastName',
+                'fatherfirstname': 'fatherFirstName', 'fathermiddlename': 'fatherMiddleName', 'fathercontactnumber': 'fatherContactNumber',
+                'mothersurname': 'motherLastName', 'motherfirstname': 'motherFirstName', 'mothermiddlename': 'motherMiddleName',
+                'mothercontactnumber': 'motherContactNumber', 'guardiansurname': 'guardianLastName', 'guardianfirstname': 'guardianFirstName',
+                'guardianmiddlename': 'guardianMiddleName', 'guardiancontactnumber': 'guardianContactNumber', 'lastcompleted': 'lastGradeLevelCompleted',
+                'lastschoolattended': 'lastSchoolAttended', 'lastschoolyear': 'lastSchoolYearCompleted', 'schoolid': 'lastSchoolId',
+            };
+            if (genericMapping[key]) {
+              const formValue = formData[genericMapping[key]];
+              valueToSet = formValue !== null && formValue !== undefined ? formValue : '';
+            }
+        }
+
+        let content;
+        if (box.type === 'checkbox') {
+            if (key === 'male' && formData.sex === 'Male') isChecked = true;
+            if (key === 'female' && formData.sex === 'Female') isChecked = true;
+            if (key === 'lrnyes' && formData.learnerReferenceNo) isChecked = true;
+            if (key === 'lrnno' && !formData.learnerReferenceNo) isChecked = true;
+            const isReturning = formData.lastGradeLevelCompleted || formData.lastSchoolYearCompleted || formData.lastSchoolAttended || formData.lastSchoolId;
+            if (key === 'returningyes' && isReturning) isChecked = true;
+            if (key === 'returningno' && !isReturning) isChecked = true;
+            if (key === 'indigenousyes' && formData.isIndigenous) isChecked = true;
+            if (key === 'indigenousno' && !formData.isIndigenous) isChecked = true;
+            if (key === '4psyes' && formData.is4psBeneficiary) isChecked = true;
+            if (key === '4psno' && !formData.is4psBeneficiary) isChecked = true;
+            if (key === 'currentaddyes' && formData.permanentHouseNo === formData.currentHouseNo) isChecked = true;
+            if (key === 'currentaddno' && formData.permanentHouseNo !== formData.currentHouseNo) isChecked = true;
+
+            content = isChecked ? CHECK_SVG : '';
+        } else {
+            const displayValue = valueToSet || '';
+            content = `<div class="overlay-box-value" style="white-space: nowrap; transform-origin: left center; font-size: 14px;">${displayValue}</div>`;
+        }
+
+        overlayBoxesHtml += `<div id="${box.id}" style="position: absolute; left: ${box.x}px; top: ${box.y}px; width: ${box.width}px; height: ${box.height}px; background-color: #FFFFFF; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-start; padding: 2px; overflow: hidden; font-family: sans-serif; color: #000; border: 2px solid #000;">${content}</div>\n`;
+      });
+    });
+    
+    overlayWrapper.innerHTML = overlayBoxesHtml;
+    const pageFrame = doc.querySelector('.pf');
+    if (pageFrame) {
+      pageFrame.appendChild(overlayWrapper);
+    }
+    
+    const finalHtml = new XMLSerializer().serializeToString(doc);
+
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.left = '-9999px';
+    document.body.appendChild(container);
+    container.innerHTML = finalHtml;
+
+    const formElement = container.querySelector('.pf');
+    if (formElement) {
+        html2canvas(formElement, {
+            scale: 2, // Higher scale for better quality
+            useCORS: true,
+            logging: true,
+        }).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'px',
+                format: [canvas.width, canvas.height]
+            });
+            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+            pdf.save('Enrollment_Certificate.pdf');
+            document.body.removeChild(container);
+        });
+    } else {
+        document.body.removeChild(container);
+    }
   };
 
   const handleEditClick = (section) => {
