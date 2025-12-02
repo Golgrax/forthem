@@ -21,9 +21,8 @@
   },
   "proxy": "http://localhost:8080",
   "scripts": {
-    "start": "react-scripts start",
-    "server": "node server/index.js",
-    "dev": "concurrently \"npm start\" \"npm run server\"",
+    "start": "concurrently \"react-scripts start\" \"node server/index.js\"",
+    "dev": "npm start",
     "build": "react-scripts build",
     "vercel-build": "echo 'Listing files in api directory:' && ls -la api && echo 'Printing environment variables:' && env && npm run build",
     "test": "react-scripts test",
