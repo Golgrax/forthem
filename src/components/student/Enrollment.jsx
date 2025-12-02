@@ -15,6 +15,8 @@ const Enrollment = () => {
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [showDocument, setShowDocument] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [sameAsCurrent, setSameAsCurrent] = useState(false);
+
 
 
   const [formData, setFormData] = useState({
@@ -30,6 +32,16 @@ const Enrollment = () => {
         middleName: '',
         extensionName: '',
         placeOfBirth: '',
+        motherTongue: '',
+        isIndigenous: false,
+        ifIndigenous: '',
+        is4psBeneficiary: false,
+        householdIdNo: '',
+        // For returning learners
+        lastGradeLevelCompleted: '',
+        lastSchoolYearCompleted: '',
+        lastSchoolAttended: '',
+        lastSchoolId: '',
         // Current Address
         currentHouseNo: '',
         currentSitio: '',
@@ -153,10 +165,6 @@ const Enrollment = () => {
     document.body.removeChild(link);
   };
 
-  const handleCertificateClick = () => {
-    setShowDocument(true);
-  };
-
   const handleEditClick = (section) => {
     setEditingSection(section);
     setShowEditModal(true);
@@ -170,6 +178,23 @@ const Enrollment = () => {
   const handleSaveEdit = () => {
     setShowEditModal(false);
     setEditingSection(null);
+  };
+
+  const handleSameAsCurrentChange = (e) => {
+    const isChecked = e.target.checked;
+    setSameAsCurrent(isChecked);
+    if (isChecked) {
+      setFormData(prev => ({
+        ...prev,
+        permanentHouseNo: prev.currentHouseNo,
+        permanentSitio: prev.currentSitio,
+        permanentBarangay: prev.currentBarangay,
+        permanentMunicipality: prev.currentMunicipality,
+        permanentProvince: prev.currentProvince,
+        permanentCountry: prev.currentCountry,
+        permanentZipCode: prev.currentZipCode,
+      }));
+    }
   };
 
       const handleSubmitEnrollment = async () => {
@@ -356,6 +381,32 @@ const Enrollment = () => {
                         <div className="form-value-new">{formData.age || 'Not provided'}</div>
                       </div>
                 </div>
+                <div className="form-row-new">
+                    <div className="form-group-new">
+                        <div className="form-label-new">Mother Tongue</div>
+                        <div className="form-value-new">{formData.motherTongue || 'Not provided'}</div>
+                    </div>
+                    <div className="form-group-new">
+                        <div className="form-label-new">Is Indigenous</div>
+                        <div className="form-value-new">{formData.isIndigenous ? 'Yes' : 'No'}</div>
+                    </div>
+                    {formData.isIndigenous && (
+                        <div className="form-group-new">
+                            <div className="form-label-new">If Indigenous, please specify</div>
+                            <div className="form-value-new">{formData.ifIndigenous || 'Not provided'}</div>
+                        </div>
+                    )}
+                    <div className="form-group-new">
+                        <div className="form-label-new">Is 4Ps Beneficiary</div>
+                        <div className="form-value-new">{formData.is4psBeneficiary ? 'Yes' : 'No'}</div>
+                    </div>
+                    {formData.is4psBeneficiary && (
+                        <div className="form-group-new">
+                            <div className="form-label-new">Household ID No.</div>
+                            <div className="form-value-new">{formData.householdIdNo || 'Not provided'}</div>
+                        </div>
+                    )}
+                </div>
               </div>
 
               <div className="form-section-new">
@@ -392,6 +443,38 @@ const Enrollment = () => {
                       </div>
                     </div>
               </div>
+
+              <div className="form-section-new">
+                <div className="section-title-new">For Returning Learners</div>
+                <div className="section-edit-icon-new">
+                  <button
+                    className="edit-icon-btn-new"
+                    onClick={() => handleEditClick('previousSchool')}
+                    title="Edit Previous School Information"
+                  >
+                    <EditIcon />
+                  </button>
+                </div>
+                <div className="form-row-new">
+                  <div className="form-group-new">
+                    <div className="form-label-new">Last Grade Level Completed</div>
+                    <div className="form-value-new">{formData.lastGradeLevelCompleted || 'Not provided'}</div>
+                  </div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">Last School Year Completed</div>
+                    <div className="form-value-new">{formData.lastSchoolYearCompleted || 'Not provided'}</div>
+                  </div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">Last School Attended</div>
+                    <div className="form-value-new">{formData.lastSchoolAttended || 'Not provided'}</div>
+                  </div>
+                  <div className="form-group-new">
+                    <div className="form-label-new">School ID</div>
+                    <div className="form-value-new">{formData.lastSchoolId || 'Not provided'}</div>
+                  </div>
+                </div>
+              </div>
+
 
               <div className="form-section-new">
                 <div className="section-title-new">Current Address</div>
@@ -438,11 +521,16 @@ const Enrollment = () => {
 
               <div className="form-section-new">
                 <div className="section-title-new">Permanent Address</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                  <input type="checkbox" id="sameAsCurrent" checked={sameAsCurrent} onChange={handleSameAsCurrentChange} />
+                  <label htmlFor="sameAsCurrent">Same as Current Address</label>
+                </div>
                 <div className="section-edit-icon-new">
                   <button 
                     className="edit-icon-btn-new" 
                     onClick={() => handleEditClick('permanentAddress')}
                     title="Edit Permanent Address"
+                    disabled={sameAsCurrent}
                   >
                     <EditIcon />
                   </button>
@@ -676,6 +764,7 @@ const Enrollment = () => {
                 <div className="edit-modal-header">
                   <h3>Edit {editingSection === 'basicInfo' ? 'Basic Information' : 
                             editingSection === 'learnerName' ? "Learner's Name" : 
+                            editingSection === 'previousSchool' ? 'Previous School Information' :
                             editingSection === 'currentAddress' ? 'Current Address' : 
                             editingSection === 'permanentAddress' ? 'Permanent Address' : 
                             editingSection === 'fatherInfo' ? "Father's Information" :
@@ -716,6 +805,7 @@ const Enrollment = () => {
                     <input 
                       type="text" 
                       value={formData.birthday}
+                      placeholder="MM-DD-YYYY"
                       onChange={(e) => handleInputChange('birthday', e.target.value)}
                     />
                   </div>
@@ -738,6 +828,54 @@ const Enrollment = () => {
                       onChange={(e) => handleInputChange('age', e.target.value)}
                     />
                   </div>
+                  <div className="form-group">
+                    <label>Mother Tongue</label>
+                    <input
+                        type="text"
+                        value={formData.motherTongue}
+                        onChange={(e) => handleInputChange('motherTongue', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                      <label>Is Indigenous</label>
+                      <select
+                          value={formData.isIndigenous}
+                          onChange={(e) => handleInputChange('isIndigenous', e.target.value === 'true')}
+                      >
+                          <option value={false}>No</option>
+                          <option value={true}>Yes</option>
+                      </select>
+                  </div>
+                  {formData.isIndigenous && (
+                      <div className="form-group">
+                          <label>If Indigenous, please specify</label>
+                          <input
+                              type="text"
+                              value={formData.ifIndigenous}
+                              onChange={(e) => handleInputChange('ifIndigenous', e.target.value)}
+                          />
+                      </div>
+                  )}
+                  <div className="form-group">
+                      <label>Is 4Ps Beneficiary</label>
+                      <select
+                          value={formData.is4psBeneficiary}
+                          onChange={(e) => handleInputChange('is4psBeneficiary', e.target.value === 'true')}
+                      >
+                          <option value={false}>No</option>
+                          <option value={true}>Yes</option>
+                      </select>
+                  </div>
+                  {formData.is4psBeneficiary && (
+                      <div className="form-group">
+                          <label>Household ID No.</label>
+                          <input
+                              type="text"
+                              value={formData.householdIdNo}
+                              onChange={(e) => handleInputChange('householdIdNo', e.target.value)}
+                          />
+                      </div>
+                  )}
                 </div>
               )}
               
@@ -783,6 +921,43 @@ const Enrollment = () => {
                       onChange={(e) => handleInputChange('placeOfBirth', e.target.value)}
                     />
                   </div>
+                </div>
+              )}
+
+              {editingSection === 'previousSchool' && (
+                <div className="edit-form">
+                    <div className="form-group">
+                        <label>Last Grade Level Completed</label>
+                        <input
+                            type="text"
+                            value={formData.lastGradeLevelCompleted}
+                            onChange={(e) => handleInputChange('lastGradeLevelCompleted', e.target.value)}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Last School Year Completed</label>
+                        <input
+                            type="text"
+                            value={formData.lastSchoolYearCompleted}
+                            onChange={(e) => handleInputChange('lastSchoolYearCompleted', e.target.value)}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Last School Attended</label>
+                        <input
+                            type="text"
+                            value={formData.lastSchoolAttended}
+                            onChange={(e) => handleInputChange('lastSchoolAttended', e.target.value)}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>School ID</label>
+                        <input
+                            type="text"
+                            value={formData.lastSchoolId}
+                            onChange={(e) => handleInputChange('lastSchoolId', e.target.value)}
+                        />
+                    </div>
                 </div>
               )}
 
