@@ -1,0 +1,5 @@
+{
+  "name": "HTML Overlay Editor",
+  "description": "A tool to visualize HTML code, overlay interactive zoning boxes, group them, and generate positioning code or JSON data.",
+  "requestFramePermissions": []
+}

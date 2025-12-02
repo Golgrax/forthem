@@ -1,0 +1,650 @@
+{
+  "maskContent": true,
+  "bottomBorderOnly": false,
+  "groups": [
+    {
+      "id": "bjh0vtojp",
+      "name": "1",
+      "color": "#000000",
+      "boxes": [
+        {
+          "id": "5isdni6px",
+          "name": "from",
+          "x": 155,
+          "y": 173,
+          "width": 63,
+          "height": 24,
+          "value": "FROM",
+          "type": "text"
+        },
+        {
+          "id": "okivsish7",
+          "name": "to",
+          "x": 233,
+          "y": 173,
+          "width": 63,
+          "height": 24,
+          "value": "TO",
+          "type": "text"
+        },
+        {
+          "id": "dndwkwulk",
+          "name": "Gradelevel",
+          "x": 185,
+          "y": 198,
+          "width": 32,
+          "height": 23,
+          "value": "00",
+          "type": "checkbox"
+        }
+      ]
+    },
+    {
+      "id": "q5x5u2p0r",
+      "name": "2",
+      "color": "#000000",
+      "boxes": [
+        {
+          "id": "awg4j3uml",
+          "name": "lastname",
+          "x": 109,
+          "y": 344,
+          "width": 311,
+          "height": 22,
+          "value": "LASTNAME",
+          "type": "text"
+        },
+        {
+          "id": "ty6bqp9zs",
+          "name": "firstname",
+          "x": 109,
+          "y": 392,
+          "width": 311,
+          "height": 22,
+          "value": "FIRSTNAME",
+          "type": "text"
+        },
+        {
+          "id": "n2v90sx2v",
+          "name": "middlename",
+          "x": 109,
+          "y": 434,
+          "width": 311,
+          "height": 22,
+          "value": "MIDDLENAME",
+          "type": "text"
+        },
+        {
+          "id": "nkoozzpqb",
+          "name": "extensionname",
+          "x": 109,
+          "y": 474,
+          "width": 142,
+          "height": 23,
+          "value": "EXTENSIONNAME",
+          "type": "text"
+        },
+        {
+          "id": "4954wqx9y",
+          "name": "bdYYYY",
+          "x": 527,
+          "y": 344,
+          "width": 62,
+          "height": 22,
+          "value": "2000",
+          "type": "text"
+        },
+        {
+          "id": "ivz7v7ba3",
+          "name": "age",
+          "x": 544,
+          "y": 388,
+          "width": 44,
+          "height": 23,
+          "value": "20",
+          "type": "text"
+        },
+        {
+          "id": "6ic3aual5",
+          "name": "LRN",
+          "x": 635,
+          "y": 297,
+          "width": 188,
+          "height": 22,
+          "value": "0000000000000",
+          "type": "text"
+        },
+        {
+          "id": "jpio85oy3",
+          "name": "placeofbirth",
+          "x": 605,
+          "y": 344,
+          "width": 200,
+          "height": 21,
+          "value": "MANILA",
+          "type": "text"
+        },
+        {
+          "id": "g3zcvci8l",
+          "name": "mothertonge",
+          "x": 605,
+          "y": 392,
+          "width": 200,
+          "height": 21,
+          "value": "N/A",
+          "type": "text"
+        },
+        {
+          "id": "ibgv658ff",
+          "name": "4ps",
+          "x": 465,
+          "y": 495,
+          "width": 341,
+          "height": 23,
+          "value": "000000000",
+          "type": "text"
+        },
+        {
+          "id": "abyw7bi8o",
+          "name": "IfYesIndigenous",
+          "x": 635,
+          "y": 433,
+          "width": 195,
+          "height": 22,
+          "value": "BADJAO",
+          "type": "text"
+        },
+        {
+          "id": "tz1x7s95o",
+          "name": "bdMM",
+          "x": 434,
+          "y": 345,
+          "width": 31,
+          "height": 22,
+          "value": "12",
+          "type": "text"
+        },
+        {
+          "id": "gl25z852v",
+          "name": "bdDD",
+          "x": 481,
+          "y": 345,
+          "width": 31,
+          "height": 22,
+          "value": "31",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "lq494osbz",
+      "name": "3",
+      "color": "#000000",
+      "boxes": [
+        {
+          "id": "q6030626o",
+          "name": "housenumber",
+          "x": 93,
+          "y": 560,
+          "width": 155,
+          "height": 30,
+          "value": "133",
+          "type": "text"
+        },
+        {
+          "id": "0tojbhla3",
+          "name": "street",
+          "x": 264,
+          "y": 560,
+          "width": 263,
+          "height": 30,
+          "value": "RIVERSIDESTREET",
+          "type": "text"
+        },
+        {
+          "id": "13695gnt4",
+          "name": "province",
+          "x": 325,
+          "y": 606,
+          "width": 203,
+          "height": 30,
+          "value": "METRO MANILA",
+          "type": "text"
+        },
+        {
+          "id": "e2dtfbrm6",
+          "name": "city",
+          "x": 93,
+          "y": 607,
+          "width": 217,
+          "height": 29,
+          "value": "PARANAQUE",
+          "type": "text"
+        },
+        {
+          "id": "td63k9gg6",
+          "name": "barangay",
+          "x": 542,
+          "y": 560,
+          "width": 263,
+          "height": 30,
+          "value": "SAN ANTONO",
+          "type": "text"
+        },
+        {
+          "id": "rr0o27zkl",
+          "name": "country",
+          "x": 543,
+          "y": 607,
+          "width": 124,
+          "height": 28,
+          "value": "PHILIPPINES",
+          "type": "text"
+        },
+        {
+          "id": "lxo974tac",
+          "name": "zip code",
+          "x": 681,
+          "y": 607,
+          "width": 124,
+          "height": 28,
+          "value": "1702",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "xtdrjij5t",
+      "name": "4",
+      "color": "#000000",
+      "boxes": [
+        {
+          "id": "scnoi68gw",
+          "name": "housenumber",
+          "x": 93,
+          "y": 677,
+          "width": 155,
+          "height": 30,
+          "value": "133",
+          "type": "text"
+        },
+        {
+          "id": "z1tc0e2qb",
+          "name": "street",
+          "x": 264,
+          "y": 677,
+          "width": 263,
+          "height": 30,
+          "value": "RIVERSIDESTREET",
+          "type": "text"
+        },
+        {
+          "id": "7n1uug851",
+          "name": "province",
+          "x": 325,
+          "y": 723,
+          "width": 203,
+          "height": 30,
+          "value": "METRO MANILA",
+          "type": "text"
+        },
+        {
+          "id": "9fzluwg3k",
+          "name": "city",
+          "x": 93,
+          "y": 724,
+          "width": 217,
+          "height": 29,
+          "value": "PARANAQUE",
+          "type": "text"
+        },
+        {
+          "id": "1d1ietvud",
+          "name": "barangay",
+          "x": 542,
+          "y": 677,
+          "width": 263,
+          "height": 30,
+          "value": "SAN ANTONO",
+          "type": "text"
+        },
+        {
+          "id": "gpbtwcvc8",
+          "name": "country",
+          "x": 543,
+          "y": 724,
+          "width": 124,
+          "height": 28,
+          "value": "PHILIPPINES",
+          "type": "text"
+        },
+        {
+          "id": "1wd40kmf9",
+          "name": "zip code",
+          "x": 681,
+          "y": 724,
+          "width": 124,
+          "height": 28,
+          "value": "1702",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "pk58wcqc4",
+      "name": "5",
+      "color": "#000000",
+      "boxes": [
+        {
+          "id": "l0rr2ibvl",
+          "name": "fathersurname",
+          "x": 93,
+          "y": 812,
+          "width": 171,
+          "height": 28,
+          "value": "FATHERLAST",
+          "type": "text"
+        },
+        {
+          "id": "u895kg7f4",
+          "name": "fatherfirstname",
+          "x": 279,
+          "y": 812,
+          "width": 171,
+          "height": 28,
+          "value": "FATHERFIRST",
+          "type": "text"
+        },
+        {
+          "id": "il5o7ari0",
+          "name": "fathermiddlename",
+          "x": 464,
+          "y": 810,
+          "width": 171,
+          "height": 28,
+          "value": "FATHERMID",
+          "type": "text"
+        },
+        {
+          "id": "vg8zfr1w5",
+          "name": "fathercontactnumber",
+          "x": 652,
+          "y": 811,
+          "width": 155,
+          "height": 29,
+          "value": "00000000000",
+          "type": "text"
+        },
+        {
+          "id": "pr1tu8qib",
+          "name": "mothersurname",
+          "x": 93,
+          "y": 874,
+          "width": 171,
+          "height": 28,
+          "value": "MOTHERLAST",
+          "type": "text"
+        },
+        {
+          "id": "soveoppl4",
+          "name": "motherfirstname",
+          "x": 279,
+          "y": 874,
+          "width": 171,
+          "height": 28,
+          "value": "MOTHERFIRST",
+          "type": "text"
+        },
+        {
+          "id": "v4vxmddbi",
+          "name": "mothermiddlename",
+          "x": 465,
+          "y": 874,
+          "width": 171,
+          "height": 28,
+          "value": "MOTHERMID",
+          "type": "text"
+        },
+        {
+          "id": "qij4tl3w0",
+          "name": "mothercontactnumber",
+          "x": 652,
+          "y": 874,
+          "width": 155,
+          "height": 29,
+          "value": "00000000000",
+          "type": "text"
+        },
+        {
+          "id": "vxf52mul7",
+          "name": "guardiansurname",
+          "x": 93,
+          "y": 936,
+          "width": 171,
+          "height": 28,
+          "value": "GUARDIANLAST",
+          "type": "text"
+        },
+        {
+          "id": "fghnjdrn4",
+          "name": "guardianfirstname",
+          "x": 279,
+          "y": 937,
+          "width": 171,
+          "height": 28,
+          "value": "GUARDIANFIRST",
+          "type": "text"
+        },
+        {
+          "id": "n5zd805mb",
+          "name": "guardianmiddlename",
+          "x": 465,
+          "y": 937,
+          "width": 171,
+          "height": 28,
+          "value": "GUARDIANMID",
+          "type": "text"
+        },
+        {
+          "id": "p9yz7qwv4",
+          "name": "guardiancontactnumber",
+          "x": 652,
+          "y": 936,
+          "width": 155,
+          "height": 29,
+          "value": "00000000000",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "piqqthlcz",
+      "name": "6",
+      "color": "#000000",
+      "boxes": [
+        {
+          "id": "gk413gpvm",
+          "name": "lastcompleted",
+          "x": 217,
+          "y": 988,
+          "width": 248,
+          "height": 26,
+          "value": "GRADE 7",
+          "type": "text"
+        },
+        {
+          "id": "7msx30114",
+          "name": "lastschoolattended",
+          "x": 186,
+          "y": 1022,
+          "width": 452,
+          "height": 28,
+          "value": "PNHS (MAIN)",
+          "type": "text"
+        },
+        {
+          "id": "ewlylexm2",
+          "name": "lastschoolyear",
+          "x": 617,
+          "y": 988,
+          "width": 189,
+          "height": 26,
+          "value": "2020-2021",
+          "type": "text"
+        },
+        {
+          "id": "8e6asq3dh",
+          "name": "schoolID",
+          "x": 710,
+          "y": 1025,
+          "width": 96,
+          "height": 25,
+          "value": "0000000000",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "585wcabr9",
+      "name": "checkbox1",
+      "color": "#000000",
+      "boxes": [
+        {
+          "id": "z3o9tmnuo",
+          "name": "LRNyes",
+          "x": 434,
+          "y": 200,
+          "width": 16,
+          "height": 15,
+          "value": "",
+          "type": "checkbox"
+        },
+        {
+          "id": "jgh4lptfh",
+          "name": "LRNno",
+          "x": 481,
+          "y": 200,
+          "width": 16,
+          "height": 15,
+          "value": "",
+          "type": "checkbox"
+        },
+        {
+          "id": "4lczxzefq",
+          "name": "Returningyes",
+          "x": 697,
+          "y": 200,
+          "width": 16,
+          "height": 15,
+          "value": "",
+          "type": "checkbox"
+        },
+        {
+          "id": "3tyy64rbm",
+          "name": "Returningno",
+          "x": 744,
+          "y": 200,
+          "width": 16,
+          "height": 15,
+          "value": "",
+          "type": "checkbox"
+        }
+      ]
+    },
+    {
+      "id": "msrgofwiy",
+      "name": "checkbox2",
+      "color": "#000000",
+      "boxes": [
+        {
+          "id": "meclvyv4k",
+          "name": "male",
+          "x": 466,
+          "y": 373,
+          "width": 16,
+          "height": 15,
+          "value": "",
+          "type": "checkbox"
+        },
+        {
+          "id": "4tqoa4zer",
+          "name": "female",
+          "x": 466,
+          "y": 395,
+          "width": 16,
+          "height": 15,
+          "value": "",
+          "type": "checkbox"
+        },
+        {
+          "id": "54hc0h5jd",
+          "name": "indigenousyes",
+          "x": 434,
+          "y": 436,
+          "width": 16,
+          "height": 15,
+          "value": "",
+          "type": "checkbox"
+        },
+        {
+          "id": "8xjgyr93i",
+          "name": "indigenousno",
+          "x": 481,
+          "y": 437,
+          "width": 16,
+          "height": 15,
+          "value": "",
+          "type": "checkbox"
+        },
+        {
+          "id": "uokwdrypy",
+          "name": "4PSyes",
+          "x": 619,
+          "y": 457,
+          "width": 16,
+          "height": 15,
+          "value": "",
+          "type": "checkbox"
+        },
+        {
+          "id": "e6dtr0o2m",
+          "name": "4PSno",
+          "x": 666,
+          "y": 457,
+          "width": 16,
+          "height": 15,
+          "value": "",
+          "type": "checkbox"
+        }
+      ]
+    },
+    {
+      "id": "h97s1gz25",
+      "name": "checkbox3",
+      "color": "#000000",
+      "boxes": [
+        {
+          "id": "zxfr5w4ih",
+          "name": "CurrentAddyes",
+          "x": 357,
+          "y": 640,
+          "width": 15,
+          "height": 16,
+          "value": "",
+          "type": "checkbox"
+        },
+        {
+          "id": "avjz1msit",
+          "name": "CurrentAddno",
+          "x": 402,
+          "y": 641,
+          "width": 15,
+          "height": 16,
+          "value": "",
+          "type": "checkbox"
+        }
+      ]
+    }
+  ],
+  "ungrouped": []
+}
