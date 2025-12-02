@@ -16,7 +16,7 @@ const EnrollmentPreview = ({ formData }) => {
 
     // Create and inject responsiveness styles
     const responsiveStyle = doc.createElement('style');
-    responsiveStyle.textContent = 'body {\n  text-align: center;\n  background: #f0f2f5; /* A light gray background for contrast */\n  padding: 20px 0;\n}\n.pf {\n  margin: 0 auto;\n  transform-origin: top center;\n}\n@media (max-width: 920px) { .pf { transform: scale(0.9); } }\n@media (max-width: 820px) { .pf { transform: scale(0.8); } }\n@media (max-width: 720px) { .pf { transform: scale(0.7); } }\n@media (max-width: 620px) { .pf { transform: scale(0.6); } }\n@media (max-width: 520px) { .pf { transform: scale(0.5); } }';
+    responsiveStyle.textContent = 'body {\n  display: flex;\n  justify-content: center;\n  align-items: flex-start;\n  background: #f0f2f5;\n  padding: 20px 0;\n  margin: 0;\n}\n#page-container {\n  position: relative !important;\n  left: auto !important;\n  top: auto !important;\n}\n.pf {\n  transform-origin: top center;\n}\n@media (max-width: 920px) { .pf { transform: scale(0.9); } }\n@media (max-width: 820px) { .pf { transform: scale(0.8); } }\n@media (max-width: 720px) { .pf { transform: scale(0.7); } }\n@media (max-width: 620px) { .pf { transform: scale(0.6); } }\n@media (max-width: 520px) { .pf { transform: scale(0.5); } }';
     doc.head.appendChild(responsiveStyle);
 
     const overlayWrapper = doc.createElement('div');

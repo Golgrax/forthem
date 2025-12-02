@@ -846,11 +846,16 @@ const Enrollment = () => {
                   </div>
                   <div className="form-group">
                     <label>Grade Level</label>
-                    <input 
-                      type="text" 
+                    <select
                       value={formData.gradeLevel}
                       onChange={(e) => handleInputChange('gradeLevel', e.target.value)}
-                    />
+                    >
+                      <option value="">Select Grade</option>
+                      {Array.from({ length: 6 }, (_, i) => {
+                        const gradeNum = i + 1;
+                        return <option key={gradeNum} value={gradeNum.toString()}>{`Grade ${gradeNum}`}</option>;
+                      })}
+                    </select>
                   </div>
                   <div className="form-group">
                     <label>Learner Reference No.</label>
@@ -1015,9 +1020,8 @@ const Enrollment = () => {
                             onChange={(e) => handleInputChange('lastSchoolYearCompleted', e.target.value)}
                         >
                             <option value="">Select School Year</option>
-                            {Array.from({ length: 10 }, (_, i) => {
-                                const currentYear = new Date().getFullYear();
-                                const startYear = currentYear - 10 + i;
+                            {Array.from({ length: new Date().getFullYear() - 1990 + 2 }, (_, i) => {
+                                const startYear = 1990 + i;
                                 const schoolYear = `${startYear}-${startYear + 1}`;
                                 return <option key={schoolYear} value={schoolYear}>{schoolYear}</option>;
                             })}
