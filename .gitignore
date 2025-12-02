@@ -4,6 +4,5 @@ node_modules/
 .env
 /build
 build/
-package-lock.json
 forthem.db
 .vscode/
