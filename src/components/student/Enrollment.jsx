@@ -778,11 +778,18 @@ const Enrollment = () => {
                 <div className="edit-form">
                   <div className="form-group">
                     <label>School Year</label>
-                    <input 
-                      type="text" 
+                    <select
                       value={formData.schoolYear}
                       onChange={(e) => handleInputChange('schoolYear', e.target.value)}
-                    />
+                    >
+                      <option value="">Select School Year</option>
+                      {Array.from({ length: 7 }, (_, i) => {
+                        const currentYear = new Date().getFullYear();
+                        const startYear = currentYear - 5 + i;
+                        const schoolYear = `${startYear}-${startYear + 1}`;
+                        return <option key={schoolYear} value={schoolYear}>{schoolYear}</option>;
+                      })}
+                    </select>
                   </div>
                   <div className="form-group">
                     <label>Grade Level</label>
@@ -936,11 +943,18 @@ const Enrollment = () => {
                     </div>
                     <div className="form-group">
                         <label>Last School Year Completed</label>
-                        <input
-                            type="text"
+                        <select
                             value={formData.lastSchoolYearCompleted}
                             onChange={(e) => handleInputChange('lastSchoolYearCompleted', e.target.value)}
-                        />
+                        >
+                            <option value="">Select School Year</option>
+                            {Array.from({ length: 10 }, (_, i) => {
+                                const currentYear = new Date().getFullYear();
+                                const startYear = currentYear - 10 + i;
+                                const schoolYear = `${startYear}-${startYear + 1}`;
+                                return <option key={schoolYear} value={schoolYear}>{schoolYear}</option>;
+                            })}
+                        </select>
                     </div>
                     <div className="form-group">
                         <label>Last School Attended</label>
