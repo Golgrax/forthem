@@ -90,11 +90,11 @@ const EnrollmentPreview = ({ formData }) => {
 
             content = isChecked ? CHECK_SVG : '';
         } else {
-            const displayValue = valueToSet || box.value || '';
+            const displayValue = valueToSet || '';
             content = `<div class="overlay-box-value" style="white-space: nowrap; transform-origin: left center; font-size: 14px;">${displayValue}</div>`;
         }
 
-        overlayBoxesHtml += `<div id="${box.id}" style="position: absolute; left: ${box.x}px; top: ${box.y}px; width: ${box.width}px; height: ${box.height}px; background-color: transparent; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-start; padding: 2px; overflow: hidden; font-family: sans-serif; font-weight: 600; color: #000; border: 2px solid #000;">${content}</div>\n`;
+        overlayBoxesHtml += `<div id="${box.id}" style="position: absolute; left: ${box.x}px; top: ${box.y}px; width: ${box.width}px; height: ${box.height}px; background-color: #FFFFFF; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-start; padding: 2px; overflow: hidden; font-family: sans-serif; font-weight: 600; color: #000; border: 2px solid #000;">${content}</div>\n`;
       });
     });
 
