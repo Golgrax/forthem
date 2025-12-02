@@ -20,6 +20,7 @@ const Enrollment = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [showDocument, setShowDocument] = useState(false);
+  const [showDocument, setShowDocument] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [sameAsCurrent, setSameAsCurrent] = useState(false);
 
@@ -223,8 +224,6 @@ const Enrollment = () => {
     }
   };
 
-// ... (inside the component)
-
   const handleDownloadCertificate = async () => {
     const CHECK_SVG = `<svg viewBox="0 0 16 16" fill="black" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;"><path d="M13.78 3.22a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06 0l-3.5-3.5a.75.75 0 1 1 1.06-1.06L5.5 9.94l7.22-7.22a.75.75 0 0 1 1.06 0z"/></svg>`;
     
@@ -324,23 +323,48 @@ const Enrollment = () => {
     document.body.appendChild(container);
     container.innerHTML = finalHtml;
 
-    const formElement = container.querySelector('.pf');
-    if (formElement) {
-        html2canvas(formElement, {
-            scale: 2, // Higher scale for better quality
-            useCORS: true,
-            logging: true,
-        }).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'px',
-                format: [canvas.width, canvas.height]
-            });
-            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-            pdf.save('Enrollment_Certificate.pdf');
-            document.body.removeChild(container);
+    const formElements = container.querySelectorAll('.pf');
+    if (formElements.length > 0) {
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'px',
         });
+
+        const processPage = async (index) => {
+            if (index >= formElements.length) {
+                pdf.save('Enrollment_Certificate.pdf');
+                document.body.removeChild(container);
+                return;
+            }
+
+            const formElement = formElements[index];
+            const canvas = await html2canvas(formElement, {
+                scale: 2,
+                useCORS: true,
+                logging: true,
+            });
+
+            const imgData = canvas.toDataURL('image/png');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            
+            if (index > 0) {
+                pdf.addPage();
+            }
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            
+            processPage(index + 1);
+        };
+
+        const firstPage = formElements[0];
+        html2canvas(firstPage, { scale: 2, useCORS: true, logging: true }).then(canvas => {
+            const pdfWidth = canvas.width;
+            const pdfHeight = canvas.height;
+            pdf.internal.pageSize.setWidth(pdfWidth);
+            pdf.internal.pageSize.setHeight(pdfHeight);
+            processPage(0);
+        });
+
     } else {
         document.body.removeChild(container);
     }
@@ -483,17 +507,7 @@ const Enrollment = () => {
   };
 
   const renderStepContent = () => {
-    if (showDocument) {
-      return (
-        <div className="enrollment-form-document">
-          <img 
-            src="https://raw.githubusercontent.com/Golgrax/forthem-assets/main/students/enrollment/enrollment-form.png" 
-            alt="Basic Education Enrollment Form" 
-            className="enrollment-document-image"
-          />
-        </div>
-      );
-    }
+
 
     if (isEnrolled) {
       return (
@@ -502,7 +516,7 @@ const Enrollment = () => {
             <div className="success-icon-wrapper">
               <svg className="success-icon" width="74" height="74" viewBox="0 0 75 75" fill="none">
               <path d="M74.375 37.1875C74.375 40.6539 71.8814 43.2537 69.6801 45.548C68.4283 46.8562 67.1334 48.2043 66.6453 49.3896C66.1937 50.4754 66.1672 52.275 66.1406 54.0182C66.0908 57.2588 66.0377 60.9311 63.4844 63.4844C60.9311 66.0377 57.2588 66.0908 54.0182 66.1406C52.275 66.1672 50.4754 66.1937 49.3896 66.6453C48.2043 67.1334 46.8562 68.4283 45.548 69.6801C43.2537 71.8814 40.6539 74.375 37.1875 74.375C33.7211 74.375 31.1213 71.8814 28.827 69.6801C27.5187 68.4283 26.1707 67.1334 24.9854 66.6453C23.8996 66.1937 22.1 66.1672 20.3568 66.1406C17.1162 66.0908 13.4439 66.0377 10.8906 63.4844C8.3373 60.9311 8.28418 57.2588 8.23438 54.0182C8.20781 52.275 8.18125 50.4754 7.72969 49.3896C7.2416 48.2043 5.94668 46.8562 4.69492 45.548C2.49355 43.2537 0 40.6539 0 37.1875C0 33.7211 2.49355 31.1213 4.69492 28.827C5.94668 27.5187 7.2416 26.1707 7.72969 24.9854C8.18125 23.8996 8.20781 22.1 8.23438 20.3568C8.28418 17.1162 8.3373 13.4439 10.8906 10.8906C13.4439 8.3373 17.1162 8.28418 20.3568 8.23438C22.1 8.20781 23.8996 8.18125 24.9854 7.72969C26.1707 7.2416 27.5187 5.94668 28.827 4.69492C31.1213 2.49355 33.7211 0 37.1875 0C40.6539 0 43.2537 2.49355 45.548 4.69492C46.8562 5.94668 48.2043 7.2416 49.3896 7.72969C50.4754 8.18125 52.275 8.20781 54.0182 8.23438C57.2588 8.28418 60.9311 8.3373 63.4844 10.8906C66.0377 13.4439 66.0908 17.1162 66.1406 20.3568C66.1672 22.1 66.1937 23.8996 66.6453 24.9854C67.1334 26.1707 68.4283 27.5187 69.6801 28.827C71.8814 31.1213 74.375 33.7211 74.375 37.1875Z" fill="#06B228"/>
-              <polygon points="21.6,46.9 33.8,59.1 53.4,39.5 49.6,35.7 33.8,51.5 25.4,43.1" fill="white"/>
+              <polygon points="21.6,41.9 33.8,54.1 53.4,34.5 49.6,30.7 33.8,46.5 25.4,38.1" fill="white"/>
               </svg>
             </div>
             <div className="confirmation-message">You are officially enrolled.</div>
@@ -914,7 +928,7 @@ const Enrollment = () => {
             </div>
           </div>
 
-          <div className={`enrollment-step-content ${currentStep === 3 || isEnrolled || showDocument ? 'full-height-step' : 'scrollable-step'}`}> 
+          <div className={`enrollment-step-content ${currentStep === 3 || isEnrolled ? 'full-height-step' : 'scrollable-step'}`}> 
             {error && (
               <div className="error-message" style={{ color: 'red', marginBottom: '1rem', padding: '0.5rem', backgroundColor: '#ffe6e6', border: '1px solid #ff9999', borderRadius: '4px' }}>
                 {error}
@@ -923,7 +937,7 @@ const Enrollment = () => {
             {renderStepContent()}
           </div>
 
-          {!isEnrolled && !showDocument && (
+          {!isEnrolled && (
             <div className="form-actions">
               {currentStep > 1 && (
                 <button className="btn btn-secondary" onClick={handleBack} disabled={loading}>
