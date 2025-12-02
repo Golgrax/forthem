@@ -78,6 +78,7 @@ const Enrollment = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [editingSection, setEditingSection] = useState(null);
+  const [formErrors, setFormErrors] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
@@ -136,10 +137,46 @@ const Enrollment = () => {
   ];
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    let errors = { ...formErrors };
+    let isValid = true;
+
+    const numberOnlyFields = [
+      'learnerReferenceNo', 'fatherContactNumber', 'motherContactNumber', 'guardianContactNumber'
+    ];
+    const textOnlyFields = [
+      'lastName', 'firstName', 'middleName', 'extensionName',
+      'placeOfBirth', 'motherTongue', 'ifIndigenous', 
+      'fatherLastName', 'fatherFirstName', 'fatherMiddleName',
+      'motherLastName', 'motherFirstName', 'motherMiddleName',
+      'guardianLastName', 'guardianFirstName', 'guardianMiddleName'
+    ];
+
+    if (numberOnlyFields.includes(field)) {
+      if (value && !/^\d*$/.test(value)) {
+        errors[field] = 'Only numbers are allowed.';
+        isValid = false;
+      } else {
+        delete errors[field];
+      }
+    }
+
+    if (textOnlyFields.includes(field)) {
+      if (value && /\d/.test(value)) {
+        errors[field] = 'Numbers are not allowed.';
+        isValid = false;
+      } else {
+        delete errors[field];
+      }
+    }
+    
+    setFormErrors(errors);
+
+    if (isValid) {
+      setFormData(prev => ({
+        ...prev,
+        [field]: value
+      }));
+    }
   };
 
   const handleNext = async () => {
@@ -802,17 +839,18 @@ const Enrollment = () => {
                   <div className="form-group">
                     <label>Learner Reference No.</label>
                     <input 
-                      type="text" 
+                      type="tel" 
                       value={formData.learnerReferenceNo}
                       onChange={(e) => handleInputChange('learnerReferenceNo', e.target.value)}
+                      maxLength="12"
                     />
+                    {formErrors.learnerReferenceNo && <small style={{ color: 'red' }}>{formErrors.learnerReferenceNo}</small>}
                   </div>
                   <div className="form-group">
                     <label>Birthday</label>
                     <input 
-                      type="text" 
+                      type="date" 
                       value={formData.birthday}
-                      placeholder="MM-DD-YYYY"
                       onChange={(e) => handleInputChange('birthday', e.target.value)}
                     />
                   </div>
@@ -895,6 +933,7 @@ const Enrollment = () => {
                       value={formData.lastName}
                       onChange={(e) => handleInputChange('lastName', e.target.value)}
                     />
+                    {formErrors.lastName && <small style={{ color: 'red' }}>{formErrors.lastName}</small>}
                   </div>
                   <div className="form-group">
                     <label>First Name</label>
@@ -903,6 +942,7 @@ const Enrollment = () => {
                       value={formData.firstName}
                       onChange={(e) => handleInputChange('firstName', e.target.value)}
                     />
+                    {formErrors.firstName && <small style={{ color: 'red' }}>{formErrors.firstName}</small>}
                   </div>
                   <div className="form-group">
                     <label>Middle Name</label>
@@ -911,6 +951,7 @@ const Enrollment = () => {
                       value={formData.middleName}
                       onChange={(e) => handleInputChange('middleName', e.target.value)}
                     />
+                    {formErrors.middleName && <small style={{ color: 'red' }}>{formErrors.middleName}</small>}
                   </div>
                   <div className="form-group">
                     <label>Extension Name</label>
@@ -919,6 +960,7 @@ const Enrollment = () => {
                       value={formData.extensionName}
                       onChange={(e) => handleInputChange('extensionName', e.target.value)}
                     />
+                    {formErrors.extensionName && <small style={{ color: 'red' }}>{formErrors.extensionName}</small>}
                   </div>
                   <div className="form-group">
                     <label>Place of Birth</label>
@@ -927,6 +969,7 @@ const Enrollment = () => {
                       value={formData.placeOfBirth}
                       onChange={(e) => handleInputChange('placeOfBirth', e.target.value)}
                     />
+                    {formErrors.placeOfBirth && <small style={{ color: 'red' }}>{formErrors.placeOfBirth}</small>}
                   </div>
                 </div>
               )}
@@ -1106,6 +1149,7 @@ const Enrollment = () => {
                       value={formData.fatherLastName}
                       onChange={(e) => handleInputChange('fatherLastName', e.target.value)}
                     />
+                    {formErrors.fatherLastName && <small style={{ color: 'red' }}>{formErrors.fatherLastName}</small>}
                   </div>
                   <div className="form-group">
                     <label>First Name</label>
@@ -1114,6 +1158,7 @@ const Enrollment = () => {
                       value={formData.fatherFirstName}
                       onChange={(e) => handleInputChange('fatherFirstName', e.target.value)}
                     />
+                    {formErrors.fatherFirstName && <small style={{ color: 'red' }}>{formErrors.fatherFirstName}</small>}
                   </div>
                   <div className="form-group">
                     <label>Middle Name</label>
@@ -1122,6 +1167,7 @@ const Enrollment = () => {
                       value={formData.fatherMiddleName}
                       onChange={(e) => handleInputChange('fatherMiddleName', e.target.value)}
                     />
+                    {formErrors.fatherMiddleName && <small style={{ color: 'red' }}>{formErrors.fatherMiddleName}</small>}
                   </div>
                   <div className="form-group">
                     <label>Extension Name</label>
@@ -1134,10 +1180,11 @@ const Enrollment = () => {
                   <div className="form-group">
                     <label>Contact Number</label>
                     <input 
-                      type="text" 
+                      type="tel" 
                       value={formData.fatherContactNumber}
                       onChange={(e) => handleInputChange('fatherContactNumber', e.target.value)}
                     />
+                    {formErrors.fatherContactNumber && <small style={{ color: 'red' }}>{formErrors.fatherContactNumber}</small>}
                   </div>
                 </div>
               )}
@@ -1151,6 +1198,7 @@ const Enrollment = () => {
                       value={formData.motherLastName}
                       onChange={(e) => handleInputChange('motherLastName', e.target.value)}
                     />
+                    {formErrors.motherLastName && <small style={{ color: 'red' }}>{formErrors.motherLastName}</small>}
                   </div>
                   <div className="form-group">
                     <label>First Name</label>
@@ -1159,6 +1207,7 @@ const Enrollment = () => {
                       value={formData.motherFirstName}
                       onChange={(e) => handleInputChange('motherFirstName', e.target.value)}
                     />
+                    {formErrors.motherFirstName && <small style={{ color: 'red' }}>{formErrors.motherFirstName}</small>}
                   </div>
                   <div className="form-group">
                     <label>Middle Name</label>
@@ -1167,6 +1216,7 @@ const Enrollment = () => {
                       value={formData.motherMiddleName}
                       onChange={(e) => handleInputChange('motherMiddleName', e.target.value)}
                     />
+                    {formErrors.motherMiddleName && <small style={{ color: 'red' }}>{formErrors.motherMiddleName}</small>}
                   </div>
                   <div className="form-group">
                     <label>Extension Name</label>
@@ -1179,10 +1229,11 @@ const Enrollment = () => {
                   <div className="form-group">
                     <label>Contact Number</label>
                     <input 
-                      type="text" 
+                      type="tel" 
                       value={formData.motherContactNumber}
                       onChange={(e) => handleInputChange('motherContactNumber', e.target.value)}
                     />
+                    {formErrors.motherContactNumber && <small style={{ color: 'red' }}>{formErrors.motherContactNumber}</small>}
                   </div>
                 </div>
               )}
@@ -1196,6 +1247,7 @@ const Enrollment = () => {
                       value={formData.guardianLastName}
                       onChange={(e) => handleInputChange('guardianLastName', e.target.value)}
                     />
+                    {formErrors.guardianLastName && <small style={{ color: 'red' }}>{formErrors.guardianLastName}</small>}
                   </div>
                   <div className="form-group">
                     <label>First Name</label>
@@ -1204,6 +1256,7 @@ const Enrollment = () => {
                       value={formData.guardianFirstName}
                       onChange={(e) => handleInputChange('guardianFirstName', e.target.value)}
                     />
+                    {formErrors.guardianFirstName && <small style={{ color: 'red' }}>{formErrors.guardianFirstName}</small>}
                   </div>
                   <div className="form-group">
                     <label>Middle Name</label>
@@ -1212,6 +1265,7 @@ const Enrollment = () => {
                       value={formData.guardianMiddleName}
                       onChange={(e) => handleInputChange('guardianMiddleName', e.target.value)}
                     />
+                    {formErrors.guardianMiddleName && <small style={{ color: 'red' }}>{formErrors.guardianMiddleName}</small>}
               </div>
                   <div className="form-group">
                     <label>Extension Name</label>
@@ -1224,10 +1278,11 @@ const Enrollment = () => {
                   <div className="form-group">
                     <label>Contact Number</label>
                     <input 
-                      type="text" 
+                      type="tel" 
                       value={formData.guardianContactNumber}
                       onChange={(e) => handleInputChange('guardianContactNumber', e.target.value)}
                     />
+                    {formErrors.guardianContactNumber && <small style={{ color: 'red' }}>{formErrors.guardianContactNumber}</small>}
                   </div>
                 </div>
               )}

@@ -45,11 +45,11 @@ const EnrollmentPreview = ({ formData }) => {
             if(formDataKey) valueToSet = formData[ (isCurrent ? 'current' : 'permanent') + formDataKey ] || '';
         } else if (box.name.startsWith('bd')) {
             if (formData.birthday) {
-                const parts = formData.birthday.split('-'); // MM-DD-YYYY
+                const parts = formData.birthday.split('-'); // YYYY-MM-DD
                 if (parts.length === 3) {
-                    if (box.name === 'bdMM') valueToSet = parts[0];
-                    if (box.name === 'bdDD') valueToSet = parts[1];
-                    if (box.name === 'bdYYYY') valueToSet = parts[2];
+                    if (box.name === 'bdMM') valueToSet = parts[1];
+                    if (box.name === 'bdDD') valueToSet = parts[2];
+                    if (box.name === 'bdYYYY') valueToSet = parts[0];
                 }
             }
         } else if (box.name === 'from' || box.name === 'to') {
