@@ -12,13 +12,32 @@ const EnrollmentPreview = ({ formData }) => {
 
     const CHECK_SVG = `<svg viewBox="0 0 16 16" fill="black" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;"><path d="M13.78 3.22a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06 0l-3.5-3.5a.75.75 0 1 1 1.06-1.06L5.5 9.94l7.22-7.22a.75.75 0 0 1 1.06 0z"/></svg>`;
 
-    let overlayHtml = '';
+    const doc = new DOMParser().parseFromString(enrollmentHtml, "text/html");
+
+    // Create and inject responsiveness styles
+    const responsiveStyle = doc.createElement('style');
+    responsiveStyle.textContent = 'body {\n  text-align: center;\n  background: #f0f2f5; /* A light gray background for contrast */\n  padding: 20px 0;\n}\n.pf {\n  margin: 0 auto;\n  transform-origin: top center;\n}\n@media (max-width: 920px) { .pf { transform: scale(0.9); } }\n@media (max-width: 820px) { .pf { transform: scale(0.8); } }\n@media (max-width: 720px) { .pf { transform: scale(0.7); } }\n@media (max-width: 620px) { .pf { transform: scale(0.6); } }\n@media (max-width: 520px) { .pf { transform: scale(0.5); } }';
+    doc.head.appendChild(responsiveStyle);
+
+    const overlayWrapper = doc.createElement('div');
+    overlayWrapper.id = 'overlay-layer';
+    overlayWrapper.style.position = 'absolute';
+    overlayWrapper.style.top = '0';
+    overlayWrapper.style.left = '0';
+    overlayWrapper.style.width = '100%';
+    overlayWrapper.style.height = '100%';
+    overlayWrapper.style.pointerEvents = 'none';
+    overlayWrapper.style.zIndex = '10000';
+
+    let overlayBoxesHtml = '';
+
     formDefinition.groups.forEach(group => {
       group.boxes.forEach(box => {
         let valueToSet = '';
         let isChecked = false;
         const key = box.name.toLowerCase().replace(/\s/g, '');
-
+        
+        // Data mapping logic...
         if (group.name === '3' || group.name === '4') { // Address
             const isCurrent = group.name === '3';
             const addrMapping = { 'housenumber': 'HouseNo', 'street': 'Sitio', 'barangay': 'Barangay', 'city': 'Municipality', 'province': 'Province', 'country': 'Country', 'zipcode': 'ZipCode' };
@@ -72,22 +91,21 @@ const EnrollmentPreview = ({ formData }) => {
             content = isChecked ? CHECK_SVG : '';
         } else {
             const displayValue = valueToSet || box.value || '';
-            content = `<div class="overlay-box-value" style="white-space: nowrap; transform-origin: left center;">${displayValue}</div>`;
+            content = `<div class="overlay-box-value" style="white-space: nowrap; transform-origin: left center; font-size: 14px;">${displayValue}</div>`;
         }
 
-        overlayHtml += `<div id="${box.id}" style="position: absolute; left: ${box.x}px; top: ${box.y}px; width: ${box.width}px; height: ${box.height}px; background-color: transparent; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-start; padding: 2px; overflow: hidden; font-family: sans-serif; font-size: 12px; font-weight: 500; color: #000; border: 2px solid #000;">${content}</div>\n`;
+        overlayBoxesHtml += `<div id="${box.id}" style="position: absolute; left: ${box.x}px; top: ${box.y}px; width: ${box.width}px; height: ${box.height}px; background-color: transparent; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-start; padding: 2px; overflow: hidden; font-family: sans-serif; font-weight: 600; color: #000; border: 2px solid #000;">${content}</div>\n`;
       });
     });
-    
-    const overlayWrapper = `<div id="overlay-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10000;">
-${overlayHtml}</div>`;
 
-    const bodyCloseIndex = enrollmentHtml.lastIndexOf('</body>');
-    if (bodyCloseIndex > -1) {
-      return enrollmentHtml.slice(0, bodyCloseIndex) + overlayWrapper + enrollmentHtml.slice(bodyCloseIndex);
-    }
+    overlayWrapper.innerHTML = overlayBoxesHtml;
     
-    return enrollmentHtml + overlayWrapper;
+    const pageFrame = doc.querySelector('.pf');
+    if (pageFrame) {
+      pageFrame.appendChild(overlayWrapper);
+    }
+
+    return new XMLSerializer().serializeToString(doc);
 
   }, [formData]);
 
