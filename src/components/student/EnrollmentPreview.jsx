@@ -88,13 +88,17 @@ const EnrollmentPreview = ({ formData }) => {
             if (key === 'currentaddyes' && formData.permanentHouseNo === formData.currentHouseNo) isChecked = true;
             if (key === 'currentaddno' && formData.permanentHouseNo !== formData.currentHouseNo) isChecked = true;
 
+            const isReturning = formData.lastGradeLevelCompleted || formData.lastSchoolYearCompleted || formData.lastSchoolAttended || formData.lastSchoolId;
+            if (key === 'returningyes' && isReturning) isChecked = true;
+            if (key === 'returningno' && !isReturning) isChecked = true;
+
             content = isChecked ? CHECK_SVG : '';
         } else {
             const displayValue = valueToSet || '';
             content = `<div class="overlay-box-value" style="white-space: nowrap; transform-origin: left center; font-size: 14px;">${displayValue}</div>`;
         }
 
-        overlayBoxesHtml += `<div id="${box.id}" style="position: absolute; left: ${box.x}px; top: ${box.y}px; width: ${box.width}px; height: ${box.height}px; background-color: #FFFFFF; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-start; padding: 2px; overflow: hidden; font-family: sans-serif; font-weight: 600; color: #000; border: 2px solid #000;">${content}</div>\n`;
+        overlayBoxesHtml += `<div id="${box.id}" style="position: absolute; left: ${box.x}px; top: ${box.y}px; width: ${box.width}px; height: ${box.height}px; background-color: #FFFFFF; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-start; padding: 2px; overflow: hidden; font-family: sans-serif; color: #000; border: 2px solid #000;">${content}</div>\n`;
       });
     });
 

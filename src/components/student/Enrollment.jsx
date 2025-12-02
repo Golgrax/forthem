@@ -79,6 +79,22 @@ const Enrollment = () => {
   const [error, setError] = useState(null);
   const [editingSection, setEditingSection] = useState(null);
   const [formErrors, setFormErrors] = useState({});
+
+  useEffect(() => {
+    if (formData.birthday) {
+      const birthDate = new Date(formData.birthday);
+      if (!isNaN(birthDate.getTime())) {
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        // Use a direct state update to avoid re-triggering validation logic in handleInputChange
+        setFormData(prev => ({ ...prev, age: age.toString() }));
+      }
+    }
+  }, [formData.birthday]);
   const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
@@ -871,6 +887,7 @@ const Enrollment = () => {
                       type="number" 
                       value={formData.age}
                       onChange={(e) => handleInputChange('age', e.target.value)}
+                      readOnly
                     />
                   </div>
                   <div className="form-group">
@@ -978,11 +995,18 @@ const Enrollment = () => {
                 <div className="edit-form">
                     <div className="form-group">
                         <label>Last Grade Level Completed</label>
-                        <input
-                            type="text"
+                        <select
                             value={formData.lastGradeLevelCompleted}
                             onChange={(e) => handleInputChange('lastGradeLevelCompleted', e.target.value)}
-                        />
+                        >
+                            <option value="">Select Grade</option>
+                            <option value="Grade 1">Grade 1</option>
+                            <option value="Grade 2">Grade 2</option>
+                            <option value="Grade 3">Grade 3</option>
+                            <option value="Grade 4">Grade 4</option>
+                            <option value="Grade 5">Grade 5</option>
+                            <option value="Grade 6">Grade 6</option>
+                        </select>
                     </div>
                     <div className="form-group">
                         <label>Last School Year Completed</label>
