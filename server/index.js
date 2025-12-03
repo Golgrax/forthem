@@ -584,12 +584,12 @@ app.get("/api/schedules/:userId", (req, res) => {
 if (process.env.NODE_ENV === 'production') {
   const path = require('path');
   
-  // Serve static files from the React app
+  // Serve static assets from the 'build' folder
   app.use(express.static(path.join(__dirname, '../build')));
 
-  // The "catchall" handler: for any request that doesn't
-  // match one above, send back React's index.html file.
-  app.get('/*', (req, res) => {
+  // For any other GET request that doesn't start with /api, 
+  // send the index.html file so client-side routing can take over.
+  app.get(/^(?!\/api).*/, (req, res) => {
     res.sendFile(path.join(__dirname, '../build/index.html'));
   });
 }
